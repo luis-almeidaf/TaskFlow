@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TaskFlow.Communication\TaskFlow.Communication.csproj" />
+      <ProjectReference Include="..\TaskFlow.Domain\TaskFlow.Domain.csproj" />
+      <ProjectReference Include="..\TaskFlow.Exception\TaskFlow.Exception.csproj" />
+    </ItemGroup>
+
+</Project>
