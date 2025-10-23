@@ -1,4 +1,4 @@
-namespace TaskFlow.Domain.Security;
+namespace TaskFlow.Domain.Security.Cryptography;
 
 public interface IPasswordEncrypter
 {

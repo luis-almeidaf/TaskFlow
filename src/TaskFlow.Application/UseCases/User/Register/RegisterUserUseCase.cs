@@ -5,7 +5,8 @@ using TaskFlow.Communication.Responses;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.User;
 using TaskFlow.Domain.Security;
-using TaskFlow.Domain.Tokens;
+using TaskFlow.Domain.Security.Cryptography;
+using TaskFlow.Domain.Security.Tokens;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 

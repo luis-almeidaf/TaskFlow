@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using TaskFlow.Domain.Entities;
-using TaskFlow.Domain.Tokens;
+using TaskFlow.Domain.Security.Tokens;
 
 namespace TaskFlow.Infrastructure.Security.Tokens;
 

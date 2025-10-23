@@ -1,6 +1,6 @@
 using TaskFlow.Domain.Entities;
 
-namespace TaskFlow.Domain.Tokens;
+namespace TaskFlow.Domain.Security.Tokens;
 
 public interface IAccessTokenGenerator
 {

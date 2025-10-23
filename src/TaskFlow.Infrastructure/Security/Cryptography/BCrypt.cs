@@ -1,4 +1,5 @@
 using TaskFlow.Domain.Security;
+using TaskFlow.Domain.Security.Cryptography;
 using BC = BCrypt.Net.BCrypt;
 
 namespace TaskFlow.Infrastructure.Security.Cryptography;
