@@ -5,7 +5,7 @@ using TaskFlow.Communication.Responses;
 
 namespace TaskFlow.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
