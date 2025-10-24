@@ -4,7 +4,7 @@ using TaskFlow.Domain.Security.Tokens;
 
 namespace CommonTestUtilities.Token;
 
-public static class JwtTokenGenerator
+public static class JwtTokenGeneratorBuilder
 {
     public static IAccessTokenGenerator Build()
     {

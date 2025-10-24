@@ -57,7 +57,7 @@ public class RegisterUserUseCaseTest
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var passwordEncrypter = new PasswordEncrypterBuilder().Build();
-        var tokenGenerator = JwtTokenGenerator.Build();
+        var tokenGenerator = JwtTokenGeneratorBuilder.Build();
         var readRepository = new UserReadOnlyRepositoryBuilder();
         var writeRepository = UserWriteOnlyRepositoryBuilder.Build();
 
