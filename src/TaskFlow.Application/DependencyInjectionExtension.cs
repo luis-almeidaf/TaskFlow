@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using TaskFlow.Application.UseCases.Login;
 using TaskFlow.Application.UseCases.User.Register;
 
 namespace TaskFlow.Application;
@@ -13,5 +14,6 @@ public static class DependencyInjectionExtension
     private static void AddUseCases(IServiceCollection services)
     {
         services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
+        services.AddScoped<ILoginUseCase, LoginUseCase>();
     }
 }

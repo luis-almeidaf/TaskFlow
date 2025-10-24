@@ -36,4 +36,7 @@
     <data name="UNKNOWN_ERROR" xml:space="preserve">
         <value>Unknown error.</value>
     </data>
+    <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
+        <value>Invalid e-mail and/or password.</value>
+    </data>
 </root>

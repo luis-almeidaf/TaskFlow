@@ -87,6 +87,15 @@ namespace TaskFlow.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid e-mail and/or password..
+        /// </summary>
+        public static string EMAIL_OR_PASSWORD_INVALID {
+            get {
+                return ResourceManager.GetString("EMAIL_OR_PASSWORD_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and a special character (example: !,?,#.*)..
         /// </summary>
         public static string INVALID_PASSWORD {
