@@ -1,8 +1,8 @@
-using System.Net;
-using System.Text.Json;
 using CommonTestUtilities.Requests;
 using FluentAssertions;
-using TaskFlow.Communication.Requests;
+using System.Net;
+using System.Text.Json;
+using TaskFlow.Application.Features.Users.Commands.Login;
 using TaskFlow.Exception;
 
 namespace WebApi.Test.Login;
@@ -25,7 +25,7 @@ public class LoginTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = new RequestLoginDto()
+        var request = new LoginCommand()
         {
             Email = _email,
             Password = _password
@@ -46,7 +46,7 @@ public class LoginTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Login_Invalid()
     {
-        var request = RequestLoginDtoBuilder.Build();
+        var request = LoginCommandBuilder.Build();
 
         var response = await DoPost(Route, request);
 

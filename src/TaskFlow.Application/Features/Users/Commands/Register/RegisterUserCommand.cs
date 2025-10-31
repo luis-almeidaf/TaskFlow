@@ -1,6 +1,8 @@
-namespace TaskFlow.Communication.Requests;
+using MediatR;
 
-public class RequestRegisterUserDto
+namespace TaskFlow.Application.Features.Users.Commands.Register;
+
+public class RegisterUserCommand : IRequest<RegisterUserResponse>
 {
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;

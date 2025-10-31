@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using TaskFlow.Communication.Responses;
+using TaskFlow.Application.Common.Responses;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 
@@ -19,7 +19,7 @@ public class ExceptionFilter : IExceptionFilter
     private static void HandleProjectException(ExceptionContext context)
     {
         var taskFlowException = (TaskFlowException)context.Exception;
-        var errorResponse = new ResponseErrorDto(taskFlowException.GetErrors());
+        var errorResponse = new BaseErrorResponse(taskFlowException.GetErrors());
 
         context.HttpContext.Response.StatusCode = taskFlowException.StatusCode;
         context.Result = new ObjectResult(errorResponse);
@@ -27,7 +27,7 @@ public class ExceptionFilter : IExceptionFilter
 
     private static void ThrowUnknownError(ExceptionContext context)
     {
-        var errorResponse = new ResponseErrorDto(ResourceErrorMessages.UNKNOWN_ERROR);
+        var errorResponse = new BaseErrorResponse(ResourceErrorMessages.UNKNOWN_ERROR);
         context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         context.Result = new ObjectResult(errorResponse);
     }

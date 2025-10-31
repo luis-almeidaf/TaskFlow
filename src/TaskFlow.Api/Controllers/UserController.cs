@@ -1,7 +1,7 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TaskFlow.Application.UseCases.User.Register;
-using TaskFlow.Communication.Requests;
-using TaskFlow.Communication.Responses;
+using TaskFlow.Application.Common.Responses;
+using TaskFlow.Application.Features.Users.Commands.Register;
 
 namespace TaskFlow.Api.Controllers
 {
@@ -9,17 +9,21 @@ namespace TaskFlow.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpPost]
-        [ProducesResponseType(typeof(ResponseRegisteredUserDto), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ResponseErrorDto), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register(
-            [FromServices] IRegisterUserUseCase userCase,
-            [FromBody] RequestRegisterUserDto request)
+        private readonly IMediator _mediator;
+
+        public UserController(IMediator mediator)
         {
-            var response = await userCase.Execute(request);
+            _mediator = mediator;
+        }
 
+        [HttpPost]
+        [ProducesResponseType(typeof(RegisterUserResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Register([FromBody] RegisterUserCommand request)
+        {
+            var response = await _mediator.Send(request);
+            
             return Created(string.Empty, response);
-
         }
     }
 }

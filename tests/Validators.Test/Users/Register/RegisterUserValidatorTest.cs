@@ -1,6 +1,6 @@
 using CommonTestUtilities.Requests;
 using FluentAssertions;
-using TaskFlow.Application.UseCases.User.Register;
+using TaskFlow.Application.Features.Users.Commands.Register;
 using TaskFlow.Exception;
 
 namespace Validators.Test.Users.Register;
@@ -11,7 +11,7 @@ public class RegisterUserValidatorTest
     public void Success()
     {
         var validator = new RegisterUserValidator();
-        var request = RequestRegisterUserDtoBuilder.Build();
+        var request = RegisterUserCommandBuilder.Build();
 
         var result = validator.Validate(request);
 
@@ -25,7 +25,7 @@ public class RegisterUserValidatorTest
     public void Error_Name_Empty(string name)
     {
         var validator = new RegisterUserValidator();
-        var request = RequestRegisterUserDtoBuilder.Build();
+        var request = RegisterUserCommandBuilder.Build();
 
         request.Name = name;
 
@@ -35,7 +35,7 @@ public class RegisterUserValidatorTest
         result.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.NAME_EMPTY));
     }
-    
+
     [Theory]
     [InlineData("")]
     [InlineData("           ")]
@@ -43,7 +43,7 @@ public class RegisterUserValidatorTest
     public void Error_Email_Empty(string email)
     {
         var validator = new RegisterUserValidator();
-        var request = RequestRegisterUserDtoBuilder.Build();
+        var request = RegisterUserCommandBuilder.Build();
 
         request.Email = email;
 
@@ -53,12 +53,12 @@ public class RegisterUserValidatorTest
         result.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.EMAIL_EMPTY));
     }
-    
+
     [Fact]
     public void Error_Email_Invalid()
     {
         var validator = new RegisterUserValidator();
-        var request = RequestRegisterUserDtoBuilder.Build();
+        var request = RegisterUserCommandBuilder.Build();
 
         request.Email = "email.com";
 
@@ -68,12 +68,12 @@ public class RegisterUserValidatorTest
         result.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.EMAIL_INVALID));
     }
-    
+
     [Fact]
     public void Error_Password_Empty()
     {
         var validator = new RegisterUserValidator();
-        var request = RequestRegisterUserDtoBuilder.Build();
+        var request = RegisterUserCommandBuilder.Build();
 
         request.Password = string.Empty;
 

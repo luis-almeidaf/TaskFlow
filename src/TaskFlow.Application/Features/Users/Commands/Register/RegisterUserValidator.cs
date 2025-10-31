@@ -1,10 +1,10 @@
 using FluentValidation;
-using TaskFlow.Communication.Requests;
+using TaskFlow.Application.Common.Validators;
 using TaskFlow.Exception;
 
-namespace TaskFlow.Application.UseCases.User.Register;
+namespace TaskFlow.Application.Features.Users.Commands.Register;
 
-public class RegisterUserValidator : AbstractValidator<RequestRegisterUserDto>
+public class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
 {
     public RegisterUserValidator()
     {
@@ -16,7 +16,7 @@ public class RegisterUserValidator : AbstractValidator<RequestRegisterUserDto>
             .When(user => !string.IsNullOrWhiteSpace(user.Email), ApplyConditionTo.CurrentValidator)
             .WithMessage(ResourceErrorMessages.EMAIL_INVALID);
 
-        RuleFor(user => user.Password).SetValidator(new PasswordValidator<RequestRegisterUserDto>())
+        RuleFor(user => user.Password).SetValidator(new PasswordValidator<RegisterUserCommand>())
             .WithMessage(ResourceErrorMessages.INVALID_PASSWORD);
     }
     

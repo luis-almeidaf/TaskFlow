@@ -11,15 +11,14 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.6"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.6"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.6" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.6" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TaskFlow.Application\TaskFlow.Application.csproj"/>
-        <ProjectReference Include="..\TaskFlow.Communication\TaskFlow.Communication.csproj"/>
-        <ProjectReference Include="..\TaskFlow.Exception\TaskFlow.Exception.csproj"/>
-        <ProjectReference Include="..\TaskFlow.Infrastructure\TaskFlow.Infrastructure.csproj"/>
+        <ProjectReference Include="..\TaskFlow.Application\TaskFlow.Application.csproj" />
+        <ProjectReference Include="..\TaskFlow.Exception\TaskFlow.Exception.csproj" />
+        <ProjectReference Include="..\TaskFlow.Infrastructure\TaskFlow.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

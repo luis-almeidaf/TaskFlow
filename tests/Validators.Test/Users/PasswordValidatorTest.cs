@@ -1,7 +1,7 @@
 using FluentAssertions;
 using FluentValidation;
-using TaskFlow.Application.UseCases;
-using TaskFlow.Communication.Requests;
+using TaskFlow.Application.Common.Validators;
+using TaskFlow.Application.Features.Users.Commands.Register;
 
 namespace Validators.Test.Users;
 
@@ -24,9 +24,9 @@ public class PasswordValidatorTest
     [InlineData("Aaaaaaa1")]
     public void Error_Password_Invalid_Register(string password)
     {
-        var validator = new PasswordValidator<RequestRegisterUserDto>();
+        var validator = new PasswordValidator<RegisterUserCommand>();
 
-        var result = validator.IsValid(new ValidationContext<RequestRegisterUserDto>(new RequestRegisterUserDto()),
+        var result = validator.IsValid(new ValidationContext<RegisterUserCommand>(new RegisterUserCommand()),
             password);
 
         result.Should().BeFalse();
