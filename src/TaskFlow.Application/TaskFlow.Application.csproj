@@ -15,7 +15,14 @@
     <ItemGroup>
       <PackageReference Include="FluentValidation" Version="12.0.0" />
       <PackageReference Include="Mapster" Version="7.4.0" />
+      <PackageReference Include="MediatR" Version="13.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Users\Commands\Requests\" />
+      <Folder Include="Features\Users\Commands\Responses\" />
+      <Folder Include="Features\Users\Handlers\" />
     </ItemGroup>
 
 </Project>
