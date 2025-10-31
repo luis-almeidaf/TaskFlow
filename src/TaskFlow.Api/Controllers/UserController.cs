@@ -2,7 +2,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Users.Commands.Register;
-using TaskFlow.Communication.Responses;
 
 namespace TaskFlow.Api.Controllers
 {
@@ -18,7 +17,7 @@ namespace TaskFlow.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ResponseRegisteredUserDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(RegisterUserResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand request)
         {

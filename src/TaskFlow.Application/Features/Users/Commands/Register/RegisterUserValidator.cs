@@ -1,6 +1,5 @@
 using FluentValidation;
 using TaskFlow.Application.Common.Validators;
-using TaskFlow.Communication.Requests;
 using TaskFlow.Exception;
 
 namespace TaskFlow.Application.Features.Users.Commands.Register;

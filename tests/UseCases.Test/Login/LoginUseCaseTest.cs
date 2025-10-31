@@ -4,7 +4,7 @@ using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using CommonTestUtilities.Token;
 using FluentAssertions;
-using TaskFlow.Application.UseCases.Login;
+using TaskFlow.Application.Features.Users.Commands.Login;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 
@@ -17,12 +17,12 @@ public class LoginUseCaseTest
     {
         var user = UserBuilder.Build();
 
-        var request = RequestLoginDtoBuilder.Build();
+        var request = LoginCommandBuilder.Build();
         request.Email = user.Email;
 
-        var useCase = CreateUseCase(user, request.Password);
+        var handler = CreateHandler(user, request.Password);
 
-        var result = await useCase.Execute(request);
+        var result = await handler.Handle(request, CancellationToken.None);
 
         result.Should().NotBeNull();
         result.Name.Should().Be(user.Name);
@@ -34,43 +34,43 @@ public class LoginUseCaseTest
     {
         var user = UserBuilder.Build();
 
-        var request = RequestLoginDtoBuilder.Build();
+        var request = LoginCommandBuilder.Build();
 
-        var useCase = CreateUseCase(user, request.Password);
+        var handler = CreateHandler(user, request.Password);
 
-        var act = async () => await useCase.Execute(request);
+        var act = async () => await handler.Handle(request, CancellationToken.None);
 
         var result = await act.Should().ThrowAsync<InvalidLoginException>();
 
         result.Where(ex =>
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.EMAIL_OR_PASSWORD_INVALID));
     }
-    
+
     [Fact]
     public async Task Error_Password_Not_Match()
     {
         var user = UserBuilder.Build();
 
-        var request = RequestLoginDtoBuilder.Build();
+        var request = LoginCommandBuilder.Build();
         request.Email = user.Email;
-        
-        var useCase = CreateUseCase(user);
 
-        var act = async () => await useCase.Execute(request);
+        var handler = CreateHandler(user);
+
+        var act = async () => await handler.Handle(request, CancellationToken.None);
 
         var result = await act.Should().ThrowAsync<InvalidLoginException>();
 
         result.Where(ex =>
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.EMAIL_OR_PASSWORD_INVALID));
     }
-    
 
-    private static LoginUseCase CreateUseCase(TaskFlow.Domain.Entities.User user, string? password = null)
+
+    private static LoginCommandHandler CreateHandler(TaskFlow.Domain.Entities.User user, string? password = null)
     {
         var readRepository = new UserReadOnlyRepositoryBuilder().GetUserByEmail(user).Build();
         var passwordEncrypter = new PasswordEncrypterBuilder().Verify(password).Build();
         var tokenGenerator = JwtTokenGeneratorBuilder.Build();
 
-        return new LoginUseCase(readRepository, passwordEncrypter, tokenGenerator);
+        return new LoginCommandHandler(readRepository, passwordEncrypter, tokenGenerator);
     }
 }
