@@ -1,18 +1,17 @@
 using FluentValidation.Results;
 using Mapster;
-using TaskFlow.Communication.Requests;
-using TaskFlow.Communication.Responses;
+using MediatR;
+using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.User;
-using TaskFlow.Domain.Security;
 using TaskFlow.Domain.Security.Cryptography;
 using TaskFlow.Domain.Security.Tokens;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 
-namespace TaskFlow.Application.UseCases.User.Register;
+namespace TaskFlow.Application.Features.Users.Commands.Register;
 
-public class RegisterUserUseCase : IRegisterUserUseCase
+public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, RegisterUserResponse>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordEncrypter _passwordEncrypter;
@@ -20,25 +19,26 @@ public class RegisterUserUseCase : IRegisterUserUseCase
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
     private readonly IUserWriteOnlyRepository _userWriteOnlyRepository;
 
-    public RegisterUserUseCase(
-        IUnitOfWork unitOfWork, 
+
+    public RegisterUserHandler(
+        IUnitOfWork unitOfWork,
         IPasswordEncrypter passwordEncrypter, 
-        IAccessTokenGenerator accessTokenGenerator,
-        IUserReadOnlyRepository userReadOnlyRepository,
+        IAccessTokenGenerator tokenGenerator, 
+        IUserReadOnlyRepository userReadOnlyRepository, 
         IUserWriteOnlyRepository userWriteOnlyRepository)
     {
         _unitOfWork = unitOfWork;
         _passwordEncrypter = passwordEncrypter;
-        _tokenGenerator = accessTokenGenerator;
+        _tokenGenerator = tokenGenerator;
         _userReadOnlyRepository = userReadOnlyRepository;
         _userWriteOnlyRepository = userWriteOnlyRepository;
     }
 
-    public async Task<ResponseRegisteredUserDto> Execute(RequestRegisterUserDto request)
+    public async Task<RegisterUserResponse> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         await Validate(request);
-        
-        var user = request.Adapt<Domain.Entities.User>();
+
+        var user = request.Adapt<User>();
         user.Password = _passwordEncrypter.Encrypt(request.Password);
         user.UserIdentifier = Guid.NewGuid();
 
@@ -46,14 +46,15 @@ public class RegisterUserUseCase : IRegisterUserUseCase
 
         await _unitOfWork.Commit();
 
-        return new ResponseRegisteredUserDto
+        return new RegisterUserResponse()
         {
+            Id = user.Id,
             Name = user.Name,
             Token = _tokenGenerator.Generate(user)
         };
     }
-
-    private async Task Validate(RequestRegisterUserDto request)
+    
+    private async Task Validate(RegisterUserCommand request)
     {
         var result = new RegisterUserValidator().Validate(request);
 

@@ -19,10 +19,4 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\Users\Commands\Requests\" />
-      <Folder Include="Features\Users\Commands\Responses\" />
-      <Folder Include="Features\Users\Handlers\" />
-    </ItemGroup>
-
 </Project>

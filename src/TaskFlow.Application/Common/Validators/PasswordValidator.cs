@@ -1,9 +1,8 @@
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
 
-namespace TaskFlow.Application.UseCases;
+namespace TaskFlow.Application.Common.Validators;
 
 public partial class PasswordValidator<T> : PropertyValidator<T, string>
 {

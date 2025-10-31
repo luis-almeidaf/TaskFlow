@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.UseCases.Login;
 using TaskFlow.Communication.Requests;
 using TaskFlow.Communication.Responses;
@@ -12,7 +13,7 @@ namespace TaskFlow.Api.Controllers
     {
         [HttpPost]
         [ProducesResponseType(typeof(ResponseRegisteredUserDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ResponseErrorDto), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login(
             [FromServices] ILoginUseCase useCase,
             [FromBody] RequestLoginDto request)

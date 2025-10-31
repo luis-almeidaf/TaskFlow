@@ -15,7 +15,7 @@ public class RegisterUserTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = RequestRegisterUserDtoBuilder.Build();
+        var request = RegisterUserCommandBuilder.Build();
 
         var result = await DoPost(Route, request);
 
@@ -32,7 +32,7 @@ public class RegisterUserTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Empty_Name()
     {
-        var request = RequestRegisterUserDtoBuilder.Build();
+        var request = RegisterUserCommandBuilder.Build();
         request.Name = string.Empty;
 
         var result = await DoPost(Route, request);
