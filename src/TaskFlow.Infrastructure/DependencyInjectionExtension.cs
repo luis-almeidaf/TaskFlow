@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.User;
-using TaskFlow.Domain.Security;
 using TaskFlow.Domain.Security.Cryptography;
 using TaskFlow.Domain.Security.Tokens;
 using TaskFlow.Infrastructure.DataAccess;

@@ -1,6 +1,7 @@
 using TaskFlow.Api.Filters;
 using TaskFlow.Application;
 using TaskFlow.Infrastructure;
+using TaskFlow.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,15 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+if (!builder.Configuration.IsTestEnvironment())
+    await MigrateDatabase();
+
 app.Run();
+
+async Task MigrateDatabase()
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    await DatabaseMigration.MigrateDatabase(scope.ServiceProvider);
+}
 
 public partial class Program { }
