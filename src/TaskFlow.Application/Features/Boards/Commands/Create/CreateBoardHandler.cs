@@ -4,6 +4,7 @@ using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Services.LoggedUser;
+using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Commands.Create;
 
@@ -22,6 +23,8 @@ public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, CreateBoar
 
     public async Task<CreateBoardResponse> Handle(CreateBoardCommand request, CancellationToken cancellationToken)
     {
+        Validate(request);
+        
         var loggedUser = await _loggedUser.Get();
         var board = request.Adapt<Board>();
         board.Id = Guid.NewGuid();
@@ -36,5 +39,16 @@ public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, CreateBoar
             Id = board.Id,
             Name = board.Name,
         };
+    }
+
+    private void Validate(CreateBoardCommand request)
+    {
+        var result = new CreateBoardValidator().Validate(request);
+
+        if (!result.IsValid)
+        {
+            var errorMessages = result.Errors.Select(error => error.ErrorMessage).ToList();
+            throw new ErrorOnValidationException(errorMessages);
+        }
     }
 }
