@@ -40,7 +40,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Register
 
         var user = request.Adapt<User>();
         user.Password = _passwordEncrypter.Encrypt(request.Password);
-        user.UserIdentifier = Guid.NewGuid();
+        user.Id = Guid.NewGuid();
 
         await _userWriteOnlyRepository.Add(user);
 

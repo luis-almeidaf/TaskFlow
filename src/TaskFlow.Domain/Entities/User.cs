@@ -2,9 +2,12 @@ namespace TaskFlow.Domain.Entities;
 
 public class User
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
-    public Guid UserIdentifier { get; set; }
+    public ICollection<Board> Boards { get; set; } = new HashSet<Board>();
+    public ICollection<Board> CreatedBoards { get; set; } = new HashSet<Board>();
+    public ICollection<Card> CreatedCards { get; set; } = new HashSet<Card>();
+    public ICollection<Card> AssignedCards { get; set; } = new HashSet<Card>();
 }
