@@ -42,4 +42,7 @@
     <data name="USER_WITH_BOARD" xml:space="preserve">
         <value>Cannot delete user, because user has associated boards.</value>
     </data>
+    <data name="PASSWORD_DIFFERENT_CURRENT_PASSWORD" xml:space="preserve">
+        <value>The password you entered is different from the current password.</value>
+    </data>
 </root>

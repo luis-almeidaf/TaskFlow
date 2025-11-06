@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
+using TaskFlow.Application.Features.Users.Commands.ChangePassword;
 using TaskFlow.Application.Features.Users.Commands.Delete;
 using TaskFlow.Application.Features.Users.Commands.GetByEmail;
 using TaskFlow.Application.Features.Users.Commands.Register;
@@ -46,6 +47,16 @@ namespace TaskFlow.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateUserCommand request)
+        {
+            await _mediator.Send(request);
+            return NoContent();
+        }
+
+        [HttpPut("change-password")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand request)
         {
             await _mediator.Send(request);
             return NoContent();
