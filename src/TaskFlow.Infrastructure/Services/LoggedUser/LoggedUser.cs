@@ -31,4 +31,17 @@ public class LoggedUser : ILoggedUser
 
         return await _dbContext.Users.AsNoTracking().FirstAsync(user => user.Id == Guid.Parse(identifier));
     }
+
+    public async Task<User> GetUserAndBoards()
+    {
+        var token = _tokenProvider.TokenOnRequest();
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        var jwtSecurityToken = tokenHandler.ReadJwtToken(token);
+
+        var identifier = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value;
+
+        return await _dbContext.Users.Include(u => u.CreatedBoards).FirstAsync(user => user.Id == Guid.Parse(identifier));
+    }
 }
