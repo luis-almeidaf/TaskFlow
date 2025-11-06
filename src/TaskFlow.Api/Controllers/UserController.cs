@@ -5,6 +5,7 @@ using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Users.Commands.Delete;
 using TaskFlow.Application.Features.Users.Commands.GetByEmail;
 using TaskFlow.Application.Features.Users.Commands.Register;
+using TaskFlow.Application.Features.Users.Commands.Update;
 
 namespace TaskFlow.Api.Controllers
 {
@@ -38,6 +39,16 @@ namespace TaskFlow.Api.Controllers
         {
             var response = await _mediator.Send(new GetUserByEmailCommand { Email = email });
             return Ok(response);
+        }
+
+        [HttpPut]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update([FromBody] UpdateUserCommand request)
+        {
+            await _mediator.Send(request);
+            return NoContent();
         }
 
         [HttpDelete]

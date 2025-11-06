@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories.User;
-using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Infrastructure.DataAccess.Repositories;
 
-internal class UserRepository : IUserReadOnlyRepository, IUserWriteOnlyRepository
+internal class UserRepository : IUserReadOnlyRepository, IUserUpdateRepository, IUserWriteOnlyRepository
 {
     private readonly TaskFlowDbContext _dbContext;
 
@@ -30,6 +29,15 @@ internal class UserRepository : IUserReadOnlyRepository, IUserWriteOnlyRepositor
     public async Task<User?> GetUserByEmail(string email)
     {
         return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Email.Equals(email));
-        
+    }
+
+    public async Task<User> GetById(Guid id)
+    {
+        return await _dbContext.Users.FirstAsync(user => user.Id == id);
+    }
+
+    public void Update(User user)
+    {
+        _dbContext.Users.Update(user);
     }
 }
