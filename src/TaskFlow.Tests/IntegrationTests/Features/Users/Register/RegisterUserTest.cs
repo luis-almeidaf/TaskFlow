@@ -2,7 +2,7 @@ using System.Net;
 using System.Text.Json;
 using FluentAssertions;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Requests;
+using TaskFlow.Tests.CommonTestUtilities.Commands;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Users.Register;
 

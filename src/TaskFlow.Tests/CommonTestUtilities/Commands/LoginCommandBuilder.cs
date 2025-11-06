@@ -1,7 +1,7 @@
 using Bogus;
 using TaskFlow.Application.Features.Users.Commands.Login;
 
-namespace TaskFlow.Tests.CommonTestUtilities.Requests;
+namespace TaskFlow.Tests.CommonTestUtilities.Commands;
 
 public class LoginCommandBuilder
 {
