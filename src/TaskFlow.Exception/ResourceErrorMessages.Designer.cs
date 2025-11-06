@@ -121,5 +121,14 @@ namespace TaskFlow.Exception {
                 return ResourceManager.GetString("UNKNOWN_ERROR", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot delete user, because user has associated boards..
+        /// </summary>
+        public static string USER_WITH_BOARD {
+            get {
+                return ResourceManager.GetString("USER_WITH_BOARD", resourceCulture);
+            }
+        }
     }
 }

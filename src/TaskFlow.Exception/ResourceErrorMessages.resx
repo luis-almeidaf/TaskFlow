@@ -39,4 +39,7 @@
     <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
         <value>Invalid e-mail and/or password.</value>
     </data>
+    <data name="USER_WITH_BOARD" xml:space="preserve">
+        <value>Cannot delete user, because user has associated boards.</value>
+    </data>
 </root>

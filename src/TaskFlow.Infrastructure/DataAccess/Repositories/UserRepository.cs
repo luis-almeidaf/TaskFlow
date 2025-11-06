@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories.User;
+using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Infrastructure.DataAccess.Repositories;
 
@@ -13,6 +14,12 @@ internal class UserRepository : IUserReadOnlyRepository, IUserWriteOnlyRepositor
     public async Task Add(User user)
     {
         await _dbContext.Users.AddAsync(user);
+    }
+
+    public async Task Delete(User user)
+    {
+        var userToRemove = await _dbContext.Users.FindAsync(user.Id);
+        _dbContext.Users.Remove(userToRemove!);
     }
 
     public async Task<bool> ExistActiveUserWithEmail(string email)

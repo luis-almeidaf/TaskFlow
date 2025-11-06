@@ -1,6 +1,8 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
+using TaskFlow.Application.Features.Users.Commands.Delete;
 using TaskFlow.Application.Features.Users.Commands.Register;
 
 namespace TaskFlow.Api.Controllers
@@ -22,8 +24,19 @@ namespace TaskFlow.Api.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand request)
         {
             var response = await _mediator.Send(request);
-            
+
             return Created(string.Empty, response);
+        }
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            await _mediator.Send(new DeleteUserCommand { Id = id });
+            return NoContent();
         }
     }
 }
