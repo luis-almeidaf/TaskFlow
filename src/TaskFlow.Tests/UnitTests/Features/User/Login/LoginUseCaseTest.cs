@@ -8,7 +8,7 @@ using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
 using TaskFlow.Tests.CommonTestUtilities.Token;
 
-namespace TaskFlow.Tests.UnitTests.Features.Login;
+namespace TaskFlow.Tests.UnitTests.Features.User.Login;
 
 public class LoginUseCaseTest
 {
