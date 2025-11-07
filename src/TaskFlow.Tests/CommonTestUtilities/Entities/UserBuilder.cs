@@ -4,7 +4,7 @@ using TaskFlow.Tests.CommonTestUtilities.Cryptography;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Entities;
 
-public class UserBuilder
+public static class UserBuilder
 {
     public static User Build()
     {

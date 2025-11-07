@@ -3,7 +3,7 @@ using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Entities;
 
-public class BoardBuilder
+public static class BoardBuilder
 {
     public static Board Build(User user)
     {
