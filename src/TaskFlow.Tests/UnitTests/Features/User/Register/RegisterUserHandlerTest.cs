@@ -9,7 +9,7 @@ using TaskFlow.Tests.CommonTestUtilities.Token;
 
 namespace TaskFlow.Tests.UnitTests.Features.User.Register;
 
-public class RegisterUserUseCaseTest
+public class RegisterUserHandlerTest
 {
     [Fact]
     public async Task Success()
