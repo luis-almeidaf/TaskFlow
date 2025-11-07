@@ -14,4 +14,13 @@ public class LoggedUserBuilder
 
         return mock.Object;
     }
+    
+    public static ILoggedUser BuildUserWithBoards(User user)
+    {
+        var mock = new Mock<ILoggedUser>();
+
+        mock.Setup(loggedUser => loggedUser.GetUserAndBoards()).ReturnsAsync(user);
+
+        return mock.Object;
+    }
 }
