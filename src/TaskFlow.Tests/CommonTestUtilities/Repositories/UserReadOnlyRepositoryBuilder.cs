@@ -13,13 +13,21 @@ public class UserReadOnlyRepositoryBuilder
         _repository.Setup(readOnlyRepository => readOnlyRepository.ExistActiveUserWithEmail(email)).ReturnsAsync(true);
     }
 
-    public UserReadOnlyRepositoryBuilder GetUserByEmail(User user)
+    public UserReadOnlyRepositoryBuilder GetUserByEmail(User user, string? email = null)
     {
-        _repository.Setup(readOnlyRepository => readOnlyRepository.GetUserByEmail(user.Email)).ReturnsAsync(user);
-        
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            _repository.Setup(readOnlyRepository => readOnlyRepository.GetUserByEmail(user.Email)).ReturnsAsync(user);
+        }
+        else
+        {
+            _repository.Setup(readOnlyRepository => readOnlyRepository.GetUserByEmail(user.Email))
+                .ReturnsAsync((User?)null);
+        }
+
         return this;
     }
-    
+
 
     public IUserReadOnlyRepository Build()
     {
