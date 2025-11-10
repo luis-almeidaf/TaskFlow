@@ -30,7 +30,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="CommonTestUtilities\" />
       <Folder Include="IntegrationTests\Features\" />
       <Folder Include="UnitTests\" />
       <Folder Include="ValidatorsTests\" />

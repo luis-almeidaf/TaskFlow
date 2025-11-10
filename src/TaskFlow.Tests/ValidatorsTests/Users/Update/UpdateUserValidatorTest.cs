@@ -1,17 +1,18 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Users.Commands.Register;
+using TaskFlow.Application.Features.Users.Commands.Update;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands;
 
-namespace TaskFlow.Tests.ValidatorsTests.Users.Register;
+namespace TaskFlow.Tests.ValidatorsTests.Users.Update;
 
-public class RegisterUserValidatorTest
+public class UpdateUserValidatorTest
 {
     [Fact]
     public void Success()
     {
-        var validator = new RegisterUserValidator();
-        var request = RegisterUserCommandBuilder.Build();
+        var validator = new UpdateUserValidator();
+        var request = UpdateUserCommandBuilder.Build();
 
         var result = validator.Validate(request);
 
@@ -24,9 +25,9 @@ public class RegisterUserValidatorTest
     [InlineData(null)]
     public void Error_Name_Empty(string name)
     {
-        var validator = new RegisterUserValidator();
-        var request = RegisterUserCommandBuilder.Build();
-
+        var validator = new UpdateUserValidator();
+        
+        var request = UpdateUserCommandBuilder.Build();
         request.Name = name;
 
         var result = validator.Validate(request);
@@ -42,9 +43,9 @@ public class RegisterUserValidatorTest
     [InlineData(null)]
     public void Error_Email_Empty(string email)
     {
-        var validator = new RegisterUserValidator();
-        var request = RegisterUserCommandBuilder.Build();
-
+        var validator = new UpdateUserValidator();
+        
+        var request = UpdateUserCommandBuilder.Build();
         request.Email = email;
 
         var result = validator.Validate(request);
@@ -57,9 +58,9 @@ public class RegisterUserValidatorTest
     [Fact]
     public void Error_Email_Invalid()
     {
-        var validator = new RegisterUserValidator();
-        var request = RegisterUserCommandBuilder.Build();
-
+        var validator = new UpdateUserValidator();
+        
+        var request = UpdateUserCommandBuilder.Build();
         request.Email = "email.com";
 
         var result = validator.Validate(request);
@@ -67,20 +68,5 @@ public class RegisterUserValidatorTest
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.EMAIL_INVALID));
-    }
-
-    [Fact]
-    public void Error_Password_Empty()
-    {
-        var validator = new RegisterUserValidator();
-        var request = RegisterUserCommandBuilder.Build();
-
-        request.Password = string.Empty;
-
-        var result = validator.Validate(request);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.INVALID_PASSWORD));
     }
 }
