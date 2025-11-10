@@ -12,6 +12,12 @@ public class TaskFlowClassFixture : IClassFixture<CustomWebApplicationFactory>
         _httpClient = webApplicationFactory.CreateClient();
     }
 
+    protected async Task<HttpResponseMessage> DoDelete(string requestUri, string token)
+    {
+        AuthorizeRequest(token);
+        return await _httpClient.DeleteAsync(requestUri);
+    }
+
     protected async Task<HttpResponseMessage> DoGet(string requestUri, string token)
     {
         AuthorizeRequest(token);
