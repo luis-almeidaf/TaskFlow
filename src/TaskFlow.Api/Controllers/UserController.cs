@@ -63,13 +63,12 @@ namespace TaskFlow.Api.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:guid}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete()
         {
-            await _mediator.Send(new DeleteUserCommand { Id = id });
+            await _mediator.Send(new DeleteUserCommand());
             return NoContent();
         }
     }
