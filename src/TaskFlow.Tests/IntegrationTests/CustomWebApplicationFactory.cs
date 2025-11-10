@@ -8,14 +8,14 @@ using TaskFlow.Domain.Security.Cryptography;
 using TaskFlow.Domain.Security.Tokens;
 using TaskFlow.Infrastructure.DataAccess;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
+using TaskFlow.Tests.IntegrationTests.Resources;
 
 namespace TaskFlow.Tests.IntegrationTests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private User _user;
-    private string _password;
-    private string _token;
+    public UserIdentityManager User { get; private set; } = null!;
+    public UserIdentityManager UserWithBoards { get; private set; } = null!;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -40,25 +40,59 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         });
     }
 
-    public string GetName() => _user.Name;
-    public string GetEmail() => _user.Email;
-    public string GetPassword() => _password;
-    public string GetToken() => _token;
-
     private void StartDatabase(
         TaskFlowDbContext dbContext,
         IPasswordEncrypter passwordEncrypter,
         IAccessTokenGenerator tokenGenerator)
     {
-        _user = UserBuilder.Build();
-        _password = _user.Password;
+        var user = AddUser(dbContext, passwordEncrypter, tokenGenerator);
 
-        _user.Password = passwordEncrypter.Encrypt(_user.Password);
-
-        dbContext.Users.Add(_user);
-
-        _token = tokenGenerator.Generate(_user);
-
+        var userWithBoards = AddUserWithBoards(dbContext, passwordEncrypter, tokenGenerator);
+        
         dbContext.SaveChanges();
+    }
+
+    private User AddUser(
+        TaskFlowDbContext dbContext,
+        IPasswordEncrypter passwordEncrypter,
+        IAccessTokenGenerator tokenGenerator)
+    {
+        var user = UserBuilder.Build();
+
+        var password = user.Password;
+
+        user.Password = passwordEncrypter.Encrypt(user.Password);
+
+        dbContext.Users.Add(user);
+
+        var token = tokenGenerator.Generate(user);
+
+        User = new UserIdentityManager(user, password, token);
+
+        return user;
+    }
+    
+    private User AddUserWithBoards(
+        TaskFlowDbContext dbContext,
+        IPasswordEncrypter passwordEncrypter,
+        IAccessTokenGenerator tokenGenerator)
+    {
+        var userWithBoards = UserBuilder.Build();
+
+        var password = userWithBoards.Password;
+
+        userWithBoards.Password = passwordEncrypter.Encrypt(userWithBoards.Password);
+
+        dbContext.Users.Add(userWithBoards);
+
+        var board = BoardBuilder.Build(userWithBoards);
+
+        dbContext.Boards.Add(board);
+
+        var token = tokenGenerator.Generate(userWithBoards);
+
+        UserWithBoards = new UserIdentityManager(userWithBoards, password, token);
+
+        return userWithBoards;
     }
 }
