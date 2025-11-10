@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Users.Commands.Login;
+using TaskFlow.Application.Features.Login;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.CommonTestUtilities.Commands;
@@ -8,7 +8,7 @@ using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
 using TaskFlow.Tests.CommonTestUtilities.Token;
 
-namespace TaskFlow.Tests.UnitTests.Features.User.Login;
+namespace TaskFlow.Tests.UnitTests.Features.Login;
 
 public class LoginUseCaseTest
 {

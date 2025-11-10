@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
-using TaskFlow.Application.Features.Users.Commands.Login;
+using TaskFlow.Application.Features.Login;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands;
 
@@ -51,7 +51,7 @@ public class LoginTest : TaskFlowClassFixture
         var response = await DoPost(Route, request);
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-        
+
         var responseBody = await response.Content.ReadAsStreamAsync();
 
         var responseData = await JsonDocument.ParseAsync(responseBody);
@@ -61,5 +61,4 @@ public class LoginTest : TaskFlowClassFixture
         errors.Should().HaveCount(1).And
             .Contain(error => error.GetString()!.Equals(ResourceErrorMessages.EMAIL_OR_PASSWORD_INVALID));
     }
-    
 }

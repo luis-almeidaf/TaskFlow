@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
-using TaskFlow.Application.Features.Users.Commands.Login;
+using TaskFlow.Application.Features.Login;
 
 namespace TaskFlow.Api.Controllers
 {

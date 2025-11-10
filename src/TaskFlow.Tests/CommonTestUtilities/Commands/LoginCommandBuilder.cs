@@ -1,5 +1,5 @@
 using Bogus;
-using TaskFlow.Application.Features.Users.Commands.Login;
+using TaskFlow.Application.Features.Login;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands;
 
