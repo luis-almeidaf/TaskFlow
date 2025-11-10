@@ -14,9 +14,9 @@ public class GetByEmailTest : TaskFlowClassFixture
     
     public GetByEmailTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _token = webApplicationFactory.GetToken();
-        _userEmail = webApplicationFactory.GetEmail();
-        _userName = webApplicationFactory.GetName();
+        _token = webApplicationFactory.User.GetToken();
+        _userEmail = webApplicationFactory.User.GetEmail();
+        _userName = webApplicationFactory.User.GetName();
     }
 
     [Fact]

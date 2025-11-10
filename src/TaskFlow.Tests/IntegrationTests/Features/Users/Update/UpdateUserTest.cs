@@ -14,7 +14,7 @@ public class UpdateUserTest : TaskFlowClassFixture
 
     public UpdateUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _token = webApplicationFactory.GetToken();
+        _token = webApplicationFactory.User.GetToken();
     }
 
     [Fact]

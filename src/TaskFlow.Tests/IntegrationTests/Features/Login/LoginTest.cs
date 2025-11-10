@@ -17,9 +17,9 @@ public class LoginTest : TaskFlowClassFixture
 
     public LoginTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _name = webApplicationFactory.GetName();
-        _email = webApplicationFactory.GetEmail();
-        _password = webApplicationFactory.GetPassword();
+        _name = webApplicationFactory.User.GetName();
+        _email = webApplicationFactory.User.GetEmail();
+        _password = webApplicationFactory.User.GetPassword();
     }
 
     [Fact]
