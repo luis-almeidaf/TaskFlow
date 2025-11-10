@@ -31,7 +31,7 @@
 
     <ItemGroup>
       <Folder Include="IntegrationTests\Features\" />
-      <Folder Include="IntegrationTests\Features\Users\Delete\DeleteUserTest\" />
+      <Folder Include="IntegrationTests\Features\Users\Delete\" />
       <Folder Include="UnitTests\" />
       <Folder Include="ValidatorsTests\" />
     </ItemGroup>

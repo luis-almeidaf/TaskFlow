@@ -12,6 +12,12 @@ public class TaskFlowClassFixture : IClassFixture<CustomWebApplicationFactory>
         _httpClient = webApplicationFactory.CreateClient();
     }
 
+    protected async Task<HttpResponseMessage> DoGet(string requestUri, string token)
+    {
+        AuthorizeRequest(token);
+        return await _httpClient.GetAsync(requestUri);
+    }
+
     protected async Task<HttpResponseMessage> DoPost(string requestUri, object request)
     {
         return await _httpClient.PostAsJsonAsync(requestUri, request);
