@@ -3,7 +3,7 @@ using TaskFlow.Application.Features.Login;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands;
 
-public class LoginCommandBuilder
+public static class LoginCommandBuilder
 {
     public static LoginCommand Build()
     {

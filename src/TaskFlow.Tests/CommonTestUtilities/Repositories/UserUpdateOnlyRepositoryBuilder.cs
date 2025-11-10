@@ -4,7 +4,7 @@ using TaskFlow.Domain.Repositories.User;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Repositories;
 
-public class UserUpdateOnlyRepositoryBuilder
+public static class UserUpdateOnlyRepositoryBuilder
 {
     public static IUserUpdateRepository Build(User user)
     {
