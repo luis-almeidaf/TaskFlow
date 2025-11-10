@@ -4,7 +4,7 @@ using TaskFlow.Domain.Services.LoggedUser;
 
 namespace TaskFlow.Tests.CommonTestUtilities.LoggedUser;
 
-public class LoggedUserBuilder
+public static class LoggedUserBuilder
 {
     public static ILoggedUser Build(User user)
     {

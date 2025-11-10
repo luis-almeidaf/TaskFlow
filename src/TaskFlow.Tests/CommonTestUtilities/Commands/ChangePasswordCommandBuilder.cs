@@ -3,7 +3,7 @@ using TaskFlow.Application.Features.Users.Commands.ChangePassword;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands;
 
-public class ChangePasswordCommandBuilder
+public static class ChangePasswordCommandBuilder
 {
     public static ChangePasswordCommand Build()
     {
