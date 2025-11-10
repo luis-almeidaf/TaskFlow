@@ -1,8 +1,6 @@
 using System.Net;
 using FluentAssertions;
-using TaskFlow.Application.Features.Users.Commands.Login;
-using TaskFlow.Domain.Entities;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
+using TaskFlow.Application.Features.Login;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Users.Delete;
 

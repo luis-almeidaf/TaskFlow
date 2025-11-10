@@ -4,7 +4,8 @@ using TaskFlow.Domain.Security.Cryptography;
 using TaskFlow.Domain.Security.Tokens;
 using TaskFlow.Exception.ExceptionsBase;
 
-namespace TaskFlow.Application.Features.Users.Commands.Login;
+namespace TaskFlow.Application.Features.Login;
+
 public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;

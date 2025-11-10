@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
-namespace TaskFlow.Application.Features.Users.Commands.Login;
+namespace TaskFlow.Application.Features.Login;
+
 public class LoginCommand : IRequest<LoginResponse>
 {
     public string Email { get; set; } = string.Empty;
