@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
+using TaskFlow.Application.Features.Boards.Commands.GetByID;
 
 namespace TaskFlow.Api.Controllers;
 
@@ -40,5 +41,17 @@ public class BoardController : ControllerBase
             return Ok(response);
 
         return NoContent();
+    }
+    
+    [HttpGet]
+    [Route("{id:guid}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        var response = await _mediator.Send(new GetBoardByCommand {Id = id});
+
+        return Ok(response);
     }
 }
