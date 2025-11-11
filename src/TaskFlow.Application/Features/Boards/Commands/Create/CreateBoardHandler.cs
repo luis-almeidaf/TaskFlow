@@ -29,6 +29,7 @@ public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, CreateBoar
         var board = request.Adapt<Board>();
         board.Id = Guid.NewGuid();
         board.CreatedById = loggedUser.Id;
+        board.CreatedBy = loggedUser;
 
         await _writeOnlyRepository.Add(board);
 
