@@ -36,6 +36,10 @@ public class BoardController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var response = await _mediator.Send(new GetBoardsCommand());
-        return Ok(response);
+        
+        if (response.Boards.Count != 0)
+            return Ok(response);
+
+        return NoContent();
     }
 }
