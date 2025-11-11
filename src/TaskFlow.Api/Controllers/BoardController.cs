@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Commands.Create;
-using TaskFlow.Application.Features.Boards.Commands.GetBoards;
-using TaskFlow.Application.Features.Users.Commands.GetByEmail;
+using TaskFlow.Application.Features.Boards.Commands.GetAll;
 
 namespace TaskFlow.Api.Controllers;
 

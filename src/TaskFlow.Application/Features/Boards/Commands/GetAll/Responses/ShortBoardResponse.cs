@@ -1,4 +1,4 @@
-namespace TaskFlow.Application.Features.Boards.Commands.GetBoards.Responses;
+namespace TaskFlow.Application.Features.Boards.Commands.GetAll.Responses;
 
 public class ShortBoardResponse
 {

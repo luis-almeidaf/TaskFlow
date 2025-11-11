@@ -1,10 +1,10 @@
 using Mapster;
 using MediatR;
-using TaskFlow.Application.Features.Boards.Commands.GetBoards.Responses;
+using TaskFlow.Application.Features.Boards.Commands.GetAll.Responses;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Services.LoggedUser;
 
-namespace TaskFlow.Application.Features.Boards.Commands.GetBoards;
+namespace TaskFlow.Application.Features.Boards.Commands.GetAll;
 
 public class GetBoardsHandler : IRequestHandler<GetBoardsCommand, GetBoardsResponse>
 {
