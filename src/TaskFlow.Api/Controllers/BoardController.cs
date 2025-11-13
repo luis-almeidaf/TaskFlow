@@ -58,9 +58,12 @@ public class BoardController : ControllerBase
     }
     
     [HttpPost]
-    [Route("{boardId:guid}")]
+    [Route("{boardId:guid}/users")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AddUserToBoard(
         [FromRoute] Guid boardId,
         [FromBody] AddUserToBoardRequest request)
