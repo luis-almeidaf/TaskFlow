@@ -15,6 +15,12 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
         await _dbContext.Boards.AddAsync(board);
     }
 
+    public void AddUserToBoard(Board board, User user)
+    {
+        _dbContext.Entry(user).State = EntityState.Unchanged;
+        board.Users.Add(user);
+    }
+
     public async Task<List<Board>> GetAll(User user)
     {
         return await _dbContext.Boards.AsNoTracking().Where(board => board.CreatedById == user.Id).ToListAsync();
@@ -27,6 +33,13 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
             .Include(board => board.CreatedBy)
             .Include(board => board.Users)
             .Include(board => board.Columns)
+            .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
+    }
+    
+    public async Task<Board?> GetByIdForUpdate(User user, Guid id)
+    {
+        return await _dbContext.Boards
+            .Include(board => board.Users)
             .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
     }
 }

@@ -60,6 +60,15 @@ namespace TaskFlow.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Board not found, check the id given..
+        /// </summary>
+        public static string BOARD_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("BOARD_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This e-mail is already in use..
         /// </summary>
         public static string EMAIL_ALREADY_REGISTERED {
@@ -128,6 +137,24 @@ namespace TaskFlow.Exception {
         public static string UNKNOWN_ERROR {
             get {
                 return ResourceManager.GetString("UNKNOWN_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User is already in this board..
+        /// </summary>
+        public static string USER_ALREADY_IN_BOARD {
+            get {
+                return ResourceManager.GetString("USER_ALREADY_IN_BOARD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No user found with the given email..
+        /// </summary>
+        public static string USER_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
             }
         }
         

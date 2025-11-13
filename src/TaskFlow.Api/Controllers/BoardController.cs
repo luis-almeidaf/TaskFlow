@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
+using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
+using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
 using TaskFlow.Application.Features.Boards.Commands.GetByID;
@@ -53,5 +55,22 @@ public class BoardController : ControllerBase
         var response = await _mediator.Send(new GetBoardByCommand {Id = id});
 
         return Ok(response);
+    }
+    
+    [HttpPost]
+    [Route("{boardId:guid}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> AddUserToBoard(
+        [FromRoute] Guid boardId,
+        [FromBody] AddUserToBoardRequest request)
+    {
+        await _mediator.Send(new AddUserToBoardCommand
+            {
+                BoardId = boardId, 
+                UserEmail = request.UserEmail
+            });
+
+        return NoContent();
     }
 }
