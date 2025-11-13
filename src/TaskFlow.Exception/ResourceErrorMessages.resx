@@ -54,4 +54,10 @@
     <data name="USER_ALREADY_IN_BOARD" xml:space="preserve">
         <value>User is already in this board.</value>
     </data>
+    <data name="USER_NOT_IN_BOARD" xml:space="preserve">
+        <value>User not found in this board.</value>
+    </data>
+    <data name="BOARD_OWNER_CANNOT_BE_REMOVED" xml:space="preserve">
+        <value>Board owner cannot be removed.</value>
+    </data>
 </root>

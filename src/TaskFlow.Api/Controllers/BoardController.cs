@@ -7,6 +7,7 @@ using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
 using TaskFlow.Application.Features.Boards.Commands.GetByID;
+using TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
 
 namespace TaskFlow.Api.Controllers;
 
@@ -73,6 +74,25 @@ public class BoardController : ControllerBase
                 BoardId = boardId, 
                 UserEmail = request.UserEmail
             });
+
+        return NoContent();
+    }
+    
+    [HttpDelete]
+    [Route("{boardId:guid}/users/{userId:guid}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RemoveUserFromBoard(
+        [FromRoute] Guid boardId,
+        [FromRoute] Guid  userId)
+    {
+        await _mediator.Send(new RemoveUserFromBoardCommand()
+        {
+            BoardId = boardId, 
+            UserId = userId
+        });
 
         return NoContent();
     }

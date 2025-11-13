@@ -20,6 +20,11 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
         _dbContext.Entry(user).State = EntityState.Unchanged;
         board.Users.Add(user);
     }
+    
+    public void RemoveUserFromBoard(Board board, User user)
+    {
+        board.Users.Remove(user);
+    }
 
     public async Task<List<Board>> GetAll(User user)
     {

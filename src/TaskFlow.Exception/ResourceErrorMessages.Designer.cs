@@ -69,6 +69,15 @@ namespace TaskFlow.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Board owner cannot be removed..
+        /// </summary>
+        public static string BOARD_OWNER_CANNOT_BE_REMOVED {
+            get {
+                return ResourceManager.GetString("BOARD_OWNER_CANNOT_BE_REMOVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This e-mail is already in use..
         /// </summary>
         public static string EMAIL_ALREADY_REGISTERED {
@@ -155,6 +164,15 @@ namespace TaskFlow.Exception {
         public static string USER_NOT_FOUND {
             get {
                 return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User not found in this board..
+        /// </summary>
+        public static string USER_NOT_IN_BOARD {
+            get {
+                return ResourceManager.GetString("USER_NOT_IN_BOARD", resourceCulture);
             }
         }
         

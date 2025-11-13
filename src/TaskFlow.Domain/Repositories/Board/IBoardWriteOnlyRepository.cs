@@ -4,4 +4,5 @@ public interface IBoardWriteOnlyRepository
 {
     Task Add(Entities.Board board);
     void AddUserToBoard(Entities.Board board, Entities.User user);
+    void RemoveUserFromBoard(Entities.Board board, Entities.User user);
 }
