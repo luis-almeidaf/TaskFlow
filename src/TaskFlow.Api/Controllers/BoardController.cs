@@ -5,6 +5,7 @@ using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
 using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 using TaskFlow.Application.Features.Boards.Commands.Create;
+using TaskFlow.Application.Features.Boards.Commands.Delete;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
 using TaskFlow.Application.Features.Boards.Commands.GetByID;
 using TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
@@ -115,6 +116,17 @@ public class BoardController : ControllerBase
             Name = request.Name,
         });
 
+        return NoContent();
+    }
+
+    [HttpDelete]
+    [Route("{boardId:guid}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Delete([FromRoute] Guid boardId)
+    {
+        await _mediator.Send(new DeleteBoardCommand { Id = boardId });
         return NoContent();
     }
 }

@@ -20,7 +20,7 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
         _dbContext.Entry(user).State = EntityState.Unchanged;
         board.Users.Add(user);
     }
-    
+
     public void RemoveUserFromBoard(Board board, User user)
     {
         board.Users.Remove(user);
@@ -44,6 +44,12 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     public void Update(Board board)
     {
         _dbContext.Boards.Update(board);
+    }
+
+    public async Task Delete(Guid boardId)
+    {
+        var boardToRemove = await _dbContext.Boards.FindAsync(boardId);
+        _dbContext.Boards.Remove(boardToRemove!);
     }
 
     async Task<Board?> IBoardWriteOnlyRepository.GetById(User user, Guid id)
