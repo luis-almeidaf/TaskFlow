@@ -1,0 +1,9 @@
+using MediatR;
+
+namespace TaskFlow.Application.Features.Boards.Commands.Update;
+
+public class UpdateBoardCommand : IRequest<Unit>
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+}
