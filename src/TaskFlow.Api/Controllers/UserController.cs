@@ -34,8 +34,8 @@ namespace TaskFlow.Api.Controllers
         [HttpGet]
         [Route("{email}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(GetUserByEmailResponse),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BaseErrorResponse),StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByEmail([FromRoute] string email)
         {
             var response = await _mediator.Send(new GetUserByEmailCommand { Email = email });
