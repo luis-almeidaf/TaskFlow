@@ -12,26 +12,40 @@ public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, CreateBoar
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILoggedUser _loggedUser;
-    private readonly IBoardWriteOnlyRepository _writeOnlyRepository;
+    private readonly IBoardWriteOnlyRepository _repository;
 
-    public CreateBoardHandler(IUnitOfWork unitOfWork, ILoggedUser loggedUser, IBoardWriteOnlyRepository writeOnlyRepository)
+    public CreateBoardHandler(IUnitOfWork unitOfWork, ILoggedUser loggedUser,
+        IBoardWriteOnlyRepository repository)
     {
         _unitOfWork = unitOfWork;
         _loggedUser = loggedUser;
-        _writeOnlyRepository = writeOnlyRepository;
+        _repository = repository;
     }
 
     public async Task<CreateBoardResponse> Handle(CreateBoardCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
-        
+
         var loggedUser = await _loggedUser.Get();
+
         var board = request.Adapt<Board>();
         board.Id = Guid.NewGuid();
         board.CreatedById = loggedUser.Id;
+        
+        _repository.AddUserToBoard(board, loggedUser);
+        
+        var columns = new List<Column>
+        {
+            new() { Id = Guid.NewGuid(), Name = "Todo", Position = 0, BoardId = board.Id, Board = board },
+            new() { Id = Guid.NewGuid(), Name = "In Progress", Position = 1, BoardId = board.Id, Board = board },
+            new() { Id = Guid.NewGuid(), Name = "Done", Position = 2, BoardId = board.Id, Board = board },
+        };
 
-        await _writeOnlyRepository.Add(board);
+        foreach (var column in columns)
+            board.Columns.Add(column);
 
+        await _repository.Add(board);
+        
         await _unitOfWork.Commit();
 
         return new CreateBoardResponse
