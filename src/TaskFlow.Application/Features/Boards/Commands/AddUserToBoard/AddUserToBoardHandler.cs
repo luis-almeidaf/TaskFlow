@@ -7,49 +7,34 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
 
-public class AddUserToBoardHandler : IRequestHandler<AddUserToBoardCommand, Unit>
+public class AddUserToBoardHandler(
+    IUnitOfWork unitOfWork,
+    ILoggedUser loggedUser,
+    IBoardWriteOnlyRepository repository,
+    IUserReadOnlyRepository userReadOnlyRepository)
+    : IRequestHandler<AddUserToBoardCommand, Unit>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ILoggedUser _loggedUser;
-    private readonly IBoardReadOnlyRepository _readOnlyRepository;
-    private readonly IBoardWriteOnlyRepository _repository;
-    private readonly IUserReadOnlyRepository _userReadOnlyRepository;
-
-    public AddUserToBoardHandler(
-        IUnitOfWork unitOfWork,
-        ILoggedUser loggedUser,
-        IBoardReadOnlyRepository readOnlyRepository,
-        IBoardWriteOnlyRepository repository,
-        IUserReadOnlyRepository userReadOnlyRepository)
-    {
-        _unitOfWork = unitOfWork;
-        _loggedUser = loggedUser;
-        _readOnlyRepository = readOnlyRepository;
-        _repository = repository;
-        _userReadOnlyRepository = userReadOnlyRepository;
-    }
-
     public async Task<Unit> Handle(AddUserToBoardCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
-        var loggedUser = await _loggedUser.Get();
+        var loggedUser1 = await loggedUser.Get();
 
-        var board = await _readOnlyRepository.GetByIdForUpdate(loggedUser, request.BoardId);
+        var board = await repository.GetById(loggedUser1, request.BoardId);
         if (board is null) throw new BoardNotFoundException();
         
-        var userToAdd = await _userReadOnlyRepository.GetUserByEmail(request.UserEmail);
+        var userToAdd = await userReadOnlyRepository.GetUserByEmail(request.UserEmail);
         if (userToAdd is null) throw new UserNotFoundException();
 
         if (board.Users.Any(user => user.Id == userToAdd.Id)) throw new UserAlreadyInBoardException();
         
-        _repository.AddUserToBoard(board , userToAdd);
+        repository.AddUserToBoard(board , userToAdd);
 
-        await _unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return Unit.Value;
     }
     
-    private void Validate(AddUserToBoardCommand request)
+    private static void Validate(AddUserToBoardCommand request)
     {
         var result = new AddUserToBoardValidator().Validate(request);
 

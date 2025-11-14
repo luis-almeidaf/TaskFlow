@@ -31,7 +31,7 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
         return await _dbContext.Boards.AsNoTracking().Where(board => board.CreatedById == user.Id).ToListAsync();
     }
 
-    public async Task<Board?> GetById(User user, Guid id)
+    async Task<Board?> IBoardReadOnlyRepository.GetById(User user, Guid id)
     {
         return await _dbContext.Boards
             .AsNoTracking()
@@ -40,8 +40,13 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
             .Include(board => board.Columns)
             .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
     }
-    
-    public async Task<Board?> GetByIdForUpdate(User user, Guid id)
+
+    public void Update(Board board)
+    {
+        _dbContext.Boards.Update(board);
+    }
+
+    async Task<Board?> IBoardWriteOnlyRepository.GetById(User user, Guid id)
     {
         return await _dbContext.Boards
             .Include(board => board.Users)
