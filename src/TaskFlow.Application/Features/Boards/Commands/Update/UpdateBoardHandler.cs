@@ -32,7 +32,7 @@ public class UpdateBoardHandler(
 
     private static void Validate(UpdateBoardCommand request)
     {
-        var result = new UpdateUserValidator().Validate(request);
+        var result = new UpdateBoardValidator().Validate(request);
 
         if (!result.IsValid)
         {
