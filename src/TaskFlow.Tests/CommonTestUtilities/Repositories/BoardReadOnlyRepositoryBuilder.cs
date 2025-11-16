@@ -22,6 +22,20 @@ public class BoardReadOnlyRepositoryBuilder
         return this;
     }
 
+    public BoardReadOnlyRepositoryBuilder GetAll(User user, Board? board = null)
+    {
+        if (board is not null)
+        {
+            _repository.Setup(repo => repo.GetAll(user)).ReturnsAsync([board]);
+        }
+        else
+        {
+            _repository.Setup(repo => repo.GetAll(user)).ReturnsAsync([]);
+        }
+        
+        return this;
+    }
+
     public IBoardReadOnlyRepository Build()
     {
         return _repository.Object;
