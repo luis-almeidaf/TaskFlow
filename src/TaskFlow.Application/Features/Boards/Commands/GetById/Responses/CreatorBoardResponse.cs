@@ -1,4 +1,4 @@
-namespace TaskFlow.Application.Features.Boards.Commands.GetByID.Responses;
+namespace TaskFlow.Application.Features.Boards.Commands.GetById.Responses;
 
 public class CreatorBoardResponse
 {

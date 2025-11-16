@@ -7,7 +7,7 @@ using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Application.Features.Boards.Commands.Delete;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
-using TaskFlow.Application.Features.Boards.Commands.GetByID;
+using TaskFlow.Application.Features.Boards.Commands.GetById;
 using TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
 using TaskFlow.Application.Features.Boards.Commands.Update;
 using TaskFlow.Application.Features.Boards.Commands.Update.Requests;
@@ -48,7 +48,7 @@ public class BoardController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var response = await mediator.Send(new GetBoardByCommand { Id = id });
+        var response = await mediator.Send(new GetBoardByIdCommand { Id = id });
 
         return Ok(response);
     }
