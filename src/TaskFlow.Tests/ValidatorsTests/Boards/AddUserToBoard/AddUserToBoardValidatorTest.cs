@@ -18,6 +18,7 @@ public class AddUserToBoardValidatorTest
 
         result.IsValid.Should().BeTrue();
     }
+
     [Theory]
     [InlineData("")]
     [InlineData("         ")]
@@ -36,7 +37,7 @@ public class AddUserToBoardValidatorTest
         result.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.EMAIL_EMPTY));
     }
-    
+
     [Fact]
     public void Error_UserEmail_Invalid()
     {
