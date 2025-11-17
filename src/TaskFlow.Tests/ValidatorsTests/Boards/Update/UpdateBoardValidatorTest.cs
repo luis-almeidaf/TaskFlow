@@ -2,6 +2,7 @@ using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Commands.Update;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Entities;
 
 namespace TaskFlow.Tests.ValidatorsTests.Boards.Update;
 
@@ -12,7 +13,11 @@ public class UpdateBoardValidatorTest
     {
         var validator = new UpdateBoardValidator();
 
-        var request = UpdateBoardCommandBuilder.Build();
+        var user = UserBuilder.Build();
+
+        var board = BoardBuilder.Build(user);
+
+        var request = UpdateBoardCommandBuilder.Build(board);
 
         var result = validator.Validate(request);
 
@@ -26,8 +31,12 @@ public class UpdateBoardValidatorTest
     public void Error_Email_Empty(string name)
     {
         var validator = new UpdateBoardValidator();
+        
+        var user = UserBuilder.Build();
 
-        var request = UpdateBoardCommandBuilder.Build();
+        var board = BoardBuilder.Build(user);
+        
+        var request = UpdateBoardCommandBuilder.Build(board);
         request.Name = name;
 
         var result = validator.Validate(request);
