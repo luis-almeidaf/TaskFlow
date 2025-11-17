@@ -44,11 +44,11 @@ public class CreateBoardHandlerTest
         result.Where(ex => ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.NAME_EMPTY));
     }
 
-    private static CreateBoardHandler CreateHandler(Domain.Entities.User user)
+    private CreateBoardHandler CreateHandler(Domain.Entities.User user)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.Build(user);
-        var repository = BoardWriteOnlyRepositoryBuilder.Build();
+        var repository = new BoardWriteOnlyRepositoryBuilder().Build();
 
         return new CreateBoardHandler(unitOfWork, loggedUser, repository);
     }

@@ -1,14 +1,29 @@
 using Moq;
+using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories.Board;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Repositories;
 
-public static class BoardWriteOnlyRepositoryBuilder
+public class BoardWriteOnlyRepositoryBuilder
 {
-    public static IBoardWriteOnlyRepository Build()
+    private readonly Mock<IBoardWriteOnlyRepository> _repository = new();
+    
+    public BoardWriteOnlyRepositoryBuilder GetById(User user, Board board, Guid? id = null)
     {
-        var mock = new Mock<IBoardWriteOnlyRepository>();
+        if (id.HasValue)
+        {
+            _repository.Setup(repo => repo.GetById(user, id.Value)).ReturnsAsync((Board?)null);
+        }
+        else
+        {
+            _repository.Setup(repo => repo.GetById(user, board.Id)).ReturnsAsync(board);
+        }
 
-        return mock.Object;
+        return this;
+    }
+    
+    public IBoardWriteOnlyRepository Build()
+    {
+       return _repository.Object;
     }
 }
