@@ -26,11 +26,11 @@ public class BoardController(IMediator mediator) : ControllerBase
     {
         var response = await mediator.Send(request);
 
-        return Ok(response);
+        return Created(string.Empty, response);
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(GetBoardsResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetBoardsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetAll()
     {
@@ -44,7 +44,7 @@ public class BoardController(IMediator mediator) : ControllerBase
 
     [HttpGet]
     [Route("{id:guid}")]
-    [ProducesResponseType(typeof(GetBoardByIdResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetBoardByIdResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
