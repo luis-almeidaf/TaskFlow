@@ -31,15 +31,11 @@ public class BoardController(IMediator mediator) : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(GetBoardsResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetAll()
     {
         var response = await mediator.Send(new GetBoardsCommand());
-
-        if (response.Boards.Count != 0)
-            return Ok(response);
-
-        return NoContent();
+        
+        return Ok(response);
     }
 
     [HttpGet]
@@ -112,7 +108,6 @@ public class BoardController(IMediator mediator) : ControllerBase
     [Route("{boardId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Delete([FromRoute] Guid boardId)
     {
         await mediator.Send(new DeleteBoardCommand { Id = boardId });

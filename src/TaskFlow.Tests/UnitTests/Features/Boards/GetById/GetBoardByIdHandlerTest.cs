@@ -1,6 +1,8 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Commands.GetById;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Exception;
+using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.CommonTestUtilities.Commands;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
@@ -38,9 +40,13 @@ public class GetBoardByIdHandlerTest
 
         var request = GetBoardByIdCommandBuilder.Build(board);
 
-        var result = await handler.Handle(request, CancellationToken.None);
+        
+        var act = async () => await handler.Handle(request, CancellationToken.None);
 
-        result.Should().BeNull();
+        var result = await act.Should().ThrowAsync<BoardNotFoundException>();
+
+        result.Where(ex =>
+            ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
 
     private static GetBoardByIdHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
