@@ -85,7 +85,10 @@ public class AddUserToBoardHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.USER_ALREADY_IN_BOARD));
     }
     
-    private static AddUserToBoardHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null,
+    private static AddUserToBoardHandler CreateHandler(
+        Domain.Entities.User user, 
+        Board board, 
+        Guid? id = null,
         string? email = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
