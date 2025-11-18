@@ -2,6 +2,7 @@ using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Entities;
 
 namespace TaskFlow.Tests.ValidatorsTests.Boards.AddUserToBoard;
 
@@ -12,7 +13,11 @@ public class AddUserToBoardValidatorTest
     {
         var validator = new AddUserToBoardValidator();
 
-        var request = AddUserToBoardCommandBuilder.Build();
+        var user = UserBuilder.Build();
+
+        var board = BoardBuilder.Build(user);
+
+        var request = AddUserToBoardCommandBuilder.Build(board, user);
 
         var result = validator.Validate(request);
 
@@ -27,7 +32,11 @@ public class AddUserToBoardValidatorTest
     {
         var validator = new AddUserToBoardValidator();
 
-        var request = AddUserToBoardCommandBuilder.Build();
+        var user = UserBuilder.Build();
+
+        var board = BoardBuilder.Build(user);
+
+        var request = AddUserToBoardCommandBuilder.Build(board, user);
         request.UserEmail = email;
 
         var result = validator.Validate(request);
@@ -43,7 +52,11 @@ public class AddUserToBoardValidatorTest
     {
         var validator = new AddUserToBoardValidator();
 
-        var request = AddUserToBoardCommandBuilder.Build();
+        var user = UserBuilder.Build();
+        
+        var board = BoardBuilder.Build(user);
+
+        var request = AddUserToBoardCommandBuilder.Build(board, user);
         request.UserEmail = "invalid.com";
 
         var result = validator.Validate(request);
