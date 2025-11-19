@@ -46,7 +46,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         IPasswordEncrypter passwordEncrypter,
         IAccessTokenGenerator tokenGenerator)
     {
-        var user = AddUser(dbContext, passwordEncrypter, tokenGenerator);
+        AddUser(dbContext, passwordEncrypter, tokenGenerator);
 
         var userWithBoards = AddUserWithBoards(dbContext, passwordEncrypter, tokenGenerator);
 
