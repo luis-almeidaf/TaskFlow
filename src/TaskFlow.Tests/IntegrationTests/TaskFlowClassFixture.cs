@@ -38,6 +38,13 @@ public class TaskFlowClassFixture : IClassFixture<CustomWebApplicationFactory>
         return await _httpClient.PutAsJsonAsync(requestUri, request);
     }
 
+    protected async Task<HttpResponseMessage> DoPatch(string requestUri, object request, string token)
+    {
+        AuthorizeRequest(token);
+
+        return await _httpClient.PatchAsJsonAsync(requestUri, request);
+    }
+
     private void AuthorizeRequest(string token)
     {
         if (string.IsNullOrWhiteSpace(token))
