@@ -31,9 +31,10 @@ internal class UserRepository : IUserReadOnlyRepository, IUserUpdateRepository, 
         return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Email.Equals(email));
     }
 
-    public async Task<User> GetById(Guid id)
+    public async Task<User?> GetById(Guid id)
     {
-        return await _dbContext.Users.FirstAsync(user => user.Id == id);
+        var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
+        return user;
     }
 
     public void Update(User user)
