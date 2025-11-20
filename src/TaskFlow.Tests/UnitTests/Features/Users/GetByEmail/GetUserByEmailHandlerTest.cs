@@ -4,7 +4,7 @@ using TaskFlow.Tests.CommonTestUtilities.Commands;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
 
-namespace TaskFlow.Tests.UnitTests.Features.User.GetByEmail;
+namespace TaskFlow.Tests.UnitTests.Features.Users.GetByEmail;
 
 public class GetUserByEmailHandlerTest
 {

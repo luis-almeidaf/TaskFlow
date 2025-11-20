@@ -7,7 +7,7 @@ using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
 
-namespace TaskFlow.Tests.UnitTests.Features.User.Delete;
+namespace TaskFlow.Tests.UnitTests.Features.Users.Delete;
 
 public class DeleteUserHandlerTest
 {

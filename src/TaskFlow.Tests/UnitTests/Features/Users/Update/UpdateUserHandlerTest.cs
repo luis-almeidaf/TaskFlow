@@ -1,37 +1,42 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Users.Commands.Register;
+using TaskFlow.Application.Features.Users.Commands.Update;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.CommonTestUtilities.Commands;
-using TaskFlow.Tests.CommonTestUtilities.Cryptography;
+using TaskFlow.Tests.CommonTestUtilities.Entities;
+using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
-using TaskFlow.Tests.CommonTestUtilities.Token;
 
-namespace TaskFlow.Tests.UnitTests.Features.User.Register;
+namespace TaskFlow.Tests.UnitTests.Features.Users.Update;
 
-public class RegisterUserHandlerTest
+public class UpdateUserHandlerTest
 {
     [Fact]
     public async Task Success()
     {
-        var request = RegisterUserCommandBuilder.Build();
-        var handler = CreateHandler();
+        var user = UserBuilder.Build();
 
+        var request = UpdateUserCommandBuilder.Build();
 
-        var result = await handler.Handle(request, CancellationToken.None);
+        var handler = CreateHandler(user);
 
-        result.Should().NotBeNull();
-        result.Name.Should().Be(request.Name);
-        result.Token.Should().NotBeNullOrWhiteSpace();
+        var act = async () => await handler.Handle(request, CancellationToken.None);
+
+        await act.Should().NotThrowAsync();
+
+        user.Name.Should().Be(request.Name);
+        user.Email.Should().Be(request.Email);
     }
 
     [Fact]
     public async Task Error_Name_Empty()
     {
-        var request = RegisterUserCommandBuilder.Build();
+        var user = UserBuilder.Build();
+
+        var request = UpdateUserCommandBuilder.Build();
         request.Name = string.Empty;
 
-        var handler = CreateHandler();
+        var handler = CreateHandler(user);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -43,9 +48,11 @@ public class RegisterUserHandlerTest
     [Fact]
     public async Task Error_Email_Already_Exists()
     {
-        var request = RegisterUserCommandBuilder.Build();
+        var user = UserBuilder.Build();
 
-        var handler = CreateHandler(request.Email);
+        var request = UpdateUserCommandBuilder.Build();
+
+        var handler = CreateHandler(user, request.Email);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -55,22 +62,18 @@ public class RegisterUserHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.EMAIL_ALREADY_REGISTERED));
     }
 
-    private static RegisterUserHandler CreateHandler(string? email = null)
+    private static UpdateUserHandler CreateHandler(Domain.Entities.User user, string? email = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var passwordEncrypter = new PasswordEncrypterBuilder().Build();
-        var tokenGenerator = JwtTokenGeneratorBuilder.Build();
+        var updateRepository = UserUpdateOnlyRepositoryBuilder.Build(user);
+        var loggedUser = LoggedUserBuilder.Build(user);
         var readRepository = new UserReadOnlyRepositoryBuilder();
-        var writeRepository = UserWriteOnlyRepositoryBuilder.Build();
 
         if (!string.IsNullOrWhiteSpace(email))
+        {
             readRepository.ExistActiveUserWithEmail(email);
+        }
 
-        return new RegisterUserHandler(
-            unitOfWork,
-            passwordEncrypter,
-            tokenGenerator,
-            readRepository.Build(),
-            writeRepository);
+        return new UpdateUserHandler(loggedUser, updateRepository, readRepository.Build(), unitOfWork);
     }
 }

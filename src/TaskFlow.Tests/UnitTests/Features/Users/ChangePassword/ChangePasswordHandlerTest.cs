@@ -8,7 +8,7 @@ using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
 
-namespace TaskFlow.Tests.UnitTests.Features.User.ChangePassword;
+namespace TaskFlow.Tests.UnitTests.Features.Users.ChangePassword;
 
 public class ChangePasswordHandlerTest
 {
