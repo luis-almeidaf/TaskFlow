@@ -31,7 +31,6 @@
 
     <ItemGroup>
       <Folder Include="UnitTests\" />
-      <Folder Include="ValidatorsTests\Features\" />
     </ItemGroup>
 
     <ItemGroup>
