@@ -1,6 +1,6 @@
 using TaskFlow.Application.Features.Boards.Commands.Create;
 
-namespace TaskFlow.Tests.CommonTestUtilities.Commands;
+namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
 public static class CreateBoardCommandBuilder
 {

@@ -1,7 +1,7 @@
 using Bogus;
 using TaskFlow.Application.Features.Users.Commands.ChangePassword;
 
-namespace TaskFlow.Tests.CommonTestUtilities.Commands;
+namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 public static class ChangePasswordCommandBuilder
 {

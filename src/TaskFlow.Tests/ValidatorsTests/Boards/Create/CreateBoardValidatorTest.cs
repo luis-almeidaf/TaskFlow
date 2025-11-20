@@ -1,7 +1,7 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
 namespace TaskFlow.Tests.ValidatorsTests.Boards.Create;
 

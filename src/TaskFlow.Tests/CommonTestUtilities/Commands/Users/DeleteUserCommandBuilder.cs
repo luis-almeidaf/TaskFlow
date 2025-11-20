@@ -1,6 +1,6 @@
 using TaskFlow.Application.Features.Users.Commands.Delete;
 
-namespace TaskFlow.Tests.CommonTestUtilities.Commands;
+namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 public static class DeleteUserCommandBuilder
 {

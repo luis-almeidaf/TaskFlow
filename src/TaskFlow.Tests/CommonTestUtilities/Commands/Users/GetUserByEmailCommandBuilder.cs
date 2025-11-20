@@ -2,7 +2,7 @@ using Bogus;
 using TaskFlow.Application.Features.Users.Commands.GetByEmail;
 using TaskFlow.Domain.Entities;
 
-namespace TaskFlow.Tests.CommonTestUtilities.Commands;
+namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 public static class GetUserByEmailCommandBuilder
 {

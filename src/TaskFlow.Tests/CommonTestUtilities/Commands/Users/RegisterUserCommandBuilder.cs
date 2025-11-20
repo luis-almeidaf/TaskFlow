@@ -1,7 +1,7 @@
 using Bogus;
 using TaskFlow.Application.Features.Users.Commands.Register;
 
-namespace TaskFlow.Tests.CommonTestUtilities.Commands;
+namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 public static class RegisterUserCommandBuilder
 {

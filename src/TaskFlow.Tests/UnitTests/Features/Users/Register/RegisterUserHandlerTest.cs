@@ -2,7 +2,7 @@ using FluentAssertions;
 using TaskFlow.Application.Features.Users.Commands.Register;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 using TaskFlow.Tests.CommonTestUtilities.Cryptography;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
 using TaskFlow.Tests.CommonTestUtilities.Token;

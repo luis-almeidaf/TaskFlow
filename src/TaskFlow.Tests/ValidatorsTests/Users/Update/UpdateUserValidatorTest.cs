@@ -2,7 +2,7 @@ using FluentAssertions;
 using TaskFlow.Application.Features.Users.Commands.Register;
 using TaskFlow.Application.Features.Users.Commands.Update;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 namespace TaskFlow.Tests.ValidatorsTests.Users.Update;
 

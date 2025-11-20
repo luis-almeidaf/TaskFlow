@@ -2,7 +2,7 @@ using Bogus;
 using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
 using TaskFlow.Domain.Entities;
 
-namespace TaskFlow.Tests.CommonTestUtilities.Commands;
+namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
 public static class AddUserToBoardCommandBuilder
 {

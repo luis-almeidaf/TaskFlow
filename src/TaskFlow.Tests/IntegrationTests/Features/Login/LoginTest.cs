@@ -3,7 +3,7 @@ using System.Text.Json;
 using FluentAssertions;
 using TaskFlow.Application.Features.Login;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Commands.Login;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Login;
 

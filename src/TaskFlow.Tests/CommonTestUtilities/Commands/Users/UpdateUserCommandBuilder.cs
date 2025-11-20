@@ -1,7 +1,7 @@
 using Bogus;
 using TaskFlow.Application.Features.Users.Commands.Update;
 
-namespace TaskFlow.Tests.CommonTestUtilities.Commands;
+namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 public static class UpdateUserCommandBuilder
 {

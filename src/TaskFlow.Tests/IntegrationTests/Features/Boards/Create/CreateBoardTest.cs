@@ -2,7 +2,7 @@ using System.Net;
 using System.Text.Json;
 using FluentAssertions;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.Create;
 
