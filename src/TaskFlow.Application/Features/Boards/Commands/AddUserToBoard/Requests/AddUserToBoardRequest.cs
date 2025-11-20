@@ -1,3 +1,6 @@
 namespace TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 
-public record AddUserToBoardRequest(string UserEmail); 
+public class AddUserToBoardRequest()
+{
+    public string UserEmail { get; set; } = string.Empty;
+} 

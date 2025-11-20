@@ -103,6 +103,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     private Board AddBoard(TaskFlowDbContext dbContext, User user)
     {
         var board = BoardBuilder.Build(user);
+        board.Users.Add(user);
 
         dbContext.Boards.Add(board);
 

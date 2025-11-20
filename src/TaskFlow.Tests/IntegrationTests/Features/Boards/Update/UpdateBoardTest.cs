@@ -10,7 +10,7 @@ namespace TaskFlow.Tests.IntegrationTests.Features.Boards.Update;
 public class UpdateBoardTest : TaskFlowClassFixture
 {
     private const string Route = "Board";
-    
+
     private readonly string _token;
     private readonly Guid _boardId;
 
@@ -31,7 +31,7 @@ public class UpdateBoardTest : TaskFlowClassFixture
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
-    
+
     [Fact]
     public async Task Error_Name_Empty()
     {
@@ -43,7 +43,7 @@ public class UpdateBoardTest : TaskFlowClassFixture
         var response = await DoPatch(requestUri: $"{Route}/{_boardId}", request: request, token: _token);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        
+
         var responseBody = await response.Content.ReadAsStreamAsync();
 
         var responseData = await JsonDocument.ParseAsync(responseBody);
@@ -53,7 +53,7 @@ public class UpdateBoardTest : TaskFlowClassFixture
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
     }
-    
+
     [Fact]
     public async Task Error_Board_Not_Found()
     {
@@ -62,11 +62,11 @@ public class UpdateBoardTest : TaskFlowClassFixture
         var request = UpdateBoardCommandBuilder.Build(board);
 
         var fakeId = Guid.NewGuid();
-        
+
         var response = await DoPatch(requestUri: $"{Route}/{fakeId}", request: request, token: _token);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        
+
         var responseBody = await response.Content.ReadAsStreamAsync();
 
         var responseData = await JsonDocument.ParseAsync(responseBody);
@@ -76,5 +76,4 @@ public class UpdateBoardTest : TaskFlowClassFixture
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
     }
-    
 }

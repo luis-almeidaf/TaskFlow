@@ -51,7 +51,7 @@ public class BoardController(IMediator mediator) : ControllerBase
 
     [HttpPost]
     [Route("{boardId:guid}/users")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
@@ -59,13 +59,13 @@ public class BoardController(IMediator mediator) : ControllerBase
         [FromRoute] Guid boardId,
         [FromBody] AddUserToBoardRequest request)
     {
-        await mediator.Send(new AddUserToBoardCommand
+        var result =await mediator.Send(new AddUserToBoardCommand
         {
             BoardId = boardId,
             UserEmail = request.UserEmail
         });
 
-        return NoContent();
+        return Ok(result);
     }
 
     [HttpDelete]

@@ -12,9 +12,9 @@ public class AddUserToBoardHandler(
     ILoggedUser loggedUser,
     IBoardWriteOnlyRepository repository,
     IUserReadOnlyRepository userReadOnlyRepository)
-    : IRequestHandler<AddUserToBoardCommand, Unit>
+    : IRequestHandler<AddUserToBoardCommand, AddUserToBoardResponse>
 {
-    public async Task<Unit> Handle(AddUserToBoardCommand request, CancellationToken cancellationToken)
+    public async Task<AddUserToBoardResponse> Handle(AddUserToBoardCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
         var loggedUser1 = await loggedUser.Get();
@@ -31,7 +31,11 @@ public class AddUserToBoardHandler(
 
         await unitOfWork.Commit();
 
-        return Unit.Value;
+        return new AddUserToBoardResponse
+        {
+            Name = userToAdd.Name,
+            Email = userToAdd.Email
+        };
     }
     
     private static void Validate(AddUserToBoardCommand request)
