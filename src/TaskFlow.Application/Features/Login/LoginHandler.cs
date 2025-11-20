@@ -6,13 +6,13 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Login;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
+public class LoginHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
     private readonly IPasswordEncrypter _passwordEncrypter;
     private readonly IAccessTokenGenerator _tokenGenerator;
 
-    public LoginCommandHandler(
+    public LoginHandler(
         IUserReadOnlyRepository userReadOnlyRepository,
         IPasswordEncrypter passwordEncrypter, 
         IAccessTokenGenerator tokenGenerator)

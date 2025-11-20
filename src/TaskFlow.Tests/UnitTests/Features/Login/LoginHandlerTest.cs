@@ -10,7 +10,7 @@ using TaskFlow.Tests.CommonTestUtilities.Token;
 
 namespace TaskFlow.Tests.UnitTests.Features.Login;
 
-public class LoginUseCaseTest
+public class LoginHandlerTest
 {
     [Fact]
     public async Task Success()
@@ -65,12 +65,12 @@ public class LoginUseCaseTest
     }
 
 
-    private static LoginCommandHandler CreateHandler(Domain.Entities.User user, string? password = null)
+    private static LoginHandler CreateHandler(Domain.Entities.User user, string? password = null)
     {
         var readRepository = new UserReadOnlyRepositoryBuilder().GetUserByEmail(user).Build();
         var passwordEncrypter = new PasswordEncrypterBuilder().Verify(password).Build();
         var tokenGenerator = JwtTokenGeneratorBuilder.Build();
 
-        return new LoginCommandHandler(readRepository, passwordEncrypter, tokenGenerator);
+        return new LoginHandler(readRepository, passwordEncrypter, tokenGenerator);
     }
 }
