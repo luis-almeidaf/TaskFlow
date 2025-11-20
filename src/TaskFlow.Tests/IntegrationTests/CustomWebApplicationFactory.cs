@@ -14,6 +14,7 @@ namespace TaskFlow.Tests.IntegrationTests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
+    public BoardIdentityManager Board { get; private set; } = null!;
     public UserIdentityManager User { get; private set; } = null!;
     public UserIdentityManager UserWithBoards { get; private set; } = null!;
 
@@ -45,9 +46,12 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         IPasswordEncrypter passwordEncrypter,
         IAccessTokenGenerator tokenGenerator)
     {
-        var user = AddUser(dbContext, passwordEncrypter, tokenGenerator);
+        AddUser(dbContext, passwordEncrypter, tokenGenerator);
 
         var userWithBoards = AddUserWithBoards(dbContext, passwordEncrypter, tokenGenerator);
+
+        var board = AddBoard(dbContext, userWithBoards);
+        Board = new BoardIdentityManager(board);
         
         dbContext.SaveChanges();
     }
@@ -94,5 +98,15 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         UserWithBoards = new UserIdentityManager(userWithBoards, password, token);
 
         return userWithBoards;
+    }
+
+    private Board AddBoard(TaskFlowDbContext dbContext, User user)
+    {
+        var board = BoardBuilder.Build(user);
+        board.Users.Add(user);
+
+        dbContext.Boards.Add(board);
+
+        return board;
     }
 }

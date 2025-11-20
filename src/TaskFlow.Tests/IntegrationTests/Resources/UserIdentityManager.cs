@@ -14,7 +14,8 @@ public class UserIdentityManager
         _password = password;
         _token = token;
     }
-    
+
+    public Guid GetId() => _user.Id;
     public string GetName() => _user.Name;
     public string GetEmail() => _user.Email;
     public string GetPassword() => _password;

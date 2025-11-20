@@ -24,8 +24,10 @@ public class TaskFlowClassFixture : IClassFixture<CustomWebApplicationFactory>
         return await _httpClient.GetAsync(requestUri);
     }
 
-    protected async Task<HttpResponseMessage> DoPost(string requestUri, object request)
+    protected async Task<HttpResponseMessage> DoPost(string requestUri, object request, string? token = null)
     {
+        if (!string.IsNullOrWhiteSpace(token))
+            AuthorizeRequest(token);
         return await _httpClient.PostAsJsonAsync(requestUri, request);
     }
 
@@ -34,6 +36,13 @@ public class TaskFlowClassFixture : IClassFixture<CustomWebApplicationFactory>
         AuthorizeRequest(token);
 
         return await _httpClient.PutAsJsonAsync(requestUri, request);
+    }
+
+    protected async Task<HttpResponseMessage> DoPatch(string requestUri, object request, string token)
+    {
+        AuthorizeRequest(token);
+
+        return await _httpClient.PatchAsJsonAsync(requestUri, request);
     }
 
     private void AuthorizeRequest(string token)

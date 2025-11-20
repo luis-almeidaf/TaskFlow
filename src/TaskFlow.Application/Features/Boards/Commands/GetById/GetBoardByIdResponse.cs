@@ -1,7 +1,6 @@
-using TaskFlow.Application.Features.Boards.Commands.GetByID.Responses;
-using TaskFlow.Domain.Entities;
+using TaskFlow.Application.Features.Boards.Commands.GetById.Responses;
 
-namespace TaskFlow.Application.Features.Boards.Commands.GetByID;
+namespace TaskFlow.Application.Features.Boards.Commands.GetById;
 
 public class GetBoardByIdResponse
 {

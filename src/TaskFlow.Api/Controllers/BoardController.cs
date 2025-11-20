@@ -7,7 +7,7 @@ using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Application.Features.Boards.Commands.Delete;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
-using TaskFlow.Application.Features.Boards.Commands.GetByID;
+using TaskFlow.Application.Features.Boards.Commands.GetById;
 using TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
 using TaskFlow.Application.Features.Boards.Commands.Update;
 using TaskFlow.Application.Features.Boards.Commands.Update.Requests;
@@ -26,36 +26,32 @@ public class BoardController(IMediator mediator) : ControllerBase
     {
         var response = await mediator.Send(request);
 
+        return Created(string.Empty, response);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(GetBoardsResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll()
+    {
+        var response = await mediator.Send(new GetBoardsCommand());
+        
         return Ok(response);
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(GetBoardsResponse),StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> GetAll()
-    {
-        var response = await mediator.Send(new GetBoardsCommand());
-
-        if (response.Boards.Count != 0)
-            return Ok(response);
-
-        return NoContent();
-    }
-
-    [HttpGet]
     [Route("{id:guid}")]
-    [ProducesResponseType(typeof(GetBoardByIdResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetBoardByIdResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var response = await mediator.Send(new GetBoardByCommand { Id = id });
+        var response = await mediator.Send(new GetBoardByIdCommand { Id = id });
 
         return Ok(response);
     }
 
     [HttpPost]
     [Route("{boardId:guid}/users")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
@@ -63,13 +59,13 @@ public class BoardController(IMediator mediator) : ControllerBase
         [FromRoute] Guid boardId,
         [FromBody] AddUserToBoardRequest request)
     {
-        await mediator.Send(new AddUserToBoardCommand
+        var result =await mediator.Send(new AddUserToBoardCommand
         {
             BoardId = boardId,
             UserEmail = request.UserEmail
         });
 
-        return NoContent();
+        return Ok(result);
     }
 
     [HttpDelete]
@@ -112,7 +108,6 @@ public class BoardController(IMediator mediator) : ControllerBase
     [Route("{boardId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Delete([FromRoute] Guid boardId)
     {
         await mediator.Send(new DeleteBoardCommand { Id = boardId });

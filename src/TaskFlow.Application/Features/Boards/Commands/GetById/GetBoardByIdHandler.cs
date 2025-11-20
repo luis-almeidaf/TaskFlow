@@ -2,10 +2,11 @@ using Mapster;
 using MediatR;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Services.LoggedUser;
+using TaskFlow.Exception.ExceptionsBase;
 
-namespace TaskFlow.Application.Features.Boards.Commands.GetByID;
+namespace TaskFlow.Application.Features.Boards.Commands.GetById;
 
-public class GetBoardByIdHandler : IRequestHandler<GetBoardByCommand, GetBoardByIdResponse?>
+public class GetBoardByIdHandler : IRequestHandler<GetBoardByIdCommand, GetBoardByIdResponse?>
 {
     private readonly IBoardReadOnlyRepository _repository;
     private readonly ILoggedUser _loggedUser;
@@ -16,12 +17,12 @@ public class GetBoardByIdHandler : IRequestHandler<GetBoardByCommand, GetBoardBy
         _loggedUser = loggedUser;
     }
     
-    public async Task<GetBoardByIdResponse?> Handle(GetBoardByCommand request, CancellationToken cancellationToken)
+    public async Task<GetBoardByIdResponse?> Handle(GetBoardByIdCommand request, CancellationToken cancellationToken)
     {
         var loggedUser = await _loggedUser.Get();
 
         var board = await _repository.GetById(loggedUser, request.Id);
-
-        return board?.Adapt<GetBoardByIdResponse>();
+        
+        return board is null ? throw new BoardNotFoundException() : board?.Adapt<GetBoardByIdResponse>();
     }
 }
