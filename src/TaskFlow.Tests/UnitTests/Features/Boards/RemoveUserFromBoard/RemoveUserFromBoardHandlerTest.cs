@@ -3,7 +3,7 @@ using TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;

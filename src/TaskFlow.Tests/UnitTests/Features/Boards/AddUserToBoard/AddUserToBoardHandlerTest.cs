@@ -3,7 +3,7 @@ using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands;
+using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
@@ -22,9 +22,11 @@ public class AddUserToBoardHandlerTest
 
         var request = AddUserToBoardCommandBuilder.Build(board, user);
         
-        var act = async () => await handler.Handle(request, CancellationToken.None);
-
-        await act.Should().NotThrowAsync();
+        var result = await handler.Handle(request, CancellationToken.None);
+        
+        result.Should().NotBeNull();
+        result.Name.Should().Be(user.Name);
+        result.Email.Should().Be(user.Email);
     }
     
     [Fact]
