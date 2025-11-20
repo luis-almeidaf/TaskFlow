@@ -22,9 +22,11 @@ public class AddUserToBoardHandlerTest
 
         var request = AddUserToBoardCommandBuilder.Build(board, user);
         
-        var act = async () => await handler.Handle(request, CancellationToken.None);
-
-        await act.Should().NotThrowAsync();
+        var result = await handler.Handle(request, CancellationToken.None);
+        
+        result.Should().NotBeNull();
+        result.Name.Should().Be(user.Name);
+        result.Email.Should().Be(user.Email);
     }
     
     [Fact]
