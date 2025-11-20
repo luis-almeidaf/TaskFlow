@@ -3,7 +3,7 @@ using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
-namespace TaskFlow.Tests.ValidatorsTests.Boards.Create;
+namespace TaskFlow.Tests.ValidatorsTests.Features.Boards.Create;
 
 public class CreateBoardValidatorTest
 {

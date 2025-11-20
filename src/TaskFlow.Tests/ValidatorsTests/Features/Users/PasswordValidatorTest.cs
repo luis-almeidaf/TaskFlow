@@ -3,7 +3,7 @@ using FluentValidation;
 using TaskFlow.Application.Common.Validators;
 using TaskFlow.Application.Features.Users.Commands.Register;
 
-namespace TaskFlow.Tests.ValidatorsTests.Users;
+namespace TaskFlow.Tests.ValidatorsTests.Features.Users;
 
 public class PasswordValidatorTest
 {

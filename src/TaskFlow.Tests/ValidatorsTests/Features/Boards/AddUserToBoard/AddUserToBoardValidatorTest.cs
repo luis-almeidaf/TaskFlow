@@ -4,7 +4,7 @@ using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
 
-namespace TaskFlow.Tests.ValidatorsTests.Boards.AddUserToBoard;
+namespace TaskFlow.Tests.ValidatorsTests.Features.Boards.AddUserToBoard;
 
 public class AddUserToBoardValidatorTest
 {

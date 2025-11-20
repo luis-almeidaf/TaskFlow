@@ -4,7 +4,7 @@ using TaskFlow.Application.Features.Users.Commands.Update;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
-namespace TaskFlow.Tests.ValidatorsTests.Users.Update;
+namespace TaskFlow.Tests.ValidatorsTests.Features.Users.Update;
 
 public class UpdateUserValidatorTest
 {

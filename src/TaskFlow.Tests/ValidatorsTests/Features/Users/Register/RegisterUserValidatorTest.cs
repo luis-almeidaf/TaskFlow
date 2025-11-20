@@ -3,7 +3,7 @@ using TaskFlow.Application.Features.Users.Commands.Register;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
-namespace TaskFlow.Tests.ValidatorsTests.Users.Register;
+namespace TaskFlow.Tests.ValidatorsTests.Features.Users.Register;
 
 public class RegisterUserValidatorTest
 {

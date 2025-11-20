@@ -3,7 +3,7 @@ using TaskFlow.Application.Features.Users.Commands.ChangePassword;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
-namespace TaskFlow.Tests.ValidatorsTests.Users.ChangePassword;
+namespace TaskFlow.Tests.ValidatorsTests.Features.Users.ChangePassword;
 
 public class ChangePasswordValidatorTest
 {
