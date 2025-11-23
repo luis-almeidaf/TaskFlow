@@ -1,3 +1,5 @@
+using TaskFlow.Domain.Entities;
+
 namespace TaskFlow.Domain.Repositories.Board;
 
 public interface IBoardWriteOnlyRepository
@@ -8,8 +10,9 @@ public interface IBoardWriteOnlyRepository
     Task Delete(Guid boardId);
     
     void AddUserToBoard(Entities.Board board, Entities.User user);
-    void RemoveUserFromBoard(Entities.Board board, Entities.User user);
+    void DeleteUserFromBoard(Entities.Board board, Entities.User user);
 
-    Task AddColumnToBoard(Entities.Column column);
-    Task<Entities.Column?> GetColumnById(Guid id);
+    Task AddColumnToBoard(Column column);
+    void DeleteColumnFromBoard(Column column);
+    void ReorderColumns(Entities.Board board, int position);
 }

@@ -8,6 +8,7 @@ using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
 using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Application.Features.Boards.Commands.Delete;
+using TaskFlow.Application.Features.Boards.Commands.DeleteColumnFromBoard;
 using TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
 using TaskFlow.Application.Features.Boards.Commands.GetById;
@@ -103,7 +104,7 @@ public class BoardController(IMediator mediator) : ControllerBase
     [Route("{boardId:guid}/users/{userId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RemoveUserFromBoard(
+    public async Task<IActionResult> DeleteUserFromBoard(
         [FromRoute] Guid boardId,
         [FromRoute] Guid userId)
     {
@@ -118,18 +119,35 @@ public class BoardController(IMediator mediator) : ControllerBase
     
     [HttpPost]
     [Route("{boardId:guid}/columns")]
-    [ProducesResponseType(typeof(CreateColumnResponse), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(
+    [ProducesResponseType(typeof(AddColumnToBoardResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AddColumnToBoard(
         [FromRoute] Guid boardId,
-        [FromBody] CreateColumnRequest request)
+        [FromBody] AddColumnToBoardRequest toBoardRequest)
     {
-        var result = await mediator.Send(new CreateColumnCommand
+        var result = await mediator.Send(new AddColumnToBoardCommand
         {
             BoardId = boardId,
-            Name = request.Name
+            Name = toBoardRequest.Name
         });
 
         return Created(string.Empty, result);
+    }
+    
+    [HttpDelete]
+    [Route("{boardId:guid}/columns/{columnId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteColumnFromBoard(
+        [FromRoute] Guid boardId,
+        [FromRoute] Guid columnId)
+    {
+        await mediator.Send(new DeleteColumnFromBoardCommand
+        {
+            BoardId = boardId,
+            ColumnId = columnId
+        });
+
+        return NoContent();
     }
 }

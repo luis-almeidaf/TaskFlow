@@ -35,6 +35,7 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     {
         return await _dbContext.Boards
             .Include(board => board.Users)
+            .Include(board => board.Columns)
             .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
     }
 
@@ -42,7 +43,6 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     {
         return await _dbContext.Boards
             .AsNoTracking()
-            .Include(board => board.CreatedBy)
             .Include(board => board.Users)
             .Include(board => board.Columns)
             .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
@@ -54,7 +54,7 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
         board.Users.Add(user);
     }
 
-    public void RemoveUserFromBoard(Board board, User user)
+    public void DeleteUserFromBoard(Board board, User user)
     {
         board.Users.Remove(user);
     }
@@ -62,6 +62,21 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     public async Task AddColumnToBoard(Column column)
     {
         await _dbContext.Columns.AddAsync(column);
+    }
+
+    public void DeleteColumnFromBoard(Column column)
+    {
+        _dbContext.Columns.Remove(column);
+    }
+
+    public void ReorderColumns(Board board, int position)
+    {
+        var columns = board.Columns.Where(c => c.Position > position).ToList();
+
+        foreach (var column in columns)
+        {
+            column.Position--;
+        }
     }
 
     public async Task<Column?> GetColumnById(Guid id)
