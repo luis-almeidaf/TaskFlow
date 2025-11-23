@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
-using TaskFlow.Domain.Repositories.Column;
 using TaskFlow.Domain.Repositories.User;
 using TaskFlow.Domain.Security.Cryptography;
 using TaskFlow.Domain.Security.Tokens;
@@ -65,6 +64,5 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
         services.AddScoped<IBoardWriteOnlyRepository, BoardRepository>();
         services.AddScoped<IBoardReadOnlyRepository, BoardRepository>();
-        services.AddScoped<IColumnWriteOnlyRepository, ColumnRepository>();
     }
 }

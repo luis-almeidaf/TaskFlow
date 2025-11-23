@@ -3,21 +3,20 @@ using MediatR;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
-using TaskFlow.Domain.Repositories.Column;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
 
-public class CreateColumnHandler : IRequestHandler<CreateColumnCommand, CreateColumnResponse>
+public class AddColumnToBoardHandler : IRequestHandler<AddColumnToBoardCommand, AddColumnToBoardResponse>
 {
     private readonly IBoardReadOnlyRepository _boardReadOnlyRepository;
     private readonly ILoggedUser _loggedUser;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IColumnWriteOnlyRepository _repository;
+    private readonly IBoardWriteOnlyRepository _repository;
 
-    public CreateColumnHandler(
-        IColumnWriteOnlyRepository repository,
+    public AddColumnToBoardHandler(
+        IBoardWriteOnlyRepository repository,
         IUnitOfWork unitOfWork,
         ILoggedUser loggedUser,
         IBoardReadOnlyRepository boardReadOnlyRepository)
@@ -28,12 +27,13 @@ public class CreateColumnHandler : IRequestHandler<CreateColumnCommand, CreateCo
         _boardReadOnlyRepository = boardReadOnlyRepository;
     }
 
-    public async Task<CreateColumnResponse> Handle(CreateColumnCommand request, CancellationToken cancellationToken)
+    public async Task<AddColumnToBoardResponse> Handle(AddColumnToBoardCommand request,
+        CancellationToken cancellationToken)
     {
         Validate(request);
-        
+
         var user = await _loggedUser.GetUserAndBoards();
-        
+
         var board = await _boardReadOnlyRepository.GetById(user, request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
@@ -44,11 +44,11 @@ public class CreateColumnHandler : IRequestHandler<CreateColumnCommand, CreateCo
         var columnsCount = board.Columns.Count;
         column.Position = columnsCount;
 
-        await _repository.Add(column);
+        await _repository.AddColumnToBoard(column);
 
         await _unitOfWork.Commit();
 
-        return new CreateColumnResponse
+        return new AddColumnToBoardResponse
         {
             BoardId = board.Id,
             ColumnId = column.Id,
@@ -56,10 +56,10 @@ public class CreateColumnHandler : IRequestHandler<CreateColumnCommand, CreateCo
             Position = column.Position
         };
     }
-    
-    private void Validate(CreateColumnCommand request)
+
+    private void Validate(AddColumnToBoardCommand request)
     {
-        var result = new CreateColumnValidator().Validate(request);
+        var result = new AddColumnToBoardValidator().Validate(request);
 
         if (!result.IsValid)
         {

@@ -1,6 +1,6 @@
 namespace TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
 
-public class CreateColumnResponse
+public class AddColumnToBoardResponse
 {
     public Guid BoardId { get; set; }
     public Guid ColumnId { get; set; }

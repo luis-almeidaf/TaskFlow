@@ -3,9 +3,9 @@ using TaskFlow.Exception;
 
 namespace TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
 
-public class CreateColumnValidator : AbstractValidator<CreateColumnCommand>
+public class AddColumnToBoardValidator : AbstractValidator<AddColumnToBoardCommand>
 {
-    public CreateColumnValidator()
+    public AddColumnToBoardValidator()
     {
         RuleFor(board => board.Name).NotEmpty().WithMessage(ResourceErrorMessages.NAME_EMPTY);
     }
