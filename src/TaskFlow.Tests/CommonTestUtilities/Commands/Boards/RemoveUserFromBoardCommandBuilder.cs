@@ -5,9 +5,9 @@ namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
 public class RemoveUserFromBoardCommandBuilder
 {
-    public static RemoveUserFromBoardCommand Build(Board board, User user)
+    public static DeleteUserFromBoardCommand Build(Board board, User user)
     {
-        return new RemoveUserFromBoardCommand
+        return new DeleteUserFromBoardCommand
         {
             BoardId = board.Id,
             UserId = user.Id

@@ -107,7 +107,7 @@ public class BoardController(IMediator mediator) : ControllerBase
         [FromRoute] Guid boardId,
         [FromRoute] Guid userId)
     {
-        await mediator.Send(new RemoveUserFromBoardCommand()
+        await mediator.Send(new DeleteUserFromBoardCommand()
         {
             BoardId = boardId,
             UserId = userId

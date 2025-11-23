@@ -7,14 +7,14 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 
-public class RemoveUserFromBoardHandler(
+public class DeleteUserFromBoardHandler(
     IUnitOfWork unitOfWork,
     ILoggedUser user,
     IBoardWriteOnlyRepository repository,
     IUserReadOnlyRepository userReadOnlyRepository)
-    : IRequestHandler<RemoveUserFromBoardCommand, Unit>
+    : IRequestHandler<DeleteUserFromBoardCommand, Unit>
 {
-    public async Task<Unit> Handle(RemoveUserFromBoardCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteUserFromBoardCommand request, CancellationToken cancellationToken)
     {
         var loggedUser = await user.Get();
 

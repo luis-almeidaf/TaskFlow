@@ -10,7 +10,7 @@ using TaskFlow.Tests.CommonTestUtilities.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.RemoveUserFromBoard;
 
-public class RemoveUserFromBoardHandlerTest
+public class DeleteUserFromBoardHandlerTest
 {
     [Fact]
     public async Task Success()
@@ -116,7 +116,7 @@ public class RemoveUserFromBoardHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_OWNER_CANNOT_BE_REMOVED));
     }
 
-    private static RemoveUserFromBoardHandler CreateHandler(
+    private static DeleteUserFromBoardHandler CreateHandler(
         Domain.Entities.User user,
         Board board,
         Domain.Entities.User? userToBeRemoved = null,
@@ -141,7 +141,7 @@ public class RemoveUserFromBoardHandlerTest
         if (userId.HasValue)
             userReadOnlyRepository.GetById(user, userId);
 
-        return new RemoveUserFromBoardHandler(
+        return new DeleteUserFromBoardHandler(
             unitOfWork,
             loggedUser,
             repository.Build(),
