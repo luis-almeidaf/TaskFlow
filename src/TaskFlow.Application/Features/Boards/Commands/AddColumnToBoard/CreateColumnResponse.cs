@@ -1,4 +1,4 @@
-namespace TaskFlow.Application.Features.Columns.Create;
+namespace TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
 
 public class CreateColumnResponse
 {

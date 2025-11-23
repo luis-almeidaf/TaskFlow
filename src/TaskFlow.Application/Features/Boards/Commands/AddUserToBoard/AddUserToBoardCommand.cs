@@ -1,5 +1,4 @@
 using MediatR;
-using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 
 namespace TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
 

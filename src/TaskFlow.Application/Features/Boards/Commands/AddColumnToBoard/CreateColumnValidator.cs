@@ -1,8 +1,7 @@
 using FluentValidation;
-using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Exception;
 
-namespace TaskFlow.Application.Features.Columns.Create;
+namespace TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
 
 public class CreateColumnValidator : AbstractValidator<CreateColumnCommand>
 {

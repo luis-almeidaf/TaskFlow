@@ -1,4 +1,4 @@
-using TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
+using TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;

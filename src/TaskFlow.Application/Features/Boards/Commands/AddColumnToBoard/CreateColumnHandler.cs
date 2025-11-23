@@ -7,7 +7,7 @@ using TaskFlow.Domain.Repositories.Column;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
-namespace TaskFlow.Application.Features.Columns.Create;
+namespace TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
 
 public class CreateColumnHandler : IRequestHandler<CreateColumnCommand, CreateColumnResponse>
 {

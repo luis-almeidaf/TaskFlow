@@ -5,7 +5,7 @@ using TaskFlow.Domain.Repositories.User;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
-namespace TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
+namespace TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 
 public class RemoveUserFromBoardHandler(
     IUnitOfWork unitOfWork,

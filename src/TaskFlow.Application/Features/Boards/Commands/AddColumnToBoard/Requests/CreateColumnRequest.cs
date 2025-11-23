@@ -1,4 +1,4 @@
-namespace TaskFlow.Application.Features.Columns.Create.Requests;
+namespace TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard.Requests;
 
 public class CreateColumnRequest
 {

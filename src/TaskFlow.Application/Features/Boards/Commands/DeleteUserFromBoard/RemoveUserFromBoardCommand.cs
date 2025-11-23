@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
+namespace TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 
 public class RemoveUserFromBoardCommand : IRequest<Unit>
 {

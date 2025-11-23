@@ -2,13 +2,15 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
+using TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
+using TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard.Requests;
 using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
 using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
 using TaskFlow.Application.Features.Boards.Commands.Create;
 using TaskFlow.Application.Features.Boards.Commands.Delete;
+using TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
 using TaskFlow.Application.Features.Boards.Commands.GetById;
-using TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
 using TaskFlow.Application.Features.Boards.Commands.Update;
 using TaskFlow.Application.Features.Boards.Commands.Update.Requests;
 
@@ -48,44 +50,7 @@ public class BoardController(IMediator mediator) : ControllerBase
 
         return Ok(response);
     }
-
-    [HttpPost]
-    [Route("{boardId:guid}/users")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> AddUserToBoard(
-        [FromRoute] Guid boardId,
-        [FromBody] AddUserToBoardRequest request)
-    {
-        var result =await mediator.Send(new AddUserToBoardCommand
-        {
-            BoardId = boardId,
-            UserEmail = request.UserEmail
-        });
-
-        return Ok(result);
-    }
-
-    [HttpDelete]
-    [Route("{boardId:guid}/users/{userId:guid}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RemoveUserFromBoard(
-        [FromRoute] Guid boardId,
-        [FromRoute] Guid userId)
-    {
-        await mediator.Send(new RemoveUserFromBoardCommand()
-        {
-            BoardId = boardId,
-            UserId = userId
-        });
-
-        return NoContent();
-    }
-
+    
     [HttpPatch]
     [Route("{boardId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -112,5 +77,59 @@ public class BoardController(IMediator mediator) : ControllerBase
     {
         await mediator.Send(new DeleteBoardCommand { Id = boardId });
         return NoContent();
+    }
+    
+
+    [HttpPost]
+    [Route("{boardId:guid}/users")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> AddUserToBoard(
+        [FromRoute] Guid boardId,
+        [FromBody] AddUserToBoardRequest request)
+    {
+        var result =await mediator.Send(new AddUserToBoardCommand
+        {
+            BoardId = boardId,
+            UserEmail = request.UserEmail
+        });
+
+        return Ok(result);
+    }
+
+    [HttpDelete]
+    [Route("{boardId:guid}/users/{userId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RemoveUserFromBoard(
+        [FromRoute] Guid boardId,
+        [FromRoute] Guid userId)
+    {
+        await mediator.Send(new RemoveUserFromBoardCommand()
+        {
+            BoardId = boardId,
+            UserId = userId
+        });
+
+        return NoContent();
+    }
+    
+    [HttpPost]
+    [Route("{boardId:guid}/columns")]
+    [ProducesResponseType(typeof(CreateColumnResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create(
+        [FromRoute] Guid boardId,
+        [FromBody] CreateColumnRequest request)
+    {
+        var result = await mediator.Send(new CreateColumnCommand
+        {
+            BoardId = boardId,
+            Name = request.Name
+        });
+
+        return Created(string.Empty, result);
     }
 }

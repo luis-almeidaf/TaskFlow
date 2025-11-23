@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
+using TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
