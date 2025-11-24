@@ -14,6 +14,8 @@ using TaskFlow.Application.Features.Boards.Commands.GetAll;
 using TaskFlow.Application.Features.Boards.Commands.GetById;
 using TaskFlow.Application.Features.Boards.Commands.Update;
 using TaskFlow.Application.Features.Boards.Commands.Update.Requests;
+using TaskFlow.Application.Features.Boards.Commands.UpdateColumn;
+using TaskFlow.Application.Features.Boards.Commands.UpdateColumn.Request;
 
 namespace TaskFlow.Api.Controllers;
 
@@ -146,6 +148,25 @@ public class BoardController(IMediator mediator) : ControllerBase
         {
             BoardId = boardId,
             ColumnId = columnId
+        });
+
+        return NoContent();
+    }
+    
+    [HttpPut]
+    [Route("{boardId:guid}/columns/{columnId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateColumn(
+        [FromRoute] Guid boardId,
+        [FromRoute] Guid columnId,
+        [FromBody] UpdateColumnRequest request)
+    {
+        await mediator.Send(new UpdateColumnCommand
+        {
+            BoardId = boardId,
+            ColumnId = columnId,
+            Name = request.Name
         });
 
         return NoContent();

@@ -15,4 +15,5 @@ public interface IBoardWriteOnlyRepository
     Task AddColumnToBoard(Column column);
     void DeleteColumnFromBoard(Column column);
     void ReorderColumns(Entities.Board board, int position);
+    void UpdateColumn(Column column);
 }

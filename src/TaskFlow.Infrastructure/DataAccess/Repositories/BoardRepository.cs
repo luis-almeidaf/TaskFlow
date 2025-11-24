@@ -43,6 +43,7 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     {
         return await _dbContext.Boards
             .AsNoTracking()
+            .Include(board => board.CreatedBy)
             .Include(board => board.Users)
             .Include(board => board.Columns)
             .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
@@ -77,6 +78,11 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
         {
             column.Position--;
         }
+    }
+
+    public void UpdateColumn(Column column)
+    {
+        _dbContext.Columns.Update(column);
     }
 
     public async Task<Column?> GetColumnById(Guid id)
