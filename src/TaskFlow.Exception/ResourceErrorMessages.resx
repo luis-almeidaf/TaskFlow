@@ -60,4 +60,7 @@
     <data name="BOARD_OWNER_CANNOT_BE_REMOVED" xml:space="preserve">
         <value>Board owner cannot be removed.</value>
     </data>
+    <data name="NEW_POSITION_CANNOT_BE_NEGATIVE" xml:space="preserve">
+        <value>New Position must be a positive integer.</value>
+    </data>
 </root>

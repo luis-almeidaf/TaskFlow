@@ -12,6 +12,8 @@ using TaskFlow.Application.Features.Boards.Commands.DeleteColumnFromBoard;
 using TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 using TaskFlow.Application.Features.Boards.Commands.GetAll;
 using TaskFlow.Application.Features.Boards.Commands.GetById;
+using TaskFlow.Application.Features.Boards.Commands.MoveColumn;
+using TaskFlow.Application.Features.Boards.Commands.MoveColumn.Request;
 using TaskFlow.Application.Features.Boards.Commands.Update;
 using TaskFlow.Application.Features.Boards.Commands.Update.Requests;
 using TaskFlow.Application.Features.Boards.Commands.UpdateColumn;
@@ -39,7 +41,7 @@ public class BoardController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var response = await mediator.Send(new GetBoardsCommand());
-        
+
         return Ok(response);
     }
 
@@ -53,7 +55,7 @@ public class BoardController(IMediator mediator) : ControllerBase
 
         return Ok(response);
     }
-    
+
     [HttpPatch]
     [Route("{boardId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -81,7 +83,7 @@ public class BoardController(IMediator mediator) : ControllerBase
         await mediator.Send(new DeleteBoardCommand { Id = boardId });
         return NoContent();
     }
-    
+
 
     [HttpPost]
     [Route("{boardId:guid}/users")]
@@ -93,7 +95,7 @@ public class BoardController(IMediator mediator) : ControllerBase
         [FromRoute] Guid boardId,
         [FromBody] AddUserToBoardRequest request)
     {
-        var result =await mediator.Send(new AddUserToBoardCommand
+        var result = await mediator.Send(new AddUserToBoardCommand
         {
             BoardId = boardId,
             UserEmail = request.UserEmail
@@ -118,7 +120,7 @@ public class BoardController(IMediator mediator) : ControllerBase
 
         return NoContent();
     }
-    
+
     [HttpPost]
     [Route("{boardId:guid}/columns")]
     [ProducesResponseType(typeof(AddColumnToBoardResponse), StatusCodes.Status201Created)]
@@ -135,7 +137,7 @@ public class BoardController(IMediator mediator) : ControllerBase
 
         return Created(string.Empty, result);
     }
-    
+
     [HttpDelete]
     [Route("{boardId:guid}/columns/{columnId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -152,8 +154,8 @@ public class BoardController(IMediator mediator) : ControllerBase
 
         return NoContent();
     }
-    
-    [HttpPut]
+
+    [HttpPatch]
     [Route("{boardId:guid}/columns/{columnId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
@@ -167,6 +169,25 @@ public class BoardController(IMediator mediator) : ControllerBase
             BoardId = boardId,
             ColumnId = columnId,
             Name = request.Name
+        });
+
+        return NoContent();
+    }
+
+    [HttpPatch]
+    [Route("{boardId:guid}/columns/{columnId:guid}/position")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> MoveColumn(
+        [FromRoute] Guid boardId,
+        [FromRoute] Guid columnId,
+        [FromBody] MoveColumnRequest request)
+    {
+        await mediator.Send(new MoveColumnCommand()
+        {
+            BoardId = boardId,
+            ColumnId = columnId,
+            NewPosition = request.NewPosition
         });
 
         return NoContent();
