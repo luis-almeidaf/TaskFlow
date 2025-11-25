@@ -5,16 +5,16 @@ using TaskFlow.Domain.Repositories.User;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
-namespace TaskFlow.Application.Features.Boards.Commands.RemoveUserFromBoard;
+namespace TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
 
-public class RemoveUserFromBoardHandler(
+public class DeleteUserFromBoardHandler(
     IUnitOfWork unitOfWork,
     ILoggedUser user,
     IBoardWriteOnlyRepository repository,
     IUserReadOnlyRepository userReadOnlyRepository)
-    : IRequestHandler<RemoveUserFromBoardCommand, Unit>
+    : IRequestHandler<DeleteUserFromBoardCommand, Unit>
 {
-    public async Task<Unit> Handle(RemoveUserFromBoardCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteUserFromBoardCommand request, CancellationToken cancellationToken)
     {
         var loggedUser = await user.Get();
 
@@ -29,7 +29,7 @@ public class RemoveUserFromBoardHandler(
 
         if (userToRemove.Id == board.CreatedById) throw new BoardOwnerCannotBeRemovedException();
 
-        repository.RemoveUserFromBoard(board, userToRemove);
+        repository.DeleteUserFromBoard(board, userToRemove);
 
         await unitOfWork.Commit();
 

@@ -15,30 +15,9 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
         await _dbContext.Boards.AddAsync(board);
     }
 
-    public void AddUserToBoard(Board board, User user)
-    {
-        _dbContext.Entry(user).State = EntityState.Unchanged;
-        board.Users.Add(user);
-    }
-
-    public void RemoveUserFromBoard(Board board, User user)
-    {
-        board.Users.Remove(user);
-    }
-
     public async Task<List<Board>> GetAll(User user)
     {
         return await _dbContext.Boards.AsNoTracking().Where(board => board.CreatedById == user.Id).ToListAsync();
-    }
-
-    async Task<Board?> IBoardReadOnlyRepository.GetById(User user, Guid id)
-    {
-        return await _dbContext.Boards
-            .AsNoTracking()
-            .Include(board => board.CreatedBy)
-            .Include(board => board.Users)
-            .Include(board => board.Columns)
-            .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
     }
 
     public void Update(Board board)
@@ -56,6 +35,59 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     {
         return await _dbContext.Boards
             .Include(board => board.Users)
+            .Include(board => board.Columns)
             .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
+    }
+
+    async Task<Board?> IBoardReadOnlyRepository.GetById(User user, Guid id)
+    {
+        return await _dbContext.Boards
+            .AsNoTracking()
+            .Include(board => board.CreatedBy)
+            .Include(board => board.Users)
+            .Include(board => board.Columns)
+            .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
+    }
+
+    public void AddUserToBoard(Board board, User user)
+    {
+        _dbContext.Entry(user).State = EntityState.Unchanged;
+        board.Users.Add(user);
+    }
+
+    public void DeleteUserFromBoard(Board board, User user)
+    {
+        board.Users.Remove(user);
+    }
+
+    public async Task AddColumnToBoard(Column column)
+    {
+        await _dbContext.Columns.AddAsync(column);
+    }
+
+    public void DeleteColumnFromBoard(Column column)
+    {
+        _dbContext.Columns.Remove(column);
+    }
+
+    public void ReorderColumns(Board board, int position)
+    {
+        var columns = board.Columns.Where(c => c.Position > position).ToList();
+
+        foreach (var column in columns)
+        {
+            column.Position--;
+        }
+    }
+
+    public void UpdateColumn(Column column)
+    {
+        _dbContext.Columns.Update(column);
+    }
+
+    public async Task<Column?> GetColumnById(Guid id)
+    {
+        var column = await _dbContext.Columns.FirstOrDefaultAsync(user => user.Id == id);
+        return column;
     }
 }

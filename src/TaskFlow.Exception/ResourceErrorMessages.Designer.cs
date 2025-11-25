@@ -132,6 +132,15 @@ namespace TaskFlow.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Position must be a positive integer..
+        /// </summary>
+        public static string NEW_POSITION_CANNOT_BE_NEGATIVE {
+            get {
+                return ResourceManager.GetString("NEW_POSITION_CANNOT_BE_NEGATIVE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The password you entered is different from the current password..
         /// </summary>
         public static string PASSWORD_DIFFERENT_CURRENT_PASSWORD {
