@@ -78,6 +78,15 @@ namespace TaskFlow.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Column not found, check the id given..
+        /// </summary>
+        public static string COLUMN_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("COLUMN_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This e-mail is already in use..
         /// </summary>
         public static string EMAIL_ALREADY_REGISTERED {
