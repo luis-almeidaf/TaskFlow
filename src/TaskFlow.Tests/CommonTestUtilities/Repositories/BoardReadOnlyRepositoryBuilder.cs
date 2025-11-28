@@ -35,6 +35,20 @@ public class BoardReadOnlyRepositoryBuilder
         
         return this;
     }
+    
+    public BoardReadOnlyRepositoryBuilder GetColumnById(Column column, Guid? id = null)
+    {
+        if (id.HasValue)
+        {
+            _repository.Setup(repo => repo.GetColumnById(id.Value)).ReturnsAsync((Column?)null);
+        }
+        else
+        {
+            _repository.Setup(repo => repo.GetColumnById(column.Id)).ReturnsAsync(column);
+        }
+
+        return this;
+    }
 
     public IBoardReadOnlyRepository Build()
     {

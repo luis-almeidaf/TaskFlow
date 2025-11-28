@@ -12,4 +12,6 @@ public class BoardIdentityManager
     }
 
     public Guid GetId() => _board.Id;
+
+    public List<Column> GetColumns => (List<Column>)_board.Columns;
 }

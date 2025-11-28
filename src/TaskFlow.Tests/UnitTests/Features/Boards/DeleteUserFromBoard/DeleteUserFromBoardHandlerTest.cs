@@ -8,7 +8,7 @@ using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
 using TaskFlow.Tests.CommonTestUtilities.Repositories;
 
-namespace TaskFlow.Tests.UnitTests.Features.Boards.RemoveUserFromBoard;
+namespace TaskFlow.Tests.UnitTests.Features.Boards.DeleteUserFromBoard;
 
 public class DeleteUserFromBoardHandlerTest
 {
@@ -32,7 +32,7 @@ public class DeleteUserFromBoardHandlerTest
     }
 
     [Fact]
-    public async Task Error_Board_Found()
+    public async Task Error_Board_Not_Found()
     {
         var user = UserBuilder.Build();
 
