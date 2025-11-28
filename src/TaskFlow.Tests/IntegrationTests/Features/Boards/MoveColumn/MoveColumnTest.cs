@@ -52,7 +52,7 @@ public class MoveColumnTest : TaskFlowClassFixture
     }
 
     [Fact]
-    public async Task Error_NewPostion_Cannot_Be_Negative()
+    public async Task Error_NewPosition_Cannot_Be_Negative()
     {
         var columnToMove = _columns[1];
 
