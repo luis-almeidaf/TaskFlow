@@ -87,7 +87,7 @@ public class BoardController(IMediator mediator) : ControllerBase
 
     [HttpPost]
     [Route("{boardId:guid}/users")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
@@ -101,7 +101,7 @@ public class BoardController(IMediator mediator) : ControllerBase
             UserEmail = request.UserEmail
         });
 
-        return Ok(result);
+        return Created(string.Empty, result);
     }
 
     [HttpDelete]

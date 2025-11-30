@@ -37,7 +37,7 @@ public class RemoveUserFromBoardTest : TaskFlowClassFixture
 
         var response = await DoPost(requestUri: $"{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
 
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         response = await DoDelete(requestUri: $"{Route}/{_boardId}/users/{_userId}", token: _boardOwnerToken);
 
