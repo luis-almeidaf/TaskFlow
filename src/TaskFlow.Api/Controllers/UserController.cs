@@ -2,11 +2,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
-using TaskFlow.Application.Features.Users.Commands.ChangePassword;
-using TaskFlow.Application.Features.Users.Commands.Delete;
-using TaskFlow.Application.Features.Users.Commands.GetByEmail;
-using TaskFlow.Application.Features.Users.Commands.Register;
-using TaskFlow.Application.Features.Users.Commands.Update;
+using TaskFlow.Application.Features.Users.Commands.ChangePasswordCommand;
+using TaskFlow.Application.Features.Users.Commands.DeleteUserCommand;
+using TaskFlow.Application.Features.Users.Commands.RegisterUserCommand;
+using TaskFlow.Application.Features.Users.Commands.UpdateCommand;
+using TaskFlow.Application.Features.Users.Queries.GetByEmailQuery;
 
 namespace TaskFlow.Api.Controllers
 {
@@ -24,21 +24,25 @@ namespace TaskFlow.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(RegisterUserResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] RegisterUserCommand request)
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
-            var response = await _mediator.Send(request);
+            var response = await _mediator.Send(new RegisterUserCommand
+            {
+                Email = request.Email,
+                Name = request.Name,
+                Password = request.Password
+            });
 
             return Created(string.Empty, response);
         }
 
-        [HttpGet]
-        [Route("{email}")]
+        [HttpGet("{email}")]
         [Authorize]
-        [ProducesResponseType(typeof(GetUserByEmailResponse),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(BaseErrorResponse),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(GetUserByEmailResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByEmail([FromRoute] string email)
         {
-            var response = await _mediator.Send(new GetUserByEmailCommand { Email = email });
+            var response = await _mediator.Send(new GetUserByEmailQuery { Email = email });
             return Ok(response);
         }
 
@@ -46,9 +50,14 @@ namespace TaskFlow.Api.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update([FromBody] UpdateUserCommand request)
+        public async Task<IActionResult> Update([FromBody] UpdateUserRequest request)
         {
-            await _mediator.Send(request);
+            await _mediator.Send(new UpdateUserCommand
+            {
+                Email = request.Email,
+                Name = request.Name
+            });
+
             return NoContent();
         }
 
@@ -56,9 +65,14 @@ namespace TaskFlow.Api.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand request)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
-            await _mediator.Send(request);
+            await _mediator.Send(new ChangePasswordCommand
+            {
+                NewPassword = request.NewPassword,
+                Password = request.Password
+            });
+
             return NoContent();
         }
 

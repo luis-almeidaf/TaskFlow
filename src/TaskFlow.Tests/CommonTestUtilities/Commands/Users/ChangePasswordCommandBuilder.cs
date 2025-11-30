@@ -1,5 +1,5 @@
 using Bogus;
-using TaskFlow.Application.Features.Users.Commands.ChangePassword;
+using TaskFlow.Application.Features.Users.Commands.ChangePasswordCommand;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 

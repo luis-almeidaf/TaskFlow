@@ -7,7 +7,7 @@ namespace TaskFlow.Tests.IntegrationTests.Features.Boards.GetById;
 
 public class GetBoardByIdTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly string _token;
     private readonly Guid _boardId;

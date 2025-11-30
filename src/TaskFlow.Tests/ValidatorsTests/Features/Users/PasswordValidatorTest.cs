@@ -1,7 +1,7 @@
 using FluentAssertions;
 using FluentValidation;
 using TaskFlow.Application.Common.Validators;
-using TaskFlow.Application.Features.Users.Commands.Register;
+using TaskFlow.Application.Features.Users.Commands.RegisterUserCommand;
 
 namespace TaskFlow.Tests.ValidatorsTests.Features.Users;
 

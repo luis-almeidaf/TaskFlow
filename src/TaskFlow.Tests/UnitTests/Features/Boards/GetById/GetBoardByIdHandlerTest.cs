@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.GetById;
+using TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
@@ -49,7 +49,7 @@ public class GetBoardByIdHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
 
-    private static GetBoardByIdHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
+    private static GetBoardByIdQueryHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
     {
         var loggedUser = LoggedUserBuilder.Build(user);
         var repository = new BoardReadOnlyRepositoryBuilder();
@@ -63,6 +63,6 @@ public class GetBoardByIdHandlerTest
             repository.GetById(user, board);
         }
 
-        return new GetBoardByIdHandler(repository.Build(), loggedUser);
+        return new GetBoardByIdQueryHandler(repository.Build(), loggedUser);
     }
 }

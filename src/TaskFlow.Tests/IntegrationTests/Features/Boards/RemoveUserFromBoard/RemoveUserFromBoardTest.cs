@@ -1,14 +1,14 @@
+using FluentAssertions;
 using System.Net;
 using System.Text.Json;
-using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
+using TaskFlow.Application.Features.Boards.Users.Commands.AddUserCommand;
 using TaskFlow.Exception;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.RemoveUserFromBoard;
 
 public class RemoveUserFromBoardTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly Guid _boardId;
 
@@ -30,16 +30,16 @@ public class RemoveUserFromBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = new AddUserToBoardRequest
+        var request = new AddUserRequest
         {
             UserEmail = _userToBeAddedEmail
         };
 
-        var response = await DoPost(requestUri: $"{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        response = await DoDelete(requestUri: $"{Route}/{_boardId}/users/{_userId}", token: _boardOwnerToken);
+        response = await DoDelete(requestUri: $"/{Route}/{_boardId}/users/{_userId}", token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
@@ -48,7 +48,7 @@ public class RemoveUserFromBoardTest : TaskFlowClassFixture
     public async Task Error_Board_Not_Found()
     {
         var fakeBoardId = Guid.NewGuid();
-        var response = await DoDelete(requestUri: $"{Route}/{fakeBoardId}/users/{_userId}", token: _boardOwnerToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{fakeBoardId}/users/{_userId}", token: _boardOwnerToken);
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
         var responseBody = await response.Content.ReadAsStreamAsync();
@@ -66,7 +66,7 @@ public class RemoveUserFromBoardTest : TaskFlowClassFixture
     {
         var fakeUserId = Guid.NewGuid();
 
-        var response = await DoDelete(requestUri: $"{Route}/{_boardId}/users/{fakeUserId}", token: _boardOwnerToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/users/{fakeUserId}", token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
@@ -83,7 +83,7 @@ public class RemoveUserFromBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_User_Not_In_Board()
     {
-        var response = await DoDelete(requestUri: $"{Route}/{_boardId}/users/{_userId}", token: _boardOwnerToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/users/{_userId}", token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
@@ -100,7 +100,7 @@ public class RemoveUserFromBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Board_Owner_Cannot_Be_Removed()
     {
-        var response = await DoDelete(requestUri: $"{Route}/{_boardId}/users/{_boardOwnerId}", token: _boardOwnerToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/users/{_boardOwnerId}", token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Conflict);
 

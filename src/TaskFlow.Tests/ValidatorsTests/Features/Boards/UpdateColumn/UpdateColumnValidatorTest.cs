@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.UpdateColumn;
+using TaskFlow.Application.Features.Boards.Columns.Commands.UpdateColumnCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 using TaskFlow.Tests.CommonTestUtilities.Entities;

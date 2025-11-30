@@ -1,4 +1,4 @@
-using TaskFlow.Application.Features.Boards.Commands.Create;
+using TaskFlow.Application.Features.Boards.Commands.CreateBoardCommand;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 

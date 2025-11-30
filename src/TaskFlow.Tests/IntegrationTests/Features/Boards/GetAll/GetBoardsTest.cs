@@ -6,7 +6,7 @@ namespace TaskFlow.Tests.IntegrationTests.Features.Boards.GetAll;
 
 public class GetBoardsTest: TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly string _userWithBoardsToken;
     private readonly string _userWithoutBoardsToken;
@@ -32,7 +32,7 @@ public class GetBoardsTest: TaskFlowClassFixture
     }
     
     [Fact]
-    public async Task User_Without_Boards()
+    public async Task User_Without_Boards_Should_Return_Empty_List()
     {
         var response = await DoGet($"{Route}", _userWithoutBoardsToken);
 

@@ -1,12 +1,12 @@
-using TaskFlow.Application.Features.Boards.Commands.GetById;
+using TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
 public static class GetBoardByIdCommandBuilder
 {
-    public static GetBoardByIdCommand Build(Board board)
+    public static GetBoardByIdQuery Build(Board board)
     {
-        return new GetBoardByIdCommand { Id = board.Id };
+        return new GetBoardByIdQuery { Id = board.Id };
     }
 }

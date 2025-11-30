@@ -1,5 +1,5 @@
 using Bogus;
-using TaskFlow.Application.Features.Users.Commands.Update;
+using TaskFlow.Application.Features.Users.Commands.UpdateCommand;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 

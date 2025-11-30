@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.Create;
+using TaskFlow.Application.Features.Boards.Commands.CreateBoardCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 

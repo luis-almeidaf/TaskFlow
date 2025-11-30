@@ -1,4 +1,4 @@
-using TaskFlow.Application.Features.Users.Commands.Delete;
+using TaskFlow.Application.Features.Users.Commands.DeleteUserCommand;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 

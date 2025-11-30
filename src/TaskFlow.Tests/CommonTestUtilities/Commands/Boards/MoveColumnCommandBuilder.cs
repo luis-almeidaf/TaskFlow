@@ -1,4 +1,4 @@
-using TaskFlow.Application.Features.Boards.Commands.MoveColumn;
+using TaskFlow.Application.Features.Boards.Columns.Commands.MoveColumnCommand;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;

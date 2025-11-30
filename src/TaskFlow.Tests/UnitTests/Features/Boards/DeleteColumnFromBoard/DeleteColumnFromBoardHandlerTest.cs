@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.DeleteColumnFromBoard;
+using TaskFlow.Application.Features.Boards.Columns.Commands.DeleteColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
@@ -72,7 +72,7 @@ public class DeleteColumnFromBoardHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.COLUMN_NOT_FOUND));
     }
 
-    private static DeleteColumnFromBoardHandler CreateHandler(
+    private static DeleteColumnCommandHandler CreateHandler(
         User user,
         Board board,
         Column column,
@@ -95,7 +95,7 @@ public class DeleteColumnFromBoardHandlerTest
         else
             boardReadRepository.GetColumnById(column);
 
-        return new DeleteColumnFromBoardHandler(
+        return new DeleteColumnCommandHandler(
             boardReadRepository.Build(),
             loggedUser,
             unitOfWork,

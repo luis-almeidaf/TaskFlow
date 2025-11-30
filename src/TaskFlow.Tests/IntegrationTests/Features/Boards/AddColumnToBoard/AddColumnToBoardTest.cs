@@ -1,14 +1,14 @@
+using FluentAssertions;
 using System.Net;
 using System.Text.Json;
-using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard.Requests;
+using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Exception;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.AddColumnToBoard;
 
 public class AddColumnToBoardTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly Guid _boardId;
     private readonly string _boardOwnerToken;
@@ -22,9 +22,9 @@ public class AddColumnToBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = new AddColumnToBoardRequest { Name = "New Column" };
+        var request = new CreateColumnRequest { Name = "New Column" };
 
-        var response = await DoPost(requestUri: $"{Route}/{_boardId}/columns", request: request,
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/columns", request: request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -40,9 +40,9 @@ public class AddColumnToBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Name_Empty()
     {
-        var request = new AddColumnToBoardRequest { Name = "" };
+        var request = new CreateColumnRequest { Name = "" };
 
-        var response = await DoPost(requestUri: $"{Route}/{_boardId}/columns", request: request,
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/columns", request: request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -61,11 +61,11 @@ public class AddColumnToBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Board_Not_Found()
     {
-        var request = new AddColumnToBoardRequest { Name = "New Column" };
+        var request = new CreateColumnRequest { Name = "New Column" };
 
         var fakeId = Guid.NewGuid();
 
-        var response = await DoPost(requestUri: $"{Route}/{fakeId}/columns", request: request,
+        var response = await DoPost(requestUri: $"/{Route}/{fakeId}/columns", request: request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);

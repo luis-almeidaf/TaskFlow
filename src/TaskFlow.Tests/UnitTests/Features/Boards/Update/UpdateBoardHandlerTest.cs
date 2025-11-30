@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.Update;
+using TaskFlow.Application.Features.Boards.Commands.UpdateBoardCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;

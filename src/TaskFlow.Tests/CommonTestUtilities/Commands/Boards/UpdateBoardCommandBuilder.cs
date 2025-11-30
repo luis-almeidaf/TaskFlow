@@ -1,4 +1,4 @@
-using TaskFlow.Application.Features.Boards.Commands.Update;
+using TaskFlow.Application.Features.Boards.Commands.UpdateBoardCommand;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;

@@ -9,7 +9,7 @@ namespace TaskFlow.Tests.IntegrationTests.Features.Boards.Update;
 
 public class UpdateBoardTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly string _token;
     private readonly Guid _boardId;

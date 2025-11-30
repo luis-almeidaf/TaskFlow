@@ -1,13 +1,13 @@
-using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
+using TaskFlow.Application.Features.Boards.Users.Commands.AddUserCommand;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
 public static class AddUserToBoardCommandBuilder
 {
-    public static AddUserToBoardCommand Build(Board board, User user)
+    public static AddUserCommand Build(Board board, User user)
     {
-        return new AddUserToBoardCommand
+        return new AddUserCommand
         {
             BoardId = board.Id,
             UserEmail = user.Email

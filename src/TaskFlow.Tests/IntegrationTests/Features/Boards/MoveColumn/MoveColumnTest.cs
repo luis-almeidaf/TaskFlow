@@ -1,7 +1,7 @@
+using FluentAssertions;
 using System.Net;
 using System.Text.Json;
-using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.MoveColumn.Request;
+using TaskFlow.Application.Features.Boards.Columns.Commands.MoveColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 
@@ -9,7 +9,7 @@ namespace TaskFlow.Tests.IntegrationTests.Features.Boards.MoveColumn;
 
 public class MoveColumnTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly Guid _boardId;
     private readonly List<Column> _columns;
@@ -31,7 +31,7 @@ public class MoveColumnTest : TaskFlowClassFixture
 
         var request = new MoveColumnRequest { NewPosition = 2 };
 
-        var response = await DoPatch(requestUri: $"{Route}/{_boardId}/columns/{columnId}/position", request,
+        var response = await DoPatch(requestUri: $"/{Route}/{_boardId}/columns/{columnId}/position", request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -60,7 +60,7 @@ public class MoveColumnTest : TaskFlowClassFixture
 
         var request = new MoveColumnRequest { NewPosition = -1 };
 
-        var response = await DoPatch(requestUri: $"{Route}/{_boardId}/columns/{columnId}/position", request,
+        var response = await DoPatch(requestUri: $"/{Route}/{_boardId}/columns/{columnId}/position", request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -87,7 +87,7 @@ public class MoveColumnTest : TaskFlowClassFixture
 
         var fakeBoardId = Guid.NewGuid();
 
-        var response = await DoPatch(requestUri: $"{Route}/{fakeBoardId}/columns/{columnId}/position", request,
+        var response = await DoPatch(requestUri: $"/{Route}/{fakeBoardId}/columns/{columnId}/position", request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -110,7 +110,7 @@ public class MoveColumnTest : TaskFlowClassFixture
 
         var request = new MoveColumnRequest { NewPosition = 2 };
 
-        var response = await DoPatch(requestUri: $"{Route}/{_boardId}/columns/{fakeColumnId}/position", request,
+        var response = await DoPatch(requestUri: $"/{Route}/{_boardId}/columns/{fakeColumnId}/position", request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);

@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
+using TaskFlow.Application.Features.Boards.Users.Commands.AddUserCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
@@ -11,7 +11,7 @@ public class AddUserToBoardValidatorTest
     [Fact]
     public void Success()
     {
-        var validator = new AddUserToBoardValidator();
+        var validator = new AddUserValidator();
 
         var user = UserBuilder.Build();
 
@@ -30,7 +30,7 @@ public class AddUserToBoardValidatorTest
     [InlineData(null)]
     public void Error_UserEmail_Empty(string email)
     {
-        var validator = new AddUserToBoardValidator();
+        var validator = new AddUserValidator();
 
         var user = UserBuilder.Build();
 
@@ -50,7 +50,7 @@ public class AddUserToBoardValidatorTest
     [Fact]
     public void Error_UserEmail_Invalid()
     {
-        var validator = new AddUserToBoardValidator();
+        var validator = new AddUserValidator();
 
         var user = UserBuilder.Build();
         

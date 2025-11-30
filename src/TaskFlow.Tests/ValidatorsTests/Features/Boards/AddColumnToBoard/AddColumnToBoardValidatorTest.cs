@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
+using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
@@ -11,7 +11,7 @@ public class AddColumnToBoardValidatorTest
     [Fact]
     public void Success()
     {
-        var validator = new AddColumnToBoardValidator();
+        var validator = new CreateColumnValidator();
 
         var user = UserBuilder.Build();
 
@@ -32,7 +32,7 @@ public class AddColumnToBoardValidatorTest
     [InlineData(null)]
     public void Error_Column_Name_Empty(string name)
     {
-        var validator = new AddColumnToBoardValidator();
+        var validator = new CreateColumnValidator();
 
         var user = UserBuilder.Build();
 

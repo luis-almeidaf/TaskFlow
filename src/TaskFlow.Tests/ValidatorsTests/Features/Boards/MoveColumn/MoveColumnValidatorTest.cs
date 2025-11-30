@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.MoveColumn;
+using TaskFlow.Application.Features.Boards.Columns.Commands.MoveColumnCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 using TaskFlow.Tests.CommonTestUtilities.Entities;

@@ -1,14 +1,14 @@
+using FluentAssertions;
 using System.Net;
 using System.Text.Json;
-using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard.Requests;
+using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Exception;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.DeleteColumnFromBoard;
 
 public class DeleteColumnFromBoardTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
     
     private readonly Guid _boardId;
     private readonly string _boardOwnerToken;
@@ -22,9 +22,9 @@ public class DeleteColumnFromBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = new AddColumnToBoardRequest { Name = "New Column" };
+        var request = new CreateColumnRequest { Name = "New Column" };
         
-        var response = await DoPost( $"{Route}/{_boardId}/columns", request, token: _boardOwnerToken);
+        var response = await DoPost( $"/{Route}/{_boardId}/columns", request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         
@@ -45,7 +45,7 @@ public class DeleteColumnFromBoardTest : TaskFlowClassFixture
     {
         var fakeBoardId = Guid.NewGuid();
         
-        var response = await DoDelete(requestUri: $"{Route}/{fakeBoardId}/columns/{fakeBoardId}", token: _boardOwnerToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{fakeBoardId}/columns/{fakeBoardId}", token: _boardOwnerToken);
         
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
@@ -68,7 +68,7 @@ public class DeleteColumnFromBoardTest : TaskFlowClassFixture
     {
         var fakeColumnId = Guid.NewGuid();
         
-        var response = await DoDelete(requestUri: $"{Route}/{_boardId}/columns/{fakeColumnId}", token: _boardOwnerToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/columns/{fakeColumnId}", token: _boardOwnerToken);
         
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 

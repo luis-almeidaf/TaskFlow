@@ -1,8 +1,7 @@
+using FluentAssertions;
 using System.Net;
 using System.Text.Json;
-using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.MoveColumn.Request;
-using TaskFlow.Application.Features.Boards.Commands.UpdateColumn.Request;
+using TaskFlow.Application.Features.Boards.Columns.Commands.UpdateColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 
@@ -10,7 +9,7 @@ namespace TaskFlow.Tests.IntegrationTests.Features.Boards.UpdateColumn;
 
 public class UpdateColumnTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly Guid _boardId;
     private readonly List<Column> _columns;

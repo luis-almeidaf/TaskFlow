@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.DeleteUserFromBoard;
+using TaskFlow.Application.Features.Boards.Users.Commands.RemoveUserCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
@@ -116,7 +116,7 @@ public class DeleteUserFromBoardHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_OWNER_CANNOT_BE_REMOVED));
     }
 
-    private static DeleteUserFromBoardHandler CreateHandler(
+    private static RemoveUserCommandHandler CreateHandler(
         Domain.Entities.User user,
         Board board,
         Domain.Entities.User? userToBeRemoved = null,
@@ -141,7 +141,7 @@ public class DeleteUserFromBoardHandlerTest
         if (userId.HasValue)
             userReadOnlyRepository.GetById(user, userId);
 
-        return new DeleteUserFromBoardHandler(
+        return new RemoveUserCommandHandler(
             unitOfWork,
             loggedUser,
             repository.Build(),

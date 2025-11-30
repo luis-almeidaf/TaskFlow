@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.MoveColumn;
+using TaskFlow.Application.Features.Boards.Columns.Commands.MoveColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
@@ -74,7 +74,7 @@ public class MoveColumnHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.COLUMN_NOT_FOUND));
     }
 
-    private static MoveColumnHandler CreateHandler(User user, Board board, Guid? boardId = null)
+    private static MoveColumnCommandHandler CreateHandler(User user, Board board, Guid? boardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
@@ -85,6 +85,6 @@ public class MoveColumnHandlerTest
         else
             repository.GetById(user, board);
 
-        return new MoveColumnHandler(unitOfWork, loggedUser, repository.Build());
+        return new MoveColumnCommandHandler(unitOfWork, loggedUser, repository.Build());
     }
 }

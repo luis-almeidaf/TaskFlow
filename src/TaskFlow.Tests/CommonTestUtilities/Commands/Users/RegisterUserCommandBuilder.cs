@@ -1,5 +1,5 @@
 using Bogus;
-using TaskFlow.Application.Features.Users.Commands.Register;
+using TaskFlow.Application.Features.Users.Commands.RegisterUserCommand;
 
 namespace TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 

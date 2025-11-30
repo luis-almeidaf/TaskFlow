@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard;
+using TaskFlow.Application.Features.Boards.Users.Commands.AddUserCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
@@ -87,7 +87,7 @@ public class AddUserToBoardHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.USER_ALREADY_IN_BOARD));
     }
     
-    private static AddUserToBoardHandler CreateHandler(
+    private static AddUserCommandHandler CreateHandler(
         Domain.Entities.User user, 
         Board board, 
         Guid? id = null,
@@ -108,6 +108,6 @@ public class AddUserToBoardHandlerTest
         if (string.IsNullOrWhiteSpace(email)) 
             userReadOnlyRepository.GetUserByEmail(user);
         
-        return new AddUserToBoardHandler(unitOfWork, loggedUser, repository.Build(), userReadOnlyRepository.Build());
+        return new AddUserCommandHandler(unitOfWork, loggedUser, repository.Build(), userReadOnlyRepository.Build());
     }
 }

@@ -1,14 +1,14 @@
+using FluentAssertions;
 using System.Net;
 using System.Text.Json;
-using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.AddUserToBoard.Requests;
+using TaskFlow.Application.Features.Boards.Users.Commands.AddUserCommand;
 using TaskFlow.Exception;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.AddUserToBoard;
 
 public class AddUserToBoardTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly Guid _boardId;
 
@@ -30,12 +30,12 @@ public class AddUserToBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = new AddUserToBoardRequest
+        var request = new AddUserRequest
         {
             UserEmail = _userToBeAddedEmail
         };
 
-        var response = await DoPost(requestUri: $"{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
@@ -50,12 +50,12 @@ public class AddUserToBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Email_Empty()
     {
-        var request = new AddUserToBoardRequest
+        var request = new AddUserRequest
         {
             UserEmail = string.Empty
         };
 
-        var response = await DoPost(requestUri: $"{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -72,13 +72,13 @@ public class AddUserToBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Board_Not_Found()
     {
-        var request = new AddUserToBoardRequest
+        var request = new AddUserRequest
         {
             UserEmail = _userToBeAddedEmail
         };
 
         var fakeId = Guid.NewGuid();
-        var response = await DoPost(requestUri: $"{Route}/{fakeId}/users", request: request, token: _boardOwnerToken);
+        var response = await DoPost(requestUri: $"/{Route}/{fakeId}/users", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
@@ -95,12 +95,12 @@ public class AddUserToBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_User_Not_Found()
     {
-        var request = new AddUserToBoardRequest
+        var request = new AddUserRequest
         {
             UserEmail = "fakeemail@email.com"
         };
 
-        var response = await DoPost(requestUri: $"{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
@@ -117,7 +117,7 @@ public class AddUserToBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_User_Already_In_Board()
     {
-        var request = new AddUserToBoardRequest
+        var request = new AddUserRequest
         {
             UserEmail = _boardOwnerEmail
         };

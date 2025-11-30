@@ -8,7 +8,7 @@ namespace TaskFlow.Tests.IntegrationTests.Features.Boards.Create;
 
 public class CreateBoardTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly string _token;
 

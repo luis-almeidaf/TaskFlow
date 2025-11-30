@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
-using TaskFlow.Application.Features.Login;
+using TaskFlow.Application.Features.Login.Commands;
 
 namespace TaskFlow.Api.Controllers
 {
@@ -19,9 +19,13 @@ namespace TaskFlow.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Login([FromBody] LoginCommand request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var response = await _mediator.Send(request);
+            var response = await _mediator.Send(new LoginCommand
+            {
+                Email = request.Email,
+                Password = request.Password
+            });
 
             return Ok(response);
         }

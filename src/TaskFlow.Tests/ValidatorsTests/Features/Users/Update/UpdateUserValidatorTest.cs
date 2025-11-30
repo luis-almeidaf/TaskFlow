@@ -1,6 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Users.Commands.Register;
-using TaskFlow.Application.Features.Users.Commands.Update;
+using TaskFlow.Application.Features.Users.Commands.UpdateCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 

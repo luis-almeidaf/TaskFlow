@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.AddColumnToBoard;
+using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
@@ -55,7 +55,7 @@ public class AddColumnToBoardHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
 
-    private static AddColumnToBoardHandler CreateHandler(User user, Board board, Guid? boardId = null)
+    private static CreateColumnCommandHandler CreateHandler(User user, Board board, Guid? boardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
@@ -67,6 +67,6 @@ public class AddColumnToBoardHandlerTest
         if (boardId.HasValue)
             boardReadRepository.GetById(user, board, boardId);
         
-        return new AddColumnToBoardHandler(boardWriteRepository.Build(), unitOfWork, loggedUser, boardReadRepository.Build());
+        return new CreateColumnCommandHandler(boardWriteRepository.Build(), unitOfWork, loggedUser, boardReadRepository.Build());
     }
 }

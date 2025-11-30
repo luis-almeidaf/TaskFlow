@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.GetAll;
+using TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Tests.CommonTestUtilities.Entities;
 using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
@@ -18,7 +18,7 @@ public class GetBoardsHandlerTest
 
         var handler = CreateHandler(user, board);
 
-        var request = new GetBoardsCommand();
+        var request = new GetBoardsQuery();
 
         var result = await handler.Handle(request, CancellationToken.None);
 
@@ -37,7 +37,7 @@ public class GetBoardsHandlerTest
 
         var handler = CreateHandler(user, board: null);
 
-        var request = new GetBoardsCommand();
+        var request = new GetBoardsQuery();
 
         var result = await handler.Handle(request, CancellationToken.None);
 
@@ -45,7 +45,7 @@ public class GetBoardsHandlerTest
         result.Boards.Should().BeEmpty();
     }
 
-    private static GetBoardsHandler CreateHandler(Domain.Entities.User user, Board? board)
+    private static GetBoardsQueryHandler CreateHandler(Domain.Entities.User user, Board? board)
     {
         var loggedUser = LoggedUserBuilder.Build(user);
         var repository = new BoardReadOnlyRepositoryBuilder();
@@ -59,6 +59,6 @@ public class GetBoardsHandlerTest
             repository.GetAll(user);
         }
 
-        return new GetBoardsHandler(loggedUser, repository.Build());
+        return new GetBoardsQueryHandler(loggedUser, repository.Build());
     }
 }
