@@ -3,7 +3,6 @@ using System.Text.Json;
 using FluentAssertions;
 using TaskFlow.Application.Features.Users.Commands.RegisterUserCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Users.Register;
 
@@ -40,7 +39,7 @@ public class RegisterUserTest : TaskFlowClassFixture
     {
         var request = new RegisterUserRequest
         {
-            Email = "new_user@email.com",
+            Email = "new_user2@email.com",
             Name = "",
             Password = "A!1qwerty"
         };

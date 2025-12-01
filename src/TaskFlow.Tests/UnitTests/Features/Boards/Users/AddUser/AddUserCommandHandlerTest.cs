@@ -3,10 +3,10 @@ using TaskFlow.Application.Features.Boards.Users.Commands.AddUserCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
-using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
+using TaskFlow.Tests.Builders.Commands.Boards.Users;
+using TaskFlow.Tests.Builders.Entities;
+using TaskFlow.Tests.Builders.LoggedUser;
+using TaskFlow.Tests.Builders.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Users.AddUser;
 
@@ -20,7 +20,7 @@ public class AddUserCommandHandlerTest
 
         var handler = CreateHandler(user, board);
 
-        var request = AddUserToBoardCommandBuilder.Build(board, user);
+        var request = AddUserCommandBuilder.Build(board, user);
 
         var result = await handler.Handle(request, CancellationToken.None);
 
@@ -38,7 +38,7 @@ public class AddUserCommandHandlerTest
 
         var handler = CreateHandler(user, board, id: board.Id);
 
-        var request = AddUserToBoardCommandBuilder.Build(board, user);
+        var request = AddUserCommandBuilder.Build(board, user);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -57,7 +57,7 @@ public class AddUserCommandHandlerTest
 
         var handler = CreateHandler(user, board, email: user.Email);
 
-        var request = AddUserToBoardCommandBuilder.Build(board, user);
+        var request = AddUserCommandBuilder.Build(board, user);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -77,7 +77,7 @@ public class AddUserCommandHandlerTest
 
         var handler = CreateHandler(user, board);
 
-        var request = AddUserToBoardCommandBuilder.Build(board, user);
+        var request = AddUserCommandBuilder.Build(board, user);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 

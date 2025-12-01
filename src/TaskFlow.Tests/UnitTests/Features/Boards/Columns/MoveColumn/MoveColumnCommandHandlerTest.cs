@@ -3,10 +3,10 @@ using TaskFlow.Application.Features.Boards.Columns.Commands.MoveColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
-using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
+using TaskFlow.Tests.Builders.Commands.Boards.Columns;
+using TaskFlow.Tests.Builders.Entities;
+using TaskFlow.Tests.Builders.LoggedUser;
+using TaskFlow.Tests.Builders.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.MoveColumn;
 

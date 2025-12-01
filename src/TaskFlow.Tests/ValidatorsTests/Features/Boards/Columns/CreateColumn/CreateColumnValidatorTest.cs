@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
+using TaskFlow.Tests.Builders.Commands.Boards.Columns;
+using TaskFlow.Tests.Builders.Entities;
 
 namespace TaskFlow.Tests.ValidatorsTests.Features.Boards.Columns.CreateColumn;
 
@@ -19,7 +19,7 @@ public class CreateColumnValidatorTest
 
         var column = ColumnBuilder.Build(board);
         
-        var request =AddColumnToBoardCommandBuilder.Build(board,column);
+        var request =CreateColumnCommandBuilder.Build(board,column);
 
         var result = validator.Validate(request);
 
@@ -41,7 +41,7 @@ public class CreateColumnValidatorTest
         var column = ColumnBuilder.Build(board);
         column.Name = name;
 
-        var request = AddColumnToBoardCommandBuilder.Build(board, column);
+        var request = CreateColumnCommandBuilder.Build(board, column);
 
         var result = validator.Validate(request);
 

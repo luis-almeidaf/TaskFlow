@@ -3,10 +3,9 @@ using TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
-using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
+using TaskFlow.Tests.Builders.Entities;
+using TaskFlow.Tests.Builders.LoggedUser;
+using TaskFlow.Tests.Builders.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Queries.GetById;
 
@@ -21,7 +20,7 @@ public class GetBoardByIdQueryHandlerTest
 
         var handler = CreateHandler(user, board);
 
-        var request = GetBoardByIdCommandBuilder.Build(board);
+        var request = new GetBoardByIdQuery { Id = board.Id };
 
         var result = await handler.Handle(request, CancellationToken.None);
 
@@ -38,9 +37,8 @@ public class GetBoardByIdQueryHandlerTest
 
         var handler = CreateHandler(user, board, id: board.Id);
 
-        var request = GetBoardByIdCommandBuilder.Build(board);
-
-
+        var request = new GetBoardByIdQuery { Id = board.Id };
+        
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
         var result = await act.Should().ThrowAsync<BoardNotFoundException>();

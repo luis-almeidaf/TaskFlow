@@ -3,10 +3,10 @@ using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
-using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
+using TaskFlow.Tests.Builders.Commands.Boards.Columns;
+using TaskFlow.Tests.Builders.Entities;
+using TaskFlow.Tests.Builders.LoggedUser;
+using TaskFlow.Tests.Builders.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.CreateColumn;
 
@@ -23,7 +23,7 @@ public class CreateColumnCommandHandlerTest
 
         var handler = CreateHandler(user, board);
 
-        var request = AddColumnToBoardCommandBuilder.Build(board, column);
+        var request = CreateColumnCommandBuilder.Build(board, column);
 
         var result = await handler.Handle(request, CancellationToken.None);
 
@@ -45,7 +45,7 @@ public class CreateColumnCommandHandlerTest
 
         var handler = CreateHandler(user, board, boardId: board.Id);
 
-        var request = AddColumnToBoardCommandBuilder.Build(board, column);
+        var request = CreateColumnCommandBuilder.Build(board, column);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 

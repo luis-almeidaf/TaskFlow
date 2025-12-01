@@ -1,8 +1,8 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Users.Commands.AddUserCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
+using TaskFlow.Tests.Builders.Commands.Boards.Users;
+using TaskFlow.Tests.Builders.Entities;
 
 namespace TaskFlow.Tests.ValidatorsTests.Features.Boards.Users.AddUser;
 
@@ -17,7 +17,7 @@ public class AddUserValidatorTest
 
         var board = BoardBuilder.Build(user);
 
-        var request = AddUserToBoardCommandBuilder.Build(board, user);
+        var request = AddUserCommandBuilder.Build(board, user);
 
         var result = validator.Validate(request);
 
@@ -36,7 +36,7 @@ public class AddUserValidatorTest
 
         var board = BoardBuilder.Build(user);
 
-        var request = AddUserToBoardCommandBuilder.Build(board, user);
+        var request = AddUserCommandBuilder.Build(board, user);
         request.UserEmail = email;
 
         var result = validator.Validate(request);
@@ -56,7 +56,7 @@ public class AddUserValidatorTest
         
         var board = BoardBuilder.Build(user);
 
-        var request = AddUserToBoardCommandBuilder.Build(board, user);
+        var request = AddUserCommandBuilder.Build(board, user);
         request.UserEmail = "invalid.com";
 
         var result = validator.Validate(request);

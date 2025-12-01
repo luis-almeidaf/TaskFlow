@@ -1,8 +1,8 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Users.Queries.GetByEmailQuery;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
+using TaskFlow.Tests.Builders.Commands.Users;
+using TaskFlow.Tests.Builders.Entities;
+using TaskFlow.Tests.Builders.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Users.Queries.GetByEmail;
 

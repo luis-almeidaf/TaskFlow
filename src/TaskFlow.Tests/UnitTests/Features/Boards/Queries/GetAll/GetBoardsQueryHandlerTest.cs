@@ -1,9 +1,9 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery;
 using TaskFlow.Domain.Entities;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
-using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
+using TaskFlow.Tests.Builders.Entities;
+using TaskFlow.Tests.Builders.LoggedUser;
+using TaskFlow.Tests.Builders.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Queries.GetAll;
 

@@ -2,10 +2,10 @@ using FluentAssertions;
 using TaskFlow.Application.Features.Users.Commands.RegisterUserCommand;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
-using TaskFlow.Tests.CommonTestUtilities.Cryptography;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
-using TaskFlow.Tests.CommonTestUtilities.Token;
+using TaskFlow.Tests.Builders.Commands.Users;
+using TaskFlow.Tests.Builders.Cryptography;
+using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.Token;
 
 namespace TaskFlow.Tests.UnitTests.Features.Users.Commands.Register;
 

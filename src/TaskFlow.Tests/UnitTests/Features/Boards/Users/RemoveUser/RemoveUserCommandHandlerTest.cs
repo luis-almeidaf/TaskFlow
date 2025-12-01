@@ -3,10 +3,10 @@ using TaskFlow.Application.Features.Boards.Users.Commands.RemoveUserCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
-using TaskFlow.Tests.CommonTestUtilities.LoggedUser;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
+using TaskFlow.Tests.Builders.Commands.Boards.Users;
+using TaskFlow.Tests.Builders.Entities;
+using TaskFlow.Tests.Builders.LoggedUser;
+using TaskFlow.Tests.Builders.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Users.RemoveUser;
 
@@ -24,7 +24,7 @@ public class RemoveUserCommandHandlerTest
 
         var handler = CreateHandler(user, board, userToBeRemoved);
 
-        var request = RemoveUserFromBoardCommandBuilder.Build(board, userToBeRemoved);
+        var request = RemoveUserCommandBuilder.Build(board, userToBeRemoved);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -43,7 +43,7 @@ public class RemoveUserCommandHandlerTest
 
         var handler = CreateHandler(user, board, userToBeRemoved, board.Id);
 
-        var request = RemoveUserFromBoardCommandBuilder.Build(board, user);
+        var request = RemoveUserCommandBuilder.Build(board, user);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -65,7 +65,7 @@ public class RemoveUserCommandHandlerTest
 
         var handler = CreateHandler(user, board, userToBeRemoved, userId: user.Id);
 
-        var request = RemoveUserFromBoardCommandBuilder.Build(board, user);
+        var request = RemoveUserCommandBuilder.Build(board, user);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -86,7 +86,7 @@ public class RemoveUserCommandHandlerTest
 
         var handler = CreateHandler(user, board, userToBeRemoved);
 
-        var request = RemoveUserFromBoardCommandBuilder.Build(board, user);
+        var request = RemoveUserCommandBuilder.Build(board, user);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -106,7 +106,7 @@ public class RemoveUserCommandHandlerTest
         
         var handler = CreateHandler(user, board);
 
-        var request = RemoveUserFromBoardCommandBuilder.Build(board, user);
+        var request = RemoveUserCommandBuilder.Build(board, user);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
