@@ -1,9 +1,8 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
-using TaskFlow.Application.Features.Login;
+using TaskFlow.Application.Features.Login.Commands;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Login;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Login;
 
@@ -25,7 +24,7 @@ public class LoginTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = new LoginCommand()
+        var request = new LoginRequest()
         {
             Email = _email,
             Password = _password
@@ -46,7 +45,11 @@ public class LoginTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Login_Invalid()
     {
-        var request = LoginCommandBuilder.Build();
+        var request = new LoginRequest()
+        {
+            Email = "invalid_email@email.com",
+            Password = "A1!qwerty"
+        };
 
         var response = await DoPost(Route, request);
 

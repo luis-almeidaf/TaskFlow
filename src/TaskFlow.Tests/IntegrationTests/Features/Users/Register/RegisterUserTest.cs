@@ -1,21 +1,26 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
+using TaskFlow.Application.Features.Users.Commands.RegisterUserCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Users.Register;
 
 public class RegisterUserTest : TaskFlowClassFixture
 {
     private const string Route = "User";
-    
+
     public RegisterUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory) { }
 
     [Fact]
     public async Task Success()
     {
-        var request = RegisterUserCommandBuilder.Build();
+        var request = new RegisterUserRequest
+        {
+            Email = "new_user@email.com",
+            Name = "user",
+            Password = "A!1qwerty"
+        };
 
         var result = await DoPost(Route, request);
 
@@ -28,17 +33,21 @@ public class RegisterUserTest : TaskFlowClassFixture
         responseData.RootElement.GetProperty("name").GetString().Should().Be(request.Name);
         responseData.RootElement.GetProperty("token").GetString().Should().NotBeNullOrEmpty();
     }
-    
+
     [Fact]
     public async Task Error_Empty_Name()
     {
-        var request = RegisterUserCommandBuilder.Build();
-        request.Name = string.Empty;
+        var request = new RegisterUserRequest
+        {
+            Email = "new_user2@email.com",
+            Name = "",
+            Password = "A!1qwerty"
+        };
 
         var result = await DoPost(Route, request);
 
         result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        
+
         var responseBody = await result.Content.ReadAsStreamAsync();
 
         var responseData = await JsonDocument.ParseAsync(responseBody);

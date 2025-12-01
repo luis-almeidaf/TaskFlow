@@ -7,11 +7,11 @@ namespace TaskFlow.Tests.IntegrationTests.Features.Users.GetByEmail;
 public class GetByEmailTest : TaskFlowClassFixture
 {
     private const string Route = "User";
-    
+
     private readonly string _token;
     private readonly string _userName;
     private readonly string _userEmail;
-    
+
     public GetByEmailTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _token = webApplicationFactory.User.GetToken();
@@ -33,7 +33,7 @@ public class GetByEmailTest : TaskFlowClassFixture
         responseData.RootElement.GetProperty("name").GetString().Should().Be(_userName);
         responseData.RootElement.GetProperty("email").GetString().Should().Be(_userEmail);
     }
-    
+
     [Fact]
     public async Task Error_User_Not_Found()
     {

@@ -1,14 +1,14 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
+using TaskFlow.Application.Features.Boards.Commands.CreateBoardCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.Create;
 
 public class CreateBoardTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly string _token;
 
@@ -20,7 +20,7 @@ public class CreateBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = CreateBoardCommandBuilder.Build();
+        var request = new CreateBoardRequest { Name = "New Board" };
 
         var result = await DoPost(Route, request, _token);
 
@@ -37,8 +37,7 @@ public class CreateBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Empty_Name()
     {
-        var request = CreateBoardCommandBuilder.Build();
-        request.Name = string.Empty;
+        var request = new CreateBoardRequest { Name = "" };
 
         var result = await DoPost(Route, request, _token);
 

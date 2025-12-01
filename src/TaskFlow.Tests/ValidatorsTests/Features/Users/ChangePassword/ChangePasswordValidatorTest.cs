@@ -1,7 +1,7 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Users.Commands.ChangePassword;
+using TaskFlow.Application.Features.Users.Commands.ChangePasswordCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
+using TaskFlow.Tests.Builders.Commands.Users;
 
 namespace TaskFlow.Tests.ValidatorsTests.Features.Users.ChangePassword;
 

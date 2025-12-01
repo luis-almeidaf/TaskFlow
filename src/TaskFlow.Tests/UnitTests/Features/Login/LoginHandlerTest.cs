@@ -1,12 +1,12 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Login;
+using TaskFlow.Application.Features.Login.Commands;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Login;
-using TaskFlow.Tests.CommonTestUtilities.Cryptography;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
-using TaskFlow.Tests.CommonTestUtilities.Repositories;
-using TaskFlow.Tests.CommonTestUtilities.Token;
+using TaskFlow.Tests.Builders.Commands.Login;
+using TaskFlow.Tests.Builders.Cryptography;
+using TaskFlow.Tests.Builders.Entities;
+using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.Token;
 
 namespace TaskFlow.Tests.UnitTests.Features.Login;
 
@@ -65,12 +65,12 @@ public class LoginHandlerTest
     }
 
 
-    private static LoginHandler CreateHandler(Domain.Entities.User user, string? password = null)
+    private static LoginCommandHandler CreateHandler(Domain.Entities.User user, string? password = null)
     {
         var readRepository = new UserReadOnlyRepositoryBuilder().GetUserByEmail(user).Build();
         var passwordEncrypter = new PasswordEncrypterBuilder().Verify(password).Build();
         var tokenGenerator = JwtTokenGeneratorBuilder.Build();
 
-        return new LoginHandler(readRepository, passwordEncrypter, tokenGenerator);
+        return new LoginCommandHandler(readRepository, passwordEncrypter, tokenGenerator);
     }
 }

@@ -1,7 +1,7 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Users.Commands.Register;
+using TaskFlow.Application.Features.Users.Commands.RegisterUserCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
+using TaskFlow.Tests.Builders.Commands.Users;
 
 namespace TaskFlow.Tests.ValidatorsTests.Features.Users.Register;
 

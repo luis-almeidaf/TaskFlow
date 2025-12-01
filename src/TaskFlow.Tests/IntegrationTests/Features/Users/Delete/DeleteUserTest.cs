@@ -1,6 +1,6 @@
 using System.Net;
 using FluentAssertions;
-using TaskFlow.Application.Features.Login;
+using TaskFlow.Application.Features.Login.Commands;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Users.Delete;
 
@@ -28,7 +28,7 @@ public class DeleteUserTest : TaskFlowClassFixture
 
         result.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var request = new LoginCommand()
+        var request = new LoginRequest()
         {
             Email = _email,
             Password = _password

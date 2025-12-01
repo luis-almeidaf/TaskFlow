@@ -1,8 +1,8 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Commands.Update;
+using TaskFlow.Application.Features.Boards.Commands.UpdateBoardCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
+using TaskFlow.Tests.Builders.Commands.Boards;
+using TaskFlow.Tests.Builders.Entities;
 
 namespace TaskFlow.Tests.ValidatorsTests.Features.Boards.Update;
 

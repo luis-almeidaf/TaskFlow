@@ -1,15 +1,14 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
+using TaskFlow.Application.Features.Boards.Commands.UpdateBoardCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Boards;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.Update;
 
 public class UpdateBoardTest : TaskFlowClassFixture
 {
-    private const string Route = "Board";
+    private const string Route = "Boards";
 
     private readonly string _token;
     private readonly Guid _boardId;
@@ -23,10 +22,8 @@ public class UpdateBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var user = UserBuilder.Build();
-        var board = BoardBuilder.Build(user);
-        var request = UpdateBoardCommandBuilder.Build(board);
-
+        var request = new UpdateBoardRequest ("New board name");
+        
         var response = await DoPatch(requestUri: $"{Route}/{_boardId}", request: request, token: _token);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -35,11 +32,8 @@ public class UpdateBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Name_Empty()
     {
-        var user = UserBuilder.Build();
-        var board = BoardBuilder.Build(user);
-        var request = UpdateBoardCommandBuilder.Build(board);
-        request.Name = string.Empty;
-
+        var request = new UpdateBoardRequest ("");
+        
         var response = await DoPatch(requestUri: $"{Route}/{_boardId}", request: request, token: _token);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -57,9 +51,7 @@ public class UpdateBoardTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Board_Not_Found()
     {
-        var user = UserBuilder.Build();
-        var board = BoardBuilder.Build(user);
-        var request = UpdateBoardCommandBuilder.Build(board);
+        var request = new UpdateBoardRequest ("New board name");
 
         var fakeId = Guid.NewGuid();
 

@@ -7,7 +7,7 @@ using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Security.Cryptography;
 using TaskFlow.Domain.Security.Tokens;
 using TaskFlow.Infrastructure.DataAccess;
-using TaskFlow.Tests.CommonTestUtilities.Entities;
+using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.IntegrationTests.Resources;
 
 namespace TaskFlow.Tests.IntegrationTests;
