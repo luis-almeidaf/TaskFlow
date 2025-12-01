@@ -25,7 +25,7 @@ public class LoginTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = new LoginCommand()
+        var request = new LoginRequest()
         {
             Email = _email,
             Password = _password
@@ -46,7 +46,11 @@ public class LoginTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Login_Invalid()
     {
-        var request = LoginCommandBuilder.Build();
+        var request = new LoginRequest()
+        {
+            Email = "invalid_email@email.com",
+            Password = "A1!qwerty"
+        };
 
         var response = await DoPost(Route, request);
 

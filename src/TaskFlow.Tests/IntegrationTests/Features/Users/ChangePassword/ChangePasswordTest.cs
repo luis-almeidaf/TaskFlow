@@ -2,6 +2,7 @@ using System.Net;
 using System.Text.Json;
 using FluentAssertions;
 using TaskFlow.Application.Features.Login.Commands;
+using TaskFlow.Application.Features.Users.Commands.ChangePasswordCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
@@ -25,14 +26,17 @@ public class ChangePasswordTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = ChangePasswordCommandBuilder.Build();
-        request.Password = _password;
+        var request = new ChangePasswordRequest
+        {
+            NewPassword = "A!1qwerty",
+            Password = _password
+        };
 
         var response = await DoPut(Route, request, _token);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var loginRequest = new LoginCommand
+        var loginRequest = new LoginRequest
         {
             Email = _email,
             Password = request.Password
@@ -50,7 +54,11 @@ public class ChangePasswordTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Password_Different_Current_Password()
     {
-        var request = ChangePasswordCommandBuilder.Build();
+        var request = new ChangePasswordRequest
+        {
+            NewPassword = "A!1qwerty",
+            Password = "AB!1qwerty"
+        };
 
         var response = await DoPut(Route, request, _token);
 

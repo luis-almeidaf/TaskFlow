@@ -1,8 +1,8 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
+using TaskFlow.Application.Features.Users.Commands.UpdateCommand;
 using TaskFlow.Exception;
-using TaskFlow.Tests.CommonTestUtilities.Commands.Users;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Users.Update;
 
@@ -20,7 +20,11 @@ public class UpdateUserTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = UpdateUserCommandBuilder.Build();
+        var request = new UpdateUserRequest
+        {
+            Email = "new_email@email.com",
+            Name = "new name"
+        };
 
         var response = await DoPut(Route, request, _token);
 
@@ -30,8 +34,11 @@ public class UpdateUserTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Empty_Name()
     {
-        var request = UpdateUserCommandBuilder.Build();
-        request.Name = string.Empty;
+        var request = new UpdateUserRequest
+        {
+            Email = "new_email@email.com",
+            Name = string.Empty
+        };
 
         var response = await DoPut(Route, request, _token);
 
@@ -46,6 +53,5 @@ public class UpdateUserTest : TaskFlowClassFixture
         var expectedMessage = ResourceErrorMessages.NAME_EMPTY;
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
-
     }
 }

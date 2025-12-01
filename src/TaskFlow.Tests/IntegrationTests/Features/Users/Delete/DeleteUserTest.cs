@@ -28,7 +28,7 @@ public class DeleteUserTest : TaskFlowClassFixture
 
         result.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var request = new LoginCommand()
+        var request = new LoginRequest()
         {
             Email = _email,
             Password = _password
