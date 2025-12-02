@@ -66,4 +66,10 @@
     <data name="COLUMN_NOT_FOUND" xml:space="preserve">
         <value>Column not found, check the id given.</value>
     </data>
+    <data name="TITLE_CANNOT_BE_EMPTY" xml:space="preserve">
+        <value>Title cannot be empty.</value>
+    </data>
+    <data name="CARD_DUE_DATE_CANNOT_BE_FOR_THE_PAST" xml:space="preserve">
+        <value>Card due date cannot be a past date.</value>
+    </data>
 </root>
