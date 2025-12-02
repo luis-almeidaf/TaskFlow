@@ -4,7 +4,7 @@ using TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery.Responses;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Services.LoggedUser;
 
-namespace TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery;
+namespace TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 
 public class GetBoardsQueryHandler : IRequestHandler<GetBoardsQuery, GetBoardsResponse>
 {

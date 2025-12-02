@@ -1,6 +1,6 @@
 using Mapster;
-using TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery;
-using TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery.Responses;
+using TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery;
+using TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery.Responses;
 using TaskFlow.Application.Features.Users.Commands.RegisterUserCommand;
 using TaskFlow.Domain.Entities;
 

@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery;
+using TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;

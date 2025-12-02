@@ -1,5 +1,6 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery;
+using TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.LoggedUser;

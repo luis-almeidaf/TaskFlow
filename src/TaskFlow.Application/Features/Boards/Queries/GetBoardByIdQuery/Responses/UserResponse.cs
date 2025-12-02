@@ -1,4 +1,4 @@
-namespace TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery.Responses;
+namespace TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery.Responses;
 
 public class UserResponse
 {

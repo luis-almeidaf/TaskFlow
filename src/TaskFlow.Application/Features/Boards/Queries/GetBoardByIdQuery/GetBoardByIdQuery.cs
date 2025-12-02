@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery;
+namespace TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery;
 
 public class GetBoardByIdQuery : IRequest<GetBoardByIdResponse?>
 {

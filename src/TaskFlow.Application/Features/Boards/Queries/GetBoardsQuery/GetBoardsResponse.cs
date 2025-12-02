@@ -1,6 +1,6 @@
 using TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery.Responses;
 
-namespace TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery;
+namespace TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 
 public class GetBoardsResponse
 {
