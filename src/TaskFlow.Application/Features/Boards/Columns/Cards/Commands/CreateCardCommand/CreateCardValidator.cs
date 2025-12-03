@@ -1,7 +1,7 @@
 using FluentValidation;
 using TaskFlow.Exception;
 
-namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands;
+namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 
 public class CreateCardValidator : AbstractValidator<CreateCardCommand>
 {

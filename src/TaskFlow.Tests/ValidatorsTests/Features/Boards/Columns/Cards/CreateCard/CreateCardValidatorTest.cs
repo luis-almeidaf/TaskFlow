@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Columns.Cards.Commands;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
 using TaskFlow.Tests.Builders.Entities;
@@ -14,7 +14,7 @@ public class CreateCardValidatorTest
         var validator = new CreateCardValidator();
 
         var user = UserBuilder.Build();
-        
+
         var board = BoardBuilder.Build(user);
 
         var column = ColumnBuilder.Build(board);
@@ -25,7 +25,7 @@ public class CreateCardValidatorTest
 
         result.IsValid.Should().BeTrue();
     }
-    
+
     [Theory]
     [InlineData("")]
     [InlineData("     ")]
@@ -35,7 +35,7 @@ public class CreateCardValidatorTest
         var validator = new CreateCardValidator();
 
         var user = UserBuilder.Build();
-        
+
         var board = BoardBuilder.Build(user);
 
         var column = ColumnBuilder.Build(board);
@@ -49,14 +49,14 @@ public class CreateCardValidatorTest
         result.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.TITLE_CANNOT_BE_EMPTY));
     }
-    
+
     [Fact]
     public void Error_Past_DueDate()
     {
         var validator = new CreateCardValidator();
 
         var user = UserBuilder.Build();
-        
+
         var board = BoardBuilder.Build(user);
 
         var column = ColumnBuilder.Build(board);

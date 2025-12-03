@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands;
+namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 
 public class CreateCardCommand : IRequest<CreateCardResponse>
 {

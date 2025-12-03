@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
-using TaskFlow.Application.Features.Boards.Columns.Cards.Commands;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 
 namespace TaskFlow.Api.Controllers;
 

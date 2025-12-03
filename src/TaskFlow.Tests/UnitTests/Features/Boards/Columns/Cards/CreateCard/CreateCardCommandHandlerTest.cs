@@ -1,5 +1,5 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Columns.Cards.Commands;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
@@ -16,13 +16,13 @@ public class CreateCardCommandHandlerTest
     public async Task Success()
     {
         var user = UserBuilder.Build();
-        
+
         var board = BoardBuilder.Build(user);
-        
+
         var column = ColumnBuilder.Build(board);
-        
+
         var handler = CreateHandler(user, board, column);
-        
+
         var request = CreateCardCommandBuilder.Build(board, column);
 
         var result = await handler.Handle(request, CancellationToken.None);
@@ -32,7 +32,7 @@ public class CreateCardCommandHandlerTest
         result.ColumnId.Should().Be(request.ColumnId);
         result.Title.Should().Be(request.Title);
     }
-    
+
     [Fact]
     public async Task Error_Board_Found()
     {
@@ -53,7 +53,7 @@ public class CreateCardCommandHandlerTest
         result.Where(ex =>
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
-    
+
     [Fact]
     public async Task Error_Column_Found()
     {
@@ -74,7 +74,7 @@ public class CreateCardCommandHandlerTest
         result.Where(ex =>
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.COLUMN_NOT_FOUND));
     }
-    
+
     [Fact]
     public async Task Error_User_Not_In_Board()
     {

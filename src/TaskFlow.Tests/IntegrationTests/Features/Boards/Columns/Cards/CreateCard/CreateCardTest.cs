@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Columns.Cards.Commands;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 using TaskFlow.Exception;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.Columns.Cards.CreateCard;
@@ -13,7 +13,7 @@ public class CreateCardTest : TaskFlowClassFixture
     private readonly Guid _boardId;
     private readonly Guid _columnId;
     private readonly string _boardOwnerToken;
-    
+
     public CreateCardTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _boardId = webApplicationFactory.Board.GetId();
@@ -39,12 +39,12 @@ public class CreateCardTest : TaskFlowClassFixture
         responseData.RootElement.GetProperty("columnId").GetGuid().Should().Be(_columnId);
         responseData.RootElement.GetProperty("title").GetString().Should().Be(request.Title);
     }
-    
+
     [Fact]
     public async Task Error_Board_Not_Found()
     {
         var request = new CreateCardRequest { Title = "New Card" };
-        
+
         var fakeId = Guid.NewGuid();
 
         var response = await DoPost(requestUri: $"/{Route}/{fakeId}/columns/{_columnId}/cards", request: request,
@@ -62,12 +62,12 @@ public class CreateCardTest : TaskFlowClassFixture
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
     }
-    
+
     [Fact]
     public async Task Error_Column_Not_Found()
     {
         var request = new CreateCardRequest { Title = "New Card" };
-        
+
         var fakeId = Guid.NewGuid();
 
         var response = await DoPost(requestUri: $"/{Route}/{_boardId}/columns/{fakeId}/cards", request: request,
@@ -85,7 +85,7 @@ public class CreateCardTest : TaskFlowClassFixture
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
     }
-    
+
     [Fact]
     public async Task Error_Assigned_User_Not_In_Board()
     {
@@ -110,5 +110,4 @@ public class CreateCardTest : TaskFlowClassFixture
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
     }
-    
 }

@@ -6,7 +6,7 @@ using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
-namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands;
+namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 
 public class CreateCardCommandHandler(
     IBoardReadOnlyRepository boardReadOnlyRepository,
@@ -15,7 +15,7 @@ public class CreateCardCommandHandler(
     IBoardWriteOnlyRepository repository)
     : IRequestHandler<CreateCardCommand, CreateCardResponse>
 {
-    public async Task<CreateCardResponse> Handle(CreateCardCommand request, CancellationToken cancellationToken)
+    public async Task<CreateCardResponse> Handle(Commands.CreateCardCommand.CreateCardCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
 
@@ -51,7 +51,7 @@ public class CreateCardCommandHandler(
         };
     }
 
-    private static void Validate(CreateCardCommand request)
+    private static void Validate(Commands.CreateCardCommand.CreateCardCommand request)
     {
         var result = new CreateCardValidator().Validate(request);
 

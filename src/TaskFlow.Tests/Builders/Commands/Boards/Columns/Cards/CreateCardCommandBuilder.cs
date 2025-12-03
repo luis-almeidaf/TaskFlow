@@ -1,4 +1,4 @@
-using TaskFlow.Application.Features.Boards.Columns.Cards.Commands;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
