@@ -72,4 +72,7 @@
     <data name="CARD_DUE_DATE_CANNOT_BE_FOR_THE_PAST" xml:space="preserve">
         <value>Card due date cannot be a past date.</value>
     </data>
+    <data name="CARD_NOT_FOUND" xml:space="preserve">
+        <value>Card not found, check the id given.</value>
+    </data>
 </root>

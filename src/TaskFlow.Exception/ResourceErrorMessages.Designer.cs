@@ -87,6 +87,15 @@ namespace TaskFlow.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card not found, check the id given..
+        /// </summary>
+        public static string CARD_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("CARD_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Column not found, check the id given..
         /// </summary>
         public static string COLUMN_NOT_FOUND {

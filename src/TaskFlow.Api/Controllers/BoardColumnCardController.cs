@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Queries.GetCardByIdQuery;
 
 namespace TaskFlow.Api.Controllers;
 
@@ -30,5 +31,20 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
         });
 
         return Created(string.Empty, result);
+    }
+    
+    [HttpGet("{cardId:guid}")]
+    [ProducesResponseType(typeof(GetCardByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCardById([FromRoute] Guid cardId, Guid boardId, Guid columnId)
+    {
+        var response = await mediator.Send(new GetCardByIdQuery()
+        {
+            BoardId = boardId,
+            ColumnId = columnId,
+            CardId = cardId
+        });
+
+        return Ok(response);
     }
 }
