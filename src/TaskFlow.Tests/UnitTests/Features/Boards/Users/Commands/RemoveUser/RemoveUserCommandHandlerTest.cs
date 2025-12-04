@@ -8,7 +8,7 @@ using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
 
-namespace TaskFlow.Tests.UnitTests.Features.Boards.Users.RemoveUser;
+namespace TaskFlow.Tests.UnitTests.Features.Boards.Users.Commands.RemoveUser;
 
 public class RemoveUserCommandHandlerTest
 {

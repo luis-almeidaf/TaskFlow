@@ -8,7 +8,7 @@ using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
 
-namespace TaskFlow.Tests.UnitTests.Features.Boards.Users.AddUser;
+namespace TaskFlow.Tests.UnitTests.Features.Boards.Users.Commands.AddUser;
 
 public class AddUserCommandHandlerTest
 {

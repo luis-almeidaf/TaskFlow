@@ -8,7 +8,7 @@ using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
 
-namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.MoveColumn;
+namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Commands.MoveColumn;
 
 public class MoveColumnCommandHandlerTest
 {

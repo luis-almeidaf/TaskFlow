@@ -8,7 +8,7 @@ using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.Repositories;
 using TaskFlow.Tests.Builders.Token;
 
-namespace TaskFlow.Tests.UnitTests.Features.Login;
+namespace TaskFlow.Tests.UnitTests.Features.Login.Command.Login;
 
 public class LoginHandlerTest
 {
