@@ -90,12 +90,7 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     {
         _dbContext.Columns.Update(column);
     }
-
-    public async Task AddCardToColumn(Card card)
-    {
-        await _dbContext.Cards.AddAsync(card);
-    }
-
+    
     public async Task<Column?> GetColumnById(Guid id)
     {
         var column = await _dbContext.Columns.FirstOrDefaultAsync(user => user.Id == id);

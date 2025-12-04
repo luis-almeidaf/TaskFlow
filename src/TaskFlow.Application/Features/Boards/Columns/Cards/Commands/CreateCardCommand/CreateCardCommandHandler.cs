@@ -3,6 +3,7 @@ using MediatR;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
+using TaskFlow.Domain.Repositories.Card;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
@@ -12,7 +13,7 @@ public class CreateCardCommandHandler(
     IBoardReadOnlyRepository boardReadOnlyRepository,
     ILoggedUser loggedUser,
     IUnitOfWork unitOfWork,
-    IBoardWriteOnlyRepository repository)
+    ICardWriteOnlyRepository repository)
     : IRequestHandler<CreateCardCommand, CreateCardResponse>
 {
     public async Task<CreateCardResponse> Handle(Commands.CreateCardCommand.CreateCardCommand request, CancellationToken cancellationToken)
@@ -39,7 +40,7 @@ public class CreateCardCommandHandler(
         card.ColumnId = column.Id;
         card.AssignedToId = request.AssignedToId;
 
-        await repository.AddCardToColumn(card);
+        await repository.Add(card);
 
         await unitOfWork.Commit();
         return new CreateCardResponse

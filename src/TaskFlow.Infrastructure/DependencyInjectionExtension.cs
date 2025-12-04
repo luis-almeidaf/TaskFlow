@@ -66,5 +66,6 @@ public static class DependencyInjectionExtension
         services.AddScoped<IBoardWriteOnlyRepository, BoardRepository>();
         services.AddScoped<IBoardReadOnlyRepository, BoardRepository>();
         services.AddScoped<ICardReadOnlyRepository, CardRepository>();
+        services.AddScoped<ICardWriteOnlyRepository, CardRepository>();
     }
 }

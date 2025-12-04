@@ -103,7 +103,7 @@ public class CreateCardCommandHandlerTest
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
-        var boardWriteRepository = new BoardWriteOnlyRepositoryBuilder().Build();
+        var cardWriteRepository = new CardWriteOnlyRepositoryBuilder().Build();
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
 
         boardReadRepository.GetById(user, board);
@@ -115,6 +115,6 @@ public class CreateCardCommandHandlerTest
         if (columnId.HasValue)
             boardReadRepository.GetColumnById(column, columnId);
 
-        return new CreateCardCommandHandler(boardReadRepository.Build(), loggedUser, unitOfWork, boardWriteRepository);
+        return new CreateCardCommandHandler(boardReadRepository.Build(), loggedUser, unitOfWork, cardWriteRepository);
     }
 }
