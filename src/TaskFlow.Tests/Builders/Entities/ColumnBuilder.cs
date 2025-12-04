@@ -14,7 +14,8 @@ public class ColumnBuilder
             .RuleFor(column => column.Id, _ => Guid.NewGuid())
             .RuleFor(column => column.Name, faker => faker.PickRandom(columnNames))
             .RuleFor(column => column.Position, _ => 3)
-            .RuleFor(column => column.BoardId, _ => board.Id);
+            .RuleFor(column => column.BoardId, _ => board.Id)
+            .RuleFor(column => column.Board, _ => board);
         
         return column;
     }

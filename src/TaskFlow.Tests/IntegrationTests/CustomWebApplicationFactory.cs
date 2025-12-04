@@ -16,6 +16,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     public BoardIdentityManager Board { get; private set; } = null!;
     public ColumnIdentityManager Column { get; private set; } = null!;
+    public CardIdentityManager Card { get; private set; } = null!;
     public UserIdentityManager User { get; private set; } = null!;
     public UserIdentityManager UserWithBoards { get; private set; } = null!;
 
@@ -53,7 +54,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
         var board = AddBoard(dbContext, userWithBoards);
         
-        AddColumn(dbContext, board);
+        var column = AddColumn(dbContext, board);
+
+        AddCard(dbContext, column);
         
         dbContext.SaveChanges();
     }
@@ -123,5 +126,16 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         Column = new ColumnIdentityManager(column);
 
         return column;
+    }
+    
+    private Card AddCard(TaskFlowDbContext dbContext, Column column)
+    {
+        var card = CardBuilder.Build(column);
+        
+        dbContext.Cards.Add(card);
+        
+        Card = new CardIdentityManager(card);
+
+        return card;
     }
 }
