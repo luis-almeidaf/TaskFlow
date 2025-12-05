@@ -32,7 +32,6 @@
     <ItemGroup>
       <Folder Include="IntegrationTests\Features\Boards\Users\" />
       <Folder Include="UnitTests\" />
-      <Folder Include="UnitTests\Features\Boards\Columns\Cards\Commands\" />
       <Folder Include="UnitTests\Features\Boards\Columns\Commands\" />
       <Folder Include="UnitTests\Features\Boards\Commands\" />
       <Folder Include="UnitTests\Features\Boards\Queries\" />
