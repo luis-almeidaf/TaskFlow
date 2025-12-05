@@ -5,8 +5,8 @@ using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Commands.CreateBoardCommand;
 using TaskFlow.Application.Features.Boards.Commands.DeleteBoardCommand;
 using TaskFlow.Application.Features.Boards.Commands.UpdateBoardCommand;
-using TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery;
-using TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery;
+using TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery;
+using TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 
 namespace TaskFlow.Api.Controllers;
 

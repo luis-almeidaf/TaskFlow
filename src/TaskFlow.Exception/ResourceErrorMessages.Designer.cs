@@ -78,6 +78,24 @@ namespace TaskFlow.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card due date cannot be a past date..
+        /// </summary>
+        public static string CARD_DUE_DATE_CANNOT_BE_FOR_THE_PAST {
+            get {
+                return ResourceManager.GetString("CARD_DUE_DATE_CANNOT_BE_FOR_THE_PAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card not found, check the id given..
+        /// </summary>
+        public static string CARD_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("CARD_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Column not found, check the id given..
         /// </summary>
         public static string COLUMN_NOT_FOUND {
@@ -155,6 +173,15 @@ namespace TaskFlow.Exception {
         public static string PASSWORD_DIFFERENT_CURRENT_PASSWORD {
             get {
                 return ResourceManager.GetString("PASSWORD_DIFFERENT_CURRENT_PASSWORD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title cannot be empty..
+        /// </summary>
+        public static string TITLE_CANNOT_BE_EMPTY {
+            get {
+                return ResourceManager.GetString("TITLE_CANNOT_BE_EMPTY", resourceCulture);
             }
         }
         

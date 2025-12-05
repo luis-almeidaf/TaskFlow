@@ -12,11 +12,11 @@ public class BoardReadOnlyRepositoryBuilder
     {
         if (id.HasValue)
         {
-            _repository.Setup(repo => repo.GetById(user, id.Value)).ReturnsAsync((Board?)null);
+            _repository.Setup(repo => repo.GetById(It.IsAny<User>(), id.Value)).ReturnsAsync((Board?)null);
         }
         else
         {
-            _repository.Setup(repo => repo.GetById(user, board.Id)).ReturnsAsync(board);
+            _repository.Setup(repo => repo.GetById(It.IsAny<User>(), board.Id)).ReturnsAsync(board);
         }
 
         return this;

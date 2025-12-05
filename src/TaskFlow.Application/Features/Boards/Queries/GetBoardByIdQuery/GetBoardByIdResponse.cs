@@ -1,6 +1,6 @@
-using TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery.Responses;
+using TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery.Responses;
 
-namespace TaskFlow.Application.Features.Boards.Queries.GetByIdBoardQuery;
+namespace TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery;
 
 public class GetBoardByIdResponse
 {

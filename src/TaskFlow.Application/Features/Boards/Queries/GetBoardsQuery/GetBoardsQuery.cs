@@ -1,5 +1,5 @@
 using MediatR;
 
-namespace TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery;
+namespace TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 
 public class GetBoardsQuery : IRequest<GetBoardsResponse> { }

@@ -46,7 +46,13 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
             .Include(board => board.CreatedBy)
             .Include(board => board.Users)
             .Include(board => board.Columns)
-            .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
+            .ThenInclude(column => column.Cards)
+            .ThenInclude(card => card.CreatedBy)
+            .Include(board => board.Columns)
+            .ThenInclude(column => column.Cards)
+            .ThenInclude(card => card.AssignedTo)
+            .FirstOrDefaultAsync(board =>
+                board.Id == id && (board.CreatedById == user.Id || board.Users.Any(u => u.Id == user.Id)));
     }
 
     public void AddUserToBoard(Board board, User user)
@@ -84,7 +90,7 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     {
         _dbContext.Columns.Update(column);
     }
-
+    
     public async Task<Column?> GetColumnById(Guid id)
     {
         var column = await _dbContext.Columns.FirstOrDefaultAsync(user => user.Id == id);

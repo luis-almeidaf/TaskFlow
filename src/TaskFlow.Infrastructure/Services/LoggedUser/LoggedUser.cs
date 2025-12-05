@@ -42,6 +42,12 @@ public class LoggedUser : ILoggedUser
 
         var identifier = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value;
 
-        return await _dbContext.Users.Include(u => u.CreatedBoards).FirstAsync(user => user.Id == Guid.Parse(identifier));
+        var userId = Guid.Parse(identifier);
+
+        return await _dbContext.Users
+            .Include(u => u.CreatedBoards)
+            .Include(u => u.Boards)
+            .ThenInclude(b => b.CreatedBy)
+            .FirstAsync(user => user.Id == userId);
     }
 }
