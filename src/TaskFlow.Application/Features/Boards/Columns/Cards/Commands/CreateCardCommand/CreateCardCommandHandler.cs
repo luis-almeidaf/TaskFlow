@@ -16,7 +16,7 @@ public class CreateCardCommandHandler(
     ICardWriteOnlyRepository repository)
     : IRequestHandler<CreateCardCommand, CreateCardResponse>
 {
-    public async Task<CreateCardResponse> Handle(Commands.CreateCardCommand.CreateCardCommand request, CancellationToken cancellationToken)
+    public async Task<CreateCardResponse> Handle(CreateCardCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
 
@@ -52,7 +52,7 @@ public class CreateCardCommandHandler(
         };
     }
 
-    private static void Validate(Commands.CreateCardCommand.CreateCardCommand request)
+    private static void Validate(CreateCardCommand request)
     {
         var result = new CreateCardValidator().Validate(request);
 
