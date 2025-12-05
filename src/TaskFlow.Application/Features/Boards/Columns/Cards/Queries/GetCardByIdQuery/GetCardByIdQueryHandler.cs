@@ -15,7 +15,7 @@ public class GetCardByIdQueryHandler(
     {
         var user = await loggedUser.Get();
 
-        var card = await repository.GetCardById(user, request.BoardId, request.ColumnId, request.CardId);
+        var card = await repository.GetById(user, request.BoardId, request.ColumnId, request.CardId);
 
         return card is null ? throw new CardNotFoundException() : card?.Adapt<GetCardByIdResponse>();
     }

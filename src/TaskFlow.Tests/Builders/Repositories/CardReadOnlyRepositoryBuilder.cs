@@ -17,11 +17,11 @@ public class CardReadOnlyRepositoryBuilder
     {
         if (cardId.HasValue)
         {
-            _repository.Setup(repo => repo.GetCardById(user, boardId, columnId, cardId.Value)).ReturnsAsync((Card?)null);
+            _repository.Setup(repo => repo.GetById(user, boardId, columnId, cardId.Value)).ReturnsAsync((Card?)null);
         }
         else
         {
-            _repository.Setup(repo => repo.GetCardById(user, boardId, columnId, card.Id)).ReturnsAsync(card);
+            _repository.Setup(repo => repo.GetById(user, boardId, columnId, card.Id)).ReturnsAsync(card);
         }
 
         return this;

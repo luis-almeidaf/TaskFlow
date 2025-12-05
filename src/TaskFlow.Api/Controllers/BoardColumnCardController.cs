@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.UpdateCardCommand;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Queries.GetCardByIdQuery;
 
 namespace TaskFlow.Api.Controllers;
@@ -46,5 +47,26 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
         });
 
         return Ok(response);
+    }
+
+    [HttpPut("{cardId:Guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Update(
+        [FromRoute] Guid boardId, Guid columnId, Guid cardId,
+        [FromBody] UpdateCardRequest request)
+    {
+        await mediator.Send(new UpdateCardCommand
+        {
+            BoardId = boardId,
+            ColumnId = columnId,
+            CardId = cardId,
+            Title = request.Title,
+            Description = request.Description,
+            AssignedToId = request.AssignedToId,
+            DueDate = request.DueDate
+        });
+
+        return NoContent();
     }
 }
