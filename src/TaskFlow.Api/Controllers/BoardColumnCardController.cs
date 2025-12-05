@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.DeleteCardCommand;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.UpdateCardCommand;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Queries.GetCardByIdQuery;
 
@@ -65,6 +66,22 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
             Description = request.Description,
             AssignedToId = request.AssignedToId,
             DueDate = request.DueDate
+        });
+
+        return NoContent();
+    }
+    
+    [HttpDelete("{cardId:Guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Delete(
+        [FromRoute] Guid boardId, Guid columnId, Guid cardId)
+    {
+        await mediator.Send(new DeleteCardCommand
+        {
+            BoardId = boardId,
+            ColumnId = columnId,
+            CardId = cardId,
         });
 
         return NoContent();

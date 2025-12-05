@@ -41,4 +41,9 @@ public class CardRepository(TaskFlowDbContext dbContext) : ICardReadOnlyReposito
     {
         dbContext.Cards.Update(card);
     }
+
+    public void Delete(Card card)
+    {
+        dbContext.Remove(card);
+    }
 }
