@@ -1,6 +1,5 @@
 using Mapster;
 using MediatR;
-using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
@@ -13,8 +12,7 @@ public class UpdateCardCommandHandler(
     IBoardReadOnlyRepository boardReadOnlyRepository,
     ILoggedUser loggedUser,
     IUnitOfWork unitOfWork,
-    ICardReadOnlyRepository cardReadOnlyRepository,
-    ICardWriteOnlyRepository repository ) : IRequestHandler<UpdateCardCommand, Unit>
+    ICardWriteOnlyRepository repository) : IRequestHandler<UpdateCardCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateCardCommand request, CancellationToken cancellationToken)
     {
