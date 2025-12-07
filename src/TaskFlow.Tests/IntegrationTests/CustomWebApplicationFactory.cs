@@ -57,6 +57,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         var column = AddColumn(dbContext, board);
 
         AddCard(dbContext, column);
+        AddCard(dbContext, column);
+        AddCard(dbContext, column);
         
         dbContext.SaveChanges();
     }

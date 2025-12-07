@@ -51,6 +51,7 @@ public class UpdateCardTest : TaskFlowClassFixture
 
         updatedCardResponseData.RootElement.GetProperty("title").GetString().Should().Be(request.Title);
         updatedCardResponseData.RootElement.GetProperty("description").GetString().Should().Be(request.Description);
+        updatedCardResponseData.RootElement.GetProperty("position").GetInt32().Should().BeGreaterThanOrEqualTo(0);
         updatedCardResponseData.RootElement.GetProperty("assignedTo").GetProperty("id").GetGuid().Should()
             .Be(request.AssignedToId!.Value);
         updatedCardResponseData.RootElement.GetProperty("dueDate").GetDateTime().Should().Be(request.DueDate);
