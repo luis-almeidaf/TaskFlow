@@ -37,6 +37,7 @@ public class GetCardByIdQueryHandlerTest
         result.Title.Should().Be(card.Title);
         result.Description.Should().Be(card.Description);
         result.CreatedAt.Should().NotBeAfter(DateTime.UtcNow);
+        result.Position.Should().BeGreaterThanOrEqualTo(0);
         result.DueDate.Should().Be(card.DueDate);
         result.CreatedBy.Should().Be(card.CreatedBy);
         result.AssignedTo.Should().Be(card.AssignedTo);

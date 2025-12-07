@@ -93,7 +93,9 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     
     public async Task<Column?> GetColumnById(Guid id)
     {
-        var column = await _dbContext.Columns.FirstOrDefaultAsync(user => user.Id == id);
-        return column;
+        return await _dbContext.Columns
+            .Include(column => column.Cards)
+            .FirstOrDefaultAsync(user => user.Id == id);
+  
     }
 }

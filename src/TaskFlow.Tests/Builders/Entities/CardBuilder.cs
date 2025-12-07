@@ -16,6 +16,8 @@ public static class CardBuilder
             .RuleFor(card => card.AssignedToId, _ => column.Board.CreatedById)
             .RuleFor(card => card.ColumnId, _ => column.Id);
 
+        column.Cards.Add(card);
+
         return card;
     }
 }
