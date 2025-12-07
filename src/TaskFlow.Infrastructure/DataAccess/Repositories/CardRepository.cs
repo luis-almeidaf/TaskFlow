@@ -36,10 +36,29 @@ public class CardRepository(TaskFlowDbContext dbContext) : ICardReadOnlyReposito
                  card.Column.Board.Users.Any(u => u.Id == user.Id)))
             .FirstOrDefaultAsync();
     }
+    
+    public async Task<List<Card>> ReorderCards(Guid columnId, int position)
+    {
+        var cards = await dbContext.Cards
+            .Where(card => card.ColumnId == columnId)
+            .Where(c => c.Position > position).ToListAsync();
+
+        foreach (var card in cards)
+        {
+            card.Position--;
+        }
+
+        return cards;
+    }
 
     public void Update(Card card)
     {
         dbContext.Cards.Update(card);
+    }
+
+    public void UpdateRange(IEnumerable<Card> cards)
+    {
+        dbContext.Cards.UpdateRange(cards);
     }
 
     public void Delete(Card card)

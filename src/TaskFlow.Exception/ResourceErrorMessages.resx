@@ -75,4 +75,7 @@
     <data name="CARD_NOT_FOUND" xml:space="preserve">
         <value>Card not found, check the id given.</value>
     </data>
+    <data name="CARD_NOT_IN_COLUMN" xml:space="preserve">
+        <value>Card not found in this column.</value>
+    </data>
 </root>

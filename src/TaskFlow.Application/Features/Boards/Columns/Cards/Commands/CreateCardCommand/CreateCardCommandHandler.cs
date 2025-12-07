@@ -35,10 +35,13 @@ public class CreateCardCommandHandler(
         }
 
         var card = request.Adapt<Card>();
-        card.CreatedById = user.Id;
         card.Id = Guid.NewGuid();
+        card.CreatedById = user.Id;
         card.ColumnId = column.Id;
         card.AssignedToId = request.AssignedToId;
+
+        var cardsCount = column.Cards.Count;
+        card.Position = cardsCount;
 
         await repository.Add(card);
 
@@ -49,6 +52,8 @@ public class CreateCardCommandHandler(
             ColumnId = column.Id,
             CardId = card.Id,
             Title = card.Title,
+            Description = card.Description,
+            Position = card.Position
         };
     }
 

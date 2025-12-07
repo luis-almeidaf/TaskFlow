@@ -17,8 +17,12 @@ public class DeleteCardCommandHandler(
 
         var card = await repository.GetById(user, request.BoardId, request.ColumnId, request.CardId);
         if (card is null) throw new CardNotFoundException();
-        
+
+        var deletedPosition = card.Position;
+
         repository.Delete(card);
+
+        await repository.ReorderCards(request.ColumnId, deletedPosition);
 
         await unitOfWork.Commit();
 

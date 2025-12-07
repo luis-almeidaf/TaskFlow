@@ -6,4 +6,6 @@ public class CreateCardResponse
     public Guid ColumnId { get; set; }
     public Guid CardId { get; set; }
     public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public int Position { get; set; }
 }
