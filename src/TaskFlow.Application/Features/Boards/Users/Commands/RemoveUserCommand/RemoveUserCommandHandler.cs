@@ -29,7 +29,7 @@ public class RemoveUserCommandHandler(
 
         if (userToRemove.Id == board.CreatedById) throw new BoardOwnerCannotBeRemovedException();
 
-        repository.DeleteUserFromBoard(board, userToRemove);
+        repository.RemoveUser(board, userToRemove);
 
         await unitOfWork.Commit();
 

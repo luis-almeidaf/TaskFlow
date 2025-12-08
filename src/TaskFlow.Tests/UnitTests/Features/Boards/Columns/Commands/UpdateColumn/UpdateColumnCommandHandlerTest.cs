@@ -42,7 +42,7 @@ public class UpdateColumnCommandHandlerTest
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
         var response = await act.Should().ThrowAsync<BoardNotFoundException>();
-        
+
         response.Where(ex =>
             ex.GetErrors().Count == 1 & ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
@@ -61,29 +61,39 @@ public class UpdateColumnCommandHandlerTest
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
         var response = await act.Should().ThrowAsync<ColumnNotFoundException>();
-        
+
         response.Where(ex =>
             ex.GetErrors().Count == 1 & ex.GetErrors().Contains(ResourceErrorMessages.COLUMN_NOT_FOUND));
     }
-    private static UpdateColumnCommandHandler CreateHandler(User user, Board board, Column column, Guid? boardId = null,
+
+    private static UpdateColumnCommandHandler CreateHandler(
+        User user,
+        Board board,
+        Column column,
+        Guid? boardId = null,
         Guid? columnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.Build(user);
-        var boardWriteRepository = new BoardWriteOnlyRepositoryBuilder();
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
+        var columnReadRepository = new ColumnReadOnlyRepositoryBuilder();
+        var columnWriteRepository = new ColumnWriteOnlyRepositoryBuilder().Build();
 
         if (boardId.HasValue)
-            boardWriteRepository.GetById(user, board, boardId);
+            boardReadRepository.GetById(user, board, boardId);
         else
-            boardWriteRepository.GetById(user, board);
+            boardReadRepository.GetById(user, board);
 
         if (columnId.HasValue)
-            boardReadRepository.GetColumnById(column, columnId);
+            columnReadRepository.GetById(column, columnId);
         else
-            boardReadRepository.GetColumnById(column);
+            columnReadRepository.GetById(column);
 
-        return new UpdateColumnCommandHandler(unitOfWork, loggedUser, boardReadRepository.Build(),
-            boardWriteRepository.Build());
+        return new UpdateColumnCommandHandler(
+            unitOfWork,
+            loggedUser,
+            boardReadRepository.Build(),
+            columnReadRepository.Build(),
+            columnWriteRepository);
     }
 }

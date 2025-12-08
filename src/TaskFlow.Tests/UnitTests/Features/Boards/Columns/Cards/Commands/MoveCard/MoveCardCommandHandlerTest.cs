@@ -58,7 +58,7 @@ public class MoveCardCommandHandlerTest
         result.Where(ex =>
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
-    
+
     [Fact]
     public async Task Error_Card_Current_Column_Not_Found()
     {
@@ -83,7 +83,7 @@ public class MoveCardCommandHandlerTest
         result.Where(ex =>
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.COLUMN_NOT_FOUND));
     }
-    
+
     [Fact]
     public async Task Error_Card_New_Column_Not_Found()
     {
@@ -132,7 +132,7 @@ public class MoveCardCommandHandlerTest
         result.Where(ex =>
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.CARD_NOT_FOUND));
     }
-    
+
     private static MoveCardCommandHandler CreateHandler(
         User user,
         Board board,
@@ -146,6 +146,7 @@ public class MoveCardCommandHandlerTest
         var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
         var boardRepository = new BoardReadOnlyRepositoryBuilder();
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
+        var columnRepository = new ColumnReadOnlyRepositoryBuilder();
 
         if (boardId.HasValue)
             boardRepository.GetById(user, board, boardId);
@@ -153,15 +154,20 @@ public class MoveCardCommandHandlerTest
             boardRepository.GetById(user, board);
 
         if (firstColumnId.HasValue)
-            boardRepository.GetColumnById(firstColumn, firstColumnId);
+            columnRepository.GetById(firstColumn, firstColumnId);
         else if (secondColumnId.HasValue)
-            boardRepository.GetColumnById(secondColumn, secondColumnId);
+            columnRepository.GetById(secondColumn, secondColumnId);
         else
         {
-            boardRepository.GetColumnById(firstColumn);
-            boardRepository.GetColumnById(secondColumn);
+            columnRepository.GetById(firstColumn);
+            columnRepository.GetById(secondColumn);
         }
 
-        return new MoveCardCommandHandler(unitOfWork, loggedUser, boardRepository.Build(), cardRepository.Build());
+        return new MoveCardCommandHandler(
+            unitOfWork,
+            loggedUser,
+            boardRepository.Build(),
+            cardRepository.Build(),
+            columnRepository.Build());
     }
 }

@@ -47,7 +47,7 @@ public class DeleteBoardCommandHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
 
-    private static DeleteBoardHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
+    private static DeleteBoardCommandHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
     {
         var loggedUser = LoggedUserBuilder.Build(user);
         var unitOfWork = UnitOfWorkBuilder.Build();
@@ -62,6 +62,6 @@ public class DeleteBoardCommandHandlerTest
             repository.GetById(user, board);
         }
 
-        return new DeleteBoardHandler(repository.Build(), loggedUser, unitOfWork);
+        return new DeleteBoardCommandHandler(repository.Build(), loggedUser, unitOfWork);
     }
 }

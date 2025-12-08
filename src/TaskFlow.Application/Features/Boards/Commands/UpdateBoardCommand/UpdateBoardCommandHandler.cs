@@ -6,7 +6,7 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Commands.UpdateBoardCommand;
 
-public class UpdateBoardHandler(
+public class UpdateBoardCommandHandler(
     IUnitOfWork unitOfWork,
     ILoggedUser loggedUser,
     IBoardWriteOnlyRepository repository)
@@ -20,7 +20,7 @@ public class UpdateBoardHandler(
 
         var board = await repository.GetById(user, request.Id);
         if (board is null) throw new BoardNotFoundException();
-        
+
         board.Name = request.Name;
 
         repository.Update(board);

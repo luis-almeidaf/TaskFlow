@@ -1,6 +1,7 @@
 using MediatR;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
+using TaskFlow.Domain.Repositories.Column;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
@@ -9,7 +10,8 @@ namespace TaskFlow.Application.Features.Boards.Columns.Commands.MoveColumnComman
 public class MoveColumnCommandHandler(
     IUnitOfWork unitOfWork,
     ILoggedUser loggedUser,
-    IBoardWriteOnlyRepository repository) : IRequestHandler<MoveColumnCommand, Unit>
+    IBoardWriteOnlyRepository boardRepository,
+    IColumnWriteOnlyRepository columnRepository) : IRequestHandler<MoveColumnCommand, Unit>
 {
     /// <summary>
     /// Handles the movement of a column to a new position within a board.
@@ -26,10 +28,10 @@ public class MoveColumnCommandHandler(
     public async Task<Unit> Handle(MoveColumnCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
-        
+
         var user = await loggedUser.GetUserAndBoards();
 
-        var board = await repository.GetById(user, request.BoardId);
+        var board = await boardRepository.GetById(user, request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
         var columns = board.Columns.OrderBy(column => column.Position).ToList();
@@ -45,8 +47,9 @@ public class MoveColumnCommandHandler(
         for (var i = 0; i < columns.Count; i++)
         {
             columns[i].Position = i;
-            repository.UpdateColumn(columns[i]);
         }
+
+        columnRepository.UpdateRange(columns);
 
         await unitOfWork.Commit();
         return Unit.Value;

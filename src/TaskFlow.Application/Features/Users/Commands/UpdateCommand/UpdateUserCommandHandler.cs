@@ -8,36 +8,27 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Users.Commands.UpdateCommand;
 
-public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
+public class UpdateUserCommandHandler(
+    ILoggedUser loggedUser,
+    IUserWriteOnlyRepository repository,
+    IUserReadOnlyRepository userReadOnlyRepository,
+    IUnitOfWork unitOfWork)
+    : IRequestHandler<UpdateUserCommand, Unit>
 {
-    private readonly ILoggedUser _loggedUser;
-    private readonly IUserUpdateRepository _repository;
-    private readonly IUserReadOnlyRepository _userReadOnlyRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public UpdateUserCommandHandler(ILoggedUser loggedUser, IUserUpdateRepository repository,
-        IUserReadOnlyRepository userReadOnlyRepository, IUnitOfWork unitOfWork)
-    {
-        _loggedUser = loggedUser;
-        _repository = repository;
-        _userReadOnlyRepository = userReadOnlyRepository;
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var loggedUser = await _loggedUser.Get();
+        var loggedUser1 = await loggedUser.Get();
 
-        await Validate(request, loggedUser.Email);
+        await Validate(request, loggedUser1.Email);
 
-        var user = await _repository.GetById(loggedUser.Id);
+        var user = await repository.GetById(loggedUser1.Id);
 
         user!.Name = request.Name;
         user.Email = request.Email;
 
-        _repository.Update(user);
+        repository.Update(user);
 
-        await _unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return Unit.Value;
     }
@@ -50,7 +41,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
 
         if (!currentEmail.Equals(request.Email))
         {
-            var userExist = await _userReadOnlyRepository.ExistActiveUserWithEmail(request.Email);
+            var userExist = await userReadOnlyRepository.ExistActiveUserWithEmail(request.Email);
 
             if (userExist)
                 result.Errors.Add(new ValidationFailure(string.Empty, ResourceErrorMessages.EMAIL_ALREADY_REGISTERED));

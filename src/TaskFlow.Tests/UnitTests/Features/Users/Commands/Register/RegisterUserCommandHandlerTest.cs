@@ -61,7 +61,7 @@ public class RegisterUserCommandHandlerTest
         var passwordEncrypter = new PasswordEncrypterBuilder().Build();
         var tokenGenerator = JwtTokenGeneratorBuilder.Build();
         var readRepository = new UserReadOnlyRepositoryBuilder();
-        var writeRepository = UserWriteOnlyRepositoryBuilder.Build();
+        var writeRepository = new UserWriteOnlyRepositoryBuilder().Build();
 
         if (!string.IsNullOrWhiteSpace(email))
             readRepository.ExistActiveUserWithEmail(email);

@@ -47,7 +47,7 @@ public class DeleteUserCommandHandlerTest
 
     private static DeleteUserCommandHandler CreateHandler(Domain.Entities.User user)
     {
-        var repository = UserWriteOnlyRepositoryBuilder.Build();
+        var repository = new UserWriteOnlyRepositoryBuilder().Build();
         var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
         var unitOfWork = UnitOfWorkBuilder.Build();
 

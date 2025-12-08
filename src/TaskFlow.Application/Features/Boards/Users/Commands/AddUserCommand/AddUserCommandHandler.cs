@@ -27,7 +27,7 @@ public class AddUserCommandHandler(
 
         if (board.Users.Any(user => user.Id == userToAdd.Id)) throw new UserAlreadyInBoardException();
         
-        repository.AddUserToBoard(board , userToAdd);
+        repository.AddUser(board , userToAdd);
 
         await unitOfWork.Commit();
 

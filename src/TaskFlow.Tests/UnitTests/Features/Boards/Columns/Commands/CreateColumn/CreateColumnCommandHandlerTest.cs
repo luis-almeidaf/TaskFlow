@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Mapster;
 using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
@@ -59,15 +60,18 @@ public class CreateColumnCommandHandlerTest
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
-        var boardWriteRepository = new BoardWriteOnlyRepositoryBuilder();
-        var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
+        var boardRepository = new BoardReadOnlyRepositoryBuilder();
+        var columnRepository = new ColumnWriteOnlyRepositoryBuilder();
 
-        boardReadRepository.GetById(user, board);
+        boardRepository.GetById(user, board);
 
         if (boardId.HasValue)
-            boardReadRepository.GetById(user, board, boardId);
+            boardRepository.GetById(user, board, boardId);
 
-        return new CreateColumnCommandHandler(boardWriteRepository.Build(), unitOfWork, loggedUser,
-            boardReadRepository.Build());
+        return new CreateColumnCommandHandler(
+            loggedUser,
+            unitOfWork, 
+            boardRepository.Build(), 
+            columnRepository.Build());
     }
 }

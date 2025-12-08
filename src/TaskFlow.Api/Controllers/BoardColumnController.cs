@@ -17,7 +17,7 @@ public class BoardColumnController(IMediator mediator) : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(CreateColumnResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> AddColumnToBoard(
+    public async Task<IActionResult> CreateColumn(
     [FromRoute] Guid boardId,
     [FromBody] CreateColumnRequest toBoardRequest)
     {
@@ -33,7 +33,7 @@ public class BoardColumnController(IMediator mediator) : ControllerBase
     [HttpDelete("{columnId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> DeleteColumnFromBoard(
+    public async Task<IActionResult> DeleteColumn(
         [FromRoute] Guid boardId,
         [FromRoute] Guid columnId)
     {

@@ -78,13 +78,18 @@ public class MoveColumnCommandHandlerTest
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
-        var repository = new BoardWriteOnlyRepositoryBuilder();
+        var boardRepository = new BoardWriteOnlyRepositoryBuilder();
+        var columnRepository = new ColumnWriteOnlyRepositoryBuilder().Build();
 
         if (boardId.HasValue)
-            repository.GetById(user, board, boardId);
+            boardRepository.GetById(user, board, boardId);
         else
-            repository.GetById(user, board);
+            boardRepository.GetById(user, board);
 
-        return new MoveColumnCommandHandler(unitOfWork, loggedUser, repository.Build());
+        return new MoveColumnCommandHandler(
+            unitOfWork, 
+            loggedUser, 
+            boardRepository.Build(),
+            columnRepository);
     }
 }

@@ -3,38 +3,26 @@ using MediatR;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
+using TaskFlow.Domain.Repositories.Column;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 
-public class CreateColumnCommandHandler : IRequestHandler<CreateColumnCommand, CreateColumnResponse>
+public class CreateColumnCommandHandler(
+    ILoggedUser loggedUser,
+    IUnitOfWork unitOfWork,
+    IBoardReadOnlyRepository boardRepository,
+    IColumnWriteOnlyRepository columnRepository) : IRequestHandler<CreateColumnCommand, CreateColumnResponse>
 {
-    private readonly IBoardReadOnlyRepository _boardReadOnlyRepository;
-    private readonly ILoggedUser _loggedUser;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IBoardWriteOnlyRepository _repository;
-
-    public CreateColumnCommandHandler(
-        IBoardWriteOnlyRepository repository,
-        IUnitOfWork unitOfWork,
-        ILoggedUser loggedUser,
-        IBoardReadOnlyRepository boardReadOnlyRepository)
-    {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
-        _loggedUser = loggedUser;
-        _boardReadOnlyRepository = boardReadOnlyRepository;
-    }
-
     public async Task<CreateColumnResponse> Handle(CreateColumnCommand request,
         CancellationToken cancellationToken)
     {
         Validate(request);
 
-        var user = await _loggedUser.GetUserAndBoards();
+        var user = await loggedUser.GetUserAndBoards();
 
-        var board = await _boardReadOnlyRepository.GetById(user, request.BoardId);
+        var board = await boardRepository.GetById(user, request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
         var column = request.Adapt<Column>();
@@ -44,9 +32,9 @@ public class CreateColumnCommandHandler : IRequestHandler<CreateColumnCommand, C
         var columnsCount = board.Columns.Count;
         column.Position = columnsCount;
 
-        await _repository.AddColumnToBoard(column);
+        await columnRepository.Add(column);
 
-        await _unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return new CreateColumnResponse
         {

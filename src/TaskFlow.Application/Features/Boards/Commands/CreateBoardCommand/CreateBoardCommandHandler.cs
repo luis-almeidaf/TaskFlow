@@ -8,13 +8,13 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Commands.CreateBoardCommand;
 
-public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, CreateBoardResponse>
+public class CreateBoardCommandHandler : IRequestHandler<CreateBoardCommand, CreateBoardResponse>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILoggedUser _loggedUser;
     private readonly IBoardWriteOnlyRepository _repository;
 
-    public CreateBoardHandler(IUnitOfWork unitOfWork, ILoggedUser loggedUser,
+    public CreateBoardCommandHandler(IUnitOfWork unitOfWork, ILoggedUser loggedUser,
         IBoardWriteOnlyRepository repository)
     {
         _unitOfWork = unitOfWork;
@@ -31,9 +31,9 @@ public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, CreateBoar
         var board = request.Adapt<Board>();
         board.Id = Guid.NewGuid();
         board.CreatedById = loggedUser.Id;
-        
-        _repository.AddUserToBoard(board, loggedUser);
-        
+
+        _repository.AddUser(board, loggedUser);
+
         var columns = new List<Column>
         {
             new() { Id = Guid.NewGuid(), Name = "Todo", Position = 0, BoardId = board.Id, Board = board },
@@ -45,7 +45,7 @@ public class CreateBoardHandler : IRequestHandler<CreateBoardCommand, CreateBoar
             board.Columns.Add(column);
 
         await _repository.Add(board);
-        
+
         await _unitOfWork.Commit();
 
         return new CreateBoardResponse

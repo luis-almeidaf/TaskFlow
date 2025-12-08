@@ -7,11 +7,18 @@ using TaskFlow.Tests.Builders.Cryptography;
 using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using Xunit.Abstractions;
 
 namespace TaskFlow.Tests.UnitTests.Features.Users.Commands.ChangePassword;
 
 public class ChangePasswordCommandHandlerTest
 {
+    private readonly ITestOutputHelper _testOutputHelper;
+    public ChangePasswordCommandHandlerTest(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper;
+    }
+
     [Fact]
     public async Task Success()
     {
@@ -24,6 +31,15 @@ public class ChangePasswordCommandHandlerTest
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
         await act.Should().NotThrowAsync();
+        try
+        {
+            await act();
+        }
+        catch (System.Exception ex)
+        {
+            _testOutputHelper.WriteLine(ex.ToString());
+            throw;
+        }
     }
 
     [Fact]
@@ -64,7 +80,7 @@ public class ChangePasswordCommandHandlerTest
     private static ChangePasswordCommandHandler CreateHandler(Domain.Entities.User user, string? password = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var updateRepository = UserUpdateOnlyRepositoryBuilder.Build(user);
+        var updateRepository = new UserWriteOnlyRepositoryBuilder().GetById(user).Build();
         var loggedUser = LoggedUserBuilder.Build(user);
         var passwordEncrypter = new PasswordEncrypterBuilder().Verify(password).Build();
 

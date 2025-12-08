@@ -79,26 +79,28 @@ public class DeleteColumnCommandHandlerTest
         Guid? boardId = null,
         Guid? columnId = null)
     {
-        var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.Build(user);
-        var boardWriteRepository = new BoardWriteOnlyRepositoryBuilder();
+        var unitOfWork = UnitOfWorkBuilder.Build();
+        var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
+        var columnReadOnlyRepository = new ColumnReadOnlyRepositoryBuilder();
+        var columnWriteOnlyRepository = new ColumnWriteOnlyRepositoryBuilder();
 
         if (boardId.HasValue)
-            boardWriteRepository.GetById(user, board, boardId);
+            boardReadRepository.GetById(user, board, boardId);
         else
-            boardWriteRepository.GetById(user, board);
+            boardReadRepository.GetById(user, board);
 
-        var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
 
         if (columnId.HasValue)
-            boardReadRepository.GetColumnById(column, columnId);
+            columnReadOnlyRepository.GetById(column, columnId);
         else
-            boardReadRepository.GetColumnById(column);
+            columnReadOnlyRepository.GetById(column);
 
         return new DeleteColumnCommandHandler(
-            boardReadRepository.Build(),
             loggedUser,
             unitOfWork,
-            boardWriteRepository.Build());
+            boardReadRepository.Build(),
+            columnReadOnlyRepository.Build(),
+            columnWriteOnlyRepository.Build());
     }
 }

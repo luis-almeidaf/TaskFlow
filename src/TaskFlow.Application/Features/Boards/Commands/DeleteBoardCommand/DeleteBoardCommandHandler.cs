@@ -6,7 +6,7 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Commands.DeleteBoardCommand;
 
-public class DeleteBoardHandler(
+public class DeleteBoardCommandHandler(
     IBoardWriteOnlyRepository repository,
     ILoggedUser loggedUser,
     IUnitOfWork unitOfWork)

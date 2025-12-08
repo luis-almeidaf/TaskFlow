@@ -10,42 +10,33 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Users.Commands.ChangePasswordCommand;
 
-public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, Unit>
+public class ChangePasswordCommandHandler(
+    ILoggedUser loggedUser,
+    IUserWriteOnlyRepository repository,
+    IPasswordEncrypter passwordEncrypter,
+    IUnitOfWork unitOfWork) : IRequestHandler<ChangePasswordCommand, Unit>
 {
-    private readonly ILoggedUser _loggedUser;
-    private readonly IUserUpdateRepository _repository;
-    private readonly IPasswordEncrypter _passwordEncrypter;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ChangePasswordCommandHandler(ILoggedUser loggedUser, IUserUpdateRepository repository,
-        IPasswordEncrypter passwordEncrypter, IUnitOfWork unitOfWork)
+    public async Task<Unit> Handle(ChangePasswordCommand request,
+        CancellationToken cancellationToken)
     {
-        _loggedUser = loggedUser;
-        _repository = repository;
-        _passwordEncrypter = passwordEncrypter;
-        _unitOfWork = unitOfWork;
-    }
+        var loggedUser1 = await loggedUser.Get();
 
-    public async Task<Unit> Handle(Commands.ChangePasswordCommand.ChangePasswordCommand request, CancellationToken cancellationToken)
-    {
-        var loggedUser = await _loggedUser.Get();
+        Validate(request, loggedUser1);
 
-        Validate(request, loggedUser);
+        var user = await repository.GetById(loggedUser1.Id);
+        user!.Password = passwordEncrypter.Encrypt(request.NewPassword);
 
-        var user = await _repository.GetById(loggedUser.Id);
-        user!.Password = _passwordEncrypter.Encrypt(request.NewPassword);
-
-        await _unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return Unit.Value;
     }
 
-    private void Validate(Commands.ChangePasswordCommand.ChangePasswordCommand request, User loggedUser)
+    private void Validate(ChangePasswordCommand request, User user)
     {
         var validator = new ChangePasswordValidator();
         var result = validator.Validate(request);
 
-        var passwordMatch = _passwordEncrypter.Verify(request.Password, loggedUser.Password);
+        var passwordMatch = passwordEncrypter.Verify(request.Password, user.Password);
 
         if (!passwordMatch)
         {

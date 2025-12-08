@@ -4,16 +4,18 @@ using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
+using TaskFlow.Domain.Repositories.Column;
 using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 
 public class CreateCardCommandHandler(
-    IBoardReadOnlyRepository boardReadOnlyRepository,
     ILoggedUser loggedUser,
     IUnitOfWork unitOfWork,
-    ICardWriteOnlyRepository repository)
+    IBoardReadOnlyRepository boardReadOnlyRepository,
+    ICardWriteOnlyRepository cardRepository,
+    IColumnReadOnlyRepository columnRepository)
     : IRequestHandler<CreateCardCommand, CreateCardResponse>
 {
     public async Task<CreateCardResponse> Handle(CreateCardCommand request, CancellationToken cancellationToken)
@@ -25,7 +27,7 @@ public class CreateCardCommandHandler(
         var board = await boardReadOnlyRepository.GetById(user, request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
-        var column = await boardReadOnlyRepository.GetColumnById(request.ColumnId);
+        var column = await columnRepository.GetById(request.ColumnId);
         if (column is null) throw new ColumnNotFoundException();
 
         if (request.AssignedToId.HasValue)
@@ -43,7 +45,7 @@ public class CreateCardCommandHandler(
         var cardsCount = column.Cards.Count;
         card.Position = cardsCount;
 
-        await repository.Add(card);
+        await cardRepository.Add(card);
 
         await unitOfWork.Commit();
         return new CreateCardResponse

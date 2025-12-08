@@ -65,7 +65,7 @@ public class UpdateUserCommandHandlerTest
     private static UpdateUserCommandHandler CreateHandler(Domain.Entities.User user, string? email = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var updateRepository = UserUpdateOnlyRepositoryBuilder.Build(user);
+        var updateRepository = new UserWriteOnlyRepositoryBuilder().GetById(user).Build();
         var loggedUser = LoggedUserBuilder.Build(user);
         var readRepository = new UserReadOnlyRepositoryBuilder();
 
