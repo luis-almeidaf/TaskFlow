@@ -13,18 +13,14 @@ public class CardRepository(TaskFlowDbContext dbContext) : ICardReadOnlyReposito
             .Include(card => card.CreatedBy)
             .Include(card => card.AssignedTo)
             .Where(card =>
-                card.Column.Board.CreatedById == user.Id || card.Column.Board.Users.Any(u => u.Id == user.Id))
-            .Where(card => card.Id == cardId)
-            .Where(card => card.ColumnId == columnId)
-            .Where(card => card.Column.BoardId == boardId)
+                card.Id == cardId &&
+                card.ColumnId == columnId &&
+                card.Column.BoardId == boardId &&
+                (card.Column.Board.CreatedById == user.Id ||
+                 card.Column.Board.Users.Any(u => u.Id == user.Id)))
             .FirstOrDefaultAsync();
     }
-
-    public async Task Add(Card card)
-    {
-        await dbContext.Cards.AddAsync(card);
-    }
-
+    
     async Task<Card?> ICardWriteOnlyRepository.GetById(User user, Guid boardId, Guid columnId, Guid cardId)
     {
         return await dbContext.Cards
@@ -35,6 +31,11 @@ public class CardRepository(TaskFlowDbContext dbContext) : ICardReadOnlyReposito
                 (card.Column.Board.CreatedById == user.Id ||
                  card.Column.Board.Users.Any(u => u.Id == user.Id)))
             .FirstOrDefaultAsync();
+    }
+
+    public async Task Add(Card card)
+    {
+        await dbContext.Cards.AddAsync(card);
     }
     
     public async Task<List<Card>> ReorderCards(Guid columnId, int position)
