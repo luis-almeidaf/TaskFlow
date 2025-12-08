@@ -10,7 +10,7 @@ using TaskFlow.Tests.Builders.Repositories;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Commands.Update;
 
-public class UpdateBoardCommandHandlerTest
+public class UpdateBoardCommandTest
 {
     [Fact]
     public async Task Success()
@@ -47,7 +47,7 @@ public class UpdateBoardCommandHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
 
-    private static UpdateBoardHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
+    private static UpdateBoardCommandHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
     {
         var loggedUser = LoggedUserBuilder.Build(user);
         var unitOfWork = UnitOfWorkBuilder.Build();
@@ -62,6 +62,6 @@ public class UpdateBoardCommandHandlerTest
             repository.GetById(user, board);
         }
 
-        return new UpdateBoardHandler(unitOfWork, loggedUser, repository.Build());
+        return new UpdateBoardCommandHandler(unitOfWork, loggedUser, repository.Build());
     }
 }

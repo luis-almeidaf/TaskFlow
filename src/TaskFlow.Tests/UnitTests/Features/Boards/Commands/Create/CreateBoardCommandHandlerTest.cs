@@ -1,5 +1,6 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Commands.CreateBoardCommand;
+using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards;
@@ -44,12 +45,12 @@ public class CreateBoardCommandHandlerTest
         result.Where(ex => ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.NAME_EMPTY));
     }
 
-    private CreateBoardHandler CreateHandler(Domain.Entities.User user)
+    private CreateBoardCommandHandler CreateHandler(User user)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.Build(user);
         var repository = new BoardWriteOnlyRepositoryBuilder().Build();
 
-        return new CreateBoardHandler(unitOfWork, loggedUser, repository);
+        return new CreateBoardCommandHandler(unitOfWork, loggedUser, repository);
     }
 }
