@@ -10,25 +10,12 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
 
     public BoardRepository(TaskFlowDbContext dbContext) => _dbContext = dbContext;
 
-    public async Task Add(Board board)
-    {
-        await _dbContext.Boards.AddAsync(board);
-    }
-
     public async Task<List<Board>> GetAll(User user)
     {
-        return await _dbContext.Boards.AsNoTracking().Where(board => board.CreatedById == user.Id).ToListAsync();
-    }
-
-    public void Update(Board board)
-    {
-        _dbContext.Boards.Update(board);
-    }
-
-    public async Task Delete(Guid boardId)
-    {
-        var boardToRemove = await _dbContext.Boards.FindAsync(boardId);
-        _dbContext.Boards.Remove(boardToRemove!);
+        return await _dbContext.Boards
+            .AsNoTracking()
+            .Where(board =>
+                board.CreatedById == user.Id || board.Users.Any(u => u.Id == user.Id)).ToListAsync();
     }
 
     async Task<Board?> IBoardWriteOnlyRepository.GetById(User user, Guid id)
@@ -36,7 +23,9 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
         return await _dbContext.Boards
             .Include(board => board.Users)
             .Include(board => board.Columns)
-            .FirstOrDefaultAsync(board => board.Id == id && board.CreatedById == user.Id);
+            .FirstOrDefaultAsync(board =>
+                board.Id == id &&
+                (board.CreatedById == user.Id || board.Users.Any(u => u.Id == user.Id)));
     }
 
     async Task<Board?> IBoardReadOnlyRepository.GetById(User user, Guid id)
@@ -52,16 +41,33 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
             .ThenInclude(column => column.Cards)
             .ThenInclude(card => card.AssignedTo)
             .FirstOrDefaultAsync(board =>
-                board.Id == id && (board.CreatedById == user.Id || board.Users.Any(u => u.Id == user.Id)));
+                board.Id == id &&
+                (board.CreatedById == user.Id || board.Users.Any(u => u.Id == user.Id)));
     }
 
-    public void AddUserToBoard(Board board, User user)
+    public async Task Add(Board board)
+    {
+        await _dbContext.Boards.AddAsync(board);
+    }
+
+    public void Update(Board board)
+    {
+        _dbContext.Boards.Update(board);
+    }
+
+    public async Task Delete(Guid boardId)
+    {
+        var boardToRemove = await _dbContext.Boards.FindAsync(boardId);
+        _dbContext.Boards.Remove(boardToRemove!);
+    }
+
+    public void AddUser(Board board, User user)
     {
         _dbContext.Entry(user).State = EntityState.Unchanged;
         board.Users.Add(user);
     }
 
-    public void DeleteUserFromBoard(Board board, User user)
+    public void RemoveUser(Board board, User user)
     {
         board.Users.Remove(user);
     }
@@ -90,12 +96,11 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     {
         _dbContext.Columns.Update(column);
     }
-    
+
     public async Task<Column?> GetColumnById(Guid id)
     {
         return await _dbContext.Columns
             .Include(column => column.Cards)
             .FirstOrDefaultAsync(user => user.Id == id);
-  
     }
 }

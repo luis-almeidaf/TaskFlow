@@ -9,8 +9,8 @@ public interface IBoardWriteOnlyRepository
     void Update(Entities.Board board);
     Task Delete(Guid boardId);
     
-    void AddUserToBoard(Entities.Board board, Entities.User user);
-    void DeleteUserFromBoard(Entities.Board board, Entities.User user);
+    void AddUser(Entities.Board board, Entities.User user);
+    void RemoveUser(Entities.Board board, Entities.User user);
 
     Task AddColumnToBoard(Column column);
     void DeleteColumnFromBoard(Column column);

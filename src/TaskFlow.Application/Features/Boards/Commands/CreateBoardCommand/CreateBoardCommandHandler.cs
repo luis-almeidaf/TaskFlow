@@ -32,7 +32,7 @@ public class CreateBoardCommandHandler : IRequestHandler<CreateBoardCommand, Cre
         board.Id = Guid.NewGuid();
         board.CreatedById = loggedUser.Id;
 
-        _repository.AddUserToBoard(board, loggedUser);
+        _repository.AddUser(board, loggedUser);
 
         var columns = new List<Column>
         {
