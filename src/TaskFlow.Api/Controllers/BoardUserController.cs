@@ -32,7 +32,7 @@ public class BoardUserController(IMediator mediator) : ControllerBase
     [HttpDelete("{userId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteUser(
+    public async Task<IActionResult> RemoveUser(
         [FromRoute] Guid boardId,
         [FromRoute] Guid userId)
     {
