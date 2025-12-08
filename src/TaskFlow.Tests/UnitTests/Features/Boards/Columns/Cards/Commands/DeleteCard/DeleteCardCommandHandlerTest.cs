@@ -25,7 +25,7 @@ public class DeleteCardCommandHandlerTest
 
         var handler = CreateHandler(user, board, column, card);
 
-        var request = DeleteCardCommandBuild.Build(board, column, card);
+        var request = DeleteCardCommandBuilder.Build(board, column, card);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -45,7 +45,7 @@ public class DeleteCardCommandHandlerTest
 
         var handler = CreateHandler(user, board, column, card, cardId: card.Id);
 
-        var request = DeleteCardCommandBuild.Build(board, column, card);
+        var request = DeleteCardCommandBuilder.Build(board, column, card);
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
