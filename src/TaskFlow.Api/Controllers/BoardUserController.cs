@@ -16,7 +16,7 @@ public class BoardUserController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> AddUserToBoard(
+    public async Task<IActionResult> AddUser(
     [FromRoute] Guid boardId,
     [FromBody] AddUserRequest request)
     {
@@ -32,7 +32,7 @@ public class BoardUserController(IMediator mediator) : ControllerBase
     [HttpDelete("{userId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteUserFromBoard(
+    public async Task<IActionResult> DeleteUser(
         [FromRoute] Guid boardId,
         [FromRoute] Guid userId)
     {
