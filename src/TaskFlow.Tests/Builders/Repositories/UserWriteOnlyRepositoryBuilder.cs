@@ -1,14 +1,22 @@
 using Moq;
+using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Repositories.User;
 
 namespace TaskFlow.Tests.Builders.Repositories;
 
-public static class UserWriteOnlyRepositoryBuilder
+public class UserWriteOnlyRepositoryBuilder
 {
-    public static IUserWriteOnlyRepository Build()
-    {
-        var mock = new Mock<IUserWriteOnlyRepository>();
+    private readonly Mock<IUserWriteOnlyRepository> _repository = new();
 
-        return mock.Object;
+    public UserWriteOnlyRepositoryBuilder GetById(User user)
+    {
+        _repository.Setup(repository => repository.GetById(user.Id)).ReturnsAsync(user);
+
+        return this;
+    }
+    
+    public IUserWriteOnlyRepository Build()
+    {
+        return _repository.Object;
     }
 }

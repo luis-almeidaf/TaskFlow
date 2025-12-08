@@ -4,7 +4,7 @@ using TaskFlow.Domain.Repositories.User;
 
 namespace TaskFlow.Infrastructure.DataAccess.Repositories;
 
-internal class UserRepository : IUserReadOnlyRepository, IUserUpdateRepository, IUserWriteOnlyRepository
+internal class UserRepository : IUserReadOnlyRepository, IUserWriteOnlyRepository
 {
     private readonly TaskFlowDbContext _dbContext;
 
