@@ -55,7 +55,7 @@ public class UpdateCardCommandHandlerTest
 
         result.Where(ex => ex.GetErrors().Count == 1 & ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
-    
+
     [Fact]
     public async Task Error_User_To_Be_Assigned_Not_In_Board()
     {
@@ -71,7 +71,7 @@ public class UpdateCardCommandHandlerTest
         var handler = CreateHandler(user, board, column, card);
 
         var userToBeAssigned = UserBuilder.Build();
-        
+
         var request = UpdateCardCommandBuilder.Build(board, column, card);
         request.AssignedToId = userToBeAssigned.Id;
 
@@ -79,7 +79,8 @@ public class UpdateCardCommandHandlerTest
 
         var result = await act.Should().ThrowAsync<UserNotInBoardException>();
 
-        result.Where(ex => ex.GetErrors().Count == 1 & ex.GetErrors().Contains(ResourceErrorMessages.USER_NOT_IN_BOARD));
+        result.Where(ex =>
+            ex.GetErrors().Count == 1 & ex.GetErrors().Contains(ResourceErrorMessages.USER_NOT_IN_BOARD));
     }
 
     [Fact]
@@ -139,26 +140,28 @@ public class UpdateCardCommandHandlerTest
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
-        var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
+        var cardRepository = new CardWriteOnlyRepositoryBuilder();
+        var columnRepository = new ColumnReadOnlyRepositoryBuilder();
 
         boardReadRepository.GetById(user, board);
-        boardReadRepository.GetColumnById(column);
         cardRepository.GetById(user, board, column, card);
+        columnRepository.GetById(column);
 
         if (boardId.HasValue)
             boardReadRepository.GetById(user, board, boardId);
 
-        if (columnId.HasValue)
-            boardReadRepository.GetColumnById(column, columnId);
-
         if (cardId.HasValue)
             cardRepository.GetById(user, board, column, card, cardId);
 
+        if (columnId.HasValue)
+            columnRepository.GetById(column, columnId);
+
         return new UpdateCardCommandHandler(
-            boardReadRepository.Build(),
             loggedUser,
             unitOfWork,
-            cardRepository.Build());
+            boardReadRepository.Build(),
+            cardRepository.Build(),
+            columnRepository.Build());
     }
 }

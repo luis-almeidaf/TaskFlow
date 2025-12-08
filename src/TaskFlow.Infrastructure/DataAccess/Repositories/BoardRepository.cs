@@ -71,36 +71,4 @@ public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyReposito
     {
         board.Users.Remove(user);
     }
-
-    public async Task AddColumnToBoard(Column column)
-    {
-        await _dbContext.Columns.AddAsync(column);
-    }
-
-    public void DeleteColumnFromBoard(Column column)
-    {
-        _dbContext.Columns.Remove(column);
-    }
-
-    public void ReorderColumns(Board board, int position)
-    {
-        var columns = board.Columns.Where(c => c.Position > position).ToList();
-
-        foreach (var column in columns)
-        {
-            column.Position--;
-        }
-    }
-
-    public void UpdateColumn(Column column)
-    {
-        _dbContext.Columns.Update(column);
-    }
-
-    public async Task<Column?> GetColumnById(Guid id)
-    {
-        return await _dbContext.Columns
-            .Include(column => column.Cards)
-            .FirstOrDefaultAsync(user => user.Id == id);
-    }
 }
