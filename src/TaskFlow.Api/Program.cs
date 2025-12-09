@@ -9,7 +9,8 @@ using TaskFlow.Domain.Security.Tokens;
 using TaskFlow.Infrastructure;
 using TaskFlow.Infrastructure.Extensions;
 
-var  myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+const string bearer = "Bearer";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(config =>
 {
-    config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    config.AddSecurityDefinition(bearer, new OpenApiSecurityScheme
     {
         Name = "Authorization",
         Description = """
@@ -26,7 +27,7 @@ builder.Services.AddSwaggerGen(config =>
                       Example: 'Bearer 12345678qwerty'
                       """,
         In = ParameterLocation.Header,
-        Scheme = "Bearer",
+        Scheme = bearer,
         Type = SecuritySchemeType.ApiKey
     });
 
@@ -38,10 +39,10 @@ builder.Services.AddSwaggerGen(config =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id = bearer
                 },
                 Scheme = "oauth2",
-                Name = "Bearer",
+                Name = bearer,
                 In = ParameterLocation.Header
             },
             new List<string>()
@@ -79,7 +80,7 @@ builder.Services.AddAuthentication(config =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: myAllowSpecificOrigins,
-        policy  =>
+        policy =>
         {
             policy.WithOrigins("http://127.0.0.1:5500")
                 .AllowAnyHeader()
@@ -106,7 +107,8 @@ app.MapControllers();
 if (!builder.Configuration.IsTestEnvironment())
     await MigrateDatabase();
 
-app.Run();
+await app.RunAsync();
+return;
 
 async Task MigrateDatabase()
 {

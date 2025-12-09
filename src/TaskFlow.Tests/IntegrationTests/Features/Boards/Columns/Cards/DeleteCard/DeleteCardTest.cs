@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 using TaskFlow.Exception;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Boards.Columns.Cards.DeleteCard;
@@ -13,7 +12,7 @@ public class DeleteCardTest : TaskFlowClassFixture
     private readonly Guid _boardId;
     private readonly Guid _columnId;
     private readonly Guid _cardId;
-    private readonly Guid _userToBeAssignedId;
+
     private readonly string _boardOwnerToken;
 
     public DeleteCardTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
@@ -21,7 +20,6 @@ public class DeleteCardTest : TaskFlowClassFixture
         _boardId = webApplicationFactory.Board.GetId();
         _columnId = webApplicationFactory.Column.GetId();
         _cardId = webApplicationFactory.Card.GetId();
-        _userToBeAssignedId = webApplicationFactory.UserWithBoards.GetId();
         _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
     }
 

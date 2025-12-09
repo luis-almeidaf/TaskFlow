@@ -45,7 +45,7 @@ public class CreateColumnCommandHandler(
         };
     }
 
-    private void Validate(CreateColumnCommand request)
+    private static void Validate(CreateColumnCommand request)
     {
         var result = new CreateColumnValidator().Validate(request);
 

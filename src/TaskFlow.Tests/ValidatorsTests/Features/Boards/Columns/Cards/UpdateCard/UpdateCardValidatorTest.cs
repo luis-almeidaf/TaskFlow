@@ -1,5 +1,4 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.UpdateCardCommand;
 using TaskFlow.Exception;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
@@ -69,7 +68,7 @@ public class UpdateCardValidatorTest
         var card = CardBuilder.Build(column);
 
         var request = UpdateCardCommandBuilder.Build(board, column, card);
-        request.DueDate = new DateTime(2023, 1, 15, 10, 0, 0);
+        request.DueDate = new DateTime(2023, 1, 15, 10, 0, 0, DateTimeKind.Utc);
 
         var result = validator.Validate(request);
 

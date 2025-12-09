@@ -55,7 +55,7 @@ public class CreateBoardCommandHandler : IRequestHandler<CreateBoardCommand, Cre
         };
     }
 
-    private void Validate(CreateBoardCommand request)
+    private static void Validate(CreateBoardCommand request)
     {
         var result = new CreateBoardValidator().Validate(request);
 

@@ -62,7 +62,8 @@ public class CreateCardValidatorTest
         var column = ColumnBuilder.Build(board);
 
         var request = CreateCardCommandBuilder.Build(board, column);
-        request.DueDate = new DateTime(2023, 1, 15, 10, 0, 0);
+        var pastDueDate = new DateTime(2023, 1, 15, 10, 0, 0, DateTimeKind.Utc);
+        request.DueDate = pastDueDate;
 
         var result = validator.Validate(request);
 

@@ -63,7 +63,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         dbContext.SaveChanges();
     }
 
-    private User AddUser(
+    private void AddUser(
         TaskFlowDbContext dbContext,
         IPasswordEncrypter passwordEncrypter,
         IAccessTokenGenerator tokenGenerator)
@@ -79,8 +79,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         var token = tokenGenerator.Generate(user);
 
         User = new UserIdentityManager(user, password, token);
-
-        return user;
     }
     
     private User AddUserWithBoards(
@@ -130,14 +128,12 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         return column;
     }
     
-    private Card AddCard(TaskFlowDbContext dbContext, Column column)
+    private void AddCard(TaskFlowDbContext dbContext, Column column)
     {
         var card = CardBuilder.Build(column);
         
         dbContext.Cards.Add(card);
         
         Card = new CardIdentityManager(card);
-
-        return card;
     }
 }
