@@ -12,21 +12,14 @@ namespace TaskFlow.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public UserController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpPost]
         [ProducesResponseType(typeof(RegisterUserResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
-            var response = await _mediator.Send(new RegisterUserCommand
+            var response = await mediator.Send(new RegisterUserCommand
             {
                 Email = request.Email,
                 Name = request.Name,
@@ -42,7 +35,7 @@ namespace TaskFlow.Api.Controllers
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByEmail([FromRoute] string email)
         {
-            var response = await _mediator.Send(new GetUserByEmailQuery { Email = email });
+            var response = await mediator.Send(new GetUserByEmailQuery { Email = email });
             return Ok(response);
         }
 
@@ -52,7 +45,7 @@ namespace TaskFlow.Api.Controllers
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateUserRequest request)
         {
-            await _mediator.Send(new UpdateUserCommand
+            await mediator.Send(new UpdateUserCommand
             {
                 Email = request.Email,
                 Name = request.Name
@@ -67,7 +60,7 @@ namespace TaskFlow.Api.Controllers
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
-            await _mediator.Send(new ChangePasswordCommand
+            await mediator.Send(new ChangePasswordCommand
             {
                 NewPassword = request.NewPassword,
                 Password = request.Password
@@ -82,7 +75,7 @@ namespace TaskFlow.Api.Controllers
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Delete()
         {
-            await _mediator.Send(new DeleteUserCommand());
+            await mediator.Send(new DeleteUserCommand());
             return NoContent();
         }
     }

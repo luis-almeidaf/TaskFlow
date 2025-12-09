@@ -7,21 +7,14 @@ namespace TaskFlow.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class LoginController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public LoginController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpPost]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var response = await _mediator.Send(new LoginCommand
+            var response = await mediator.Send(new LoginCommand
             {
                 Email = request.Email,
                 Password = request.Password

@@ -18,6 +18,7 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(typeof(CreateCardResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateCard(
         [FromRoute] Guid boardId,
@@ -55,6 +56,7 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
     [HttpPut("{cardId:Guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid boardId, Guid columnId, Guid cardId,
         [FromBody] UpdateCardRequest request)
@@ -76,6 +78,7 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
     [HttpPatch("{cardId:Guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Move(
         [FromRoute] Guid boardId, Guid columnId, Guid cardId,
         [FromBody] MoveCardRequest request)
