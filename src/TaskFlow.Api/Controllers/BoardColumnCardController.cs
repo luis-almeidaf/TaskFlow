@@ -112,7 +112,7 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
 
     [HttpDelete("{cardId:Guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(
         [FromRoute] Guid boardId, Guid columnId, Guid cardId)
     {
