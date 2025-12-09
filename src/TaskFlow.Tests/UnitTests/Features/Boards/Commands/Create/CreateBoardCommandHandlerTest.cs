@@ -45,7 +45,7 @@ public class CreateBoardCommandHandlerTest
         result.Where(ex => ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.NAME_EMPTY));
     }
 
-    private CreateBoardCommandHandler CreateHandler(User user)
+    private static CreateBoardCommandHandler CreateHandler(User user)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var loggedUser = LoggedUserBuilder.Build(user);

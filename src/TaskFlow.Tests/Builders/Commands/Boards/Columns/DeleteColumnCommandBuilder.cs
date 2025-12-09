@@ -3,7 +3,7 @@ using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.Builders.Commands.Boards.Columns;
 
-public class DeleteColumnCommandBuilder
+public static class DeleteColumnCommandBuilder
 {
     public static DeleteColumnCommand Build(Board board, Column column)
     {

@@ -37,7 +37,7 @@ public class GetUserByEmailQueryHandlerTest
         result.Should().BeNull();
     }
 
-    private GetUserByEmailQueryHandler CreateHandler(Domain.Entities.User user, string? email = null)
+    private static GetUserByEmailQueryHandler CreateHandler(Domain.Entities.User user, string? email = null)
     {
         var repository = new UserReadOnlyRepositoryBuilder();
         if (string.IsNullOrWhiteSpace(email))

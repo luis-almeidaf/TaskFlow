@@ -15,7 +15,6 @@ public class MoveCardTest : TaskFlowClassFixture
     private readonly Guid _boardId;
     private readonly Guid _columnId;
     private readonly Guid _cardId;
-    private readonly Guid _userToBeAssignedId;
 
     private readonly List<Column> _columns;
     private readonly string _boardOwnerToken;
@@ -25,7 +24,6 @@ public class MoveCardTest : TaskFlowClassFixture
         _boardId = webApplicationFactory.Board.GetId();
         _columnId = webApplicationFactory.Column.GetId();
         _cardId = webApplicationFactory.Card.GetId();
-        _userToBeAssignedId = webApplicationFactory.UserWithBoards.GetId();
         _columns = webApplicationFactory.Board.GetColumns;
         _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
     }
@@ -57,7 +55,6 @@ public class MoveCardTest : TaskFlowClassFixture
     [Fact]
     public async Task Success_Moving_Card_Inside_Same_Columns()
     {
-        
         var createCardRequest = new CreateCardRequest { Title = "New Card" };
 
         var response = await DoPost(

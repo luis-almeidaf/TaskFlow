@@ -33,9 +33,7 @@ public class GetBoardsQueryHandlerTest
     public async Task Return_EmptyList_When_UserHasNoBoard()
     {
         var user = UserBuilder.Build();
-
-        var board = BoardBuilder.Build(user);
-
+        
         var handler = CreateHandler(user, board: null);
 
         var request = new GetBoardsQuery();

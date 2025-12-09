@@ -3,7 +3,7 @@ using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
 
-public class CreateCardCommandBuilder
+public static class CreateCardCommandBuilder
 {
     public static CreateCardCommand Build(Board board, Column column)
     {
