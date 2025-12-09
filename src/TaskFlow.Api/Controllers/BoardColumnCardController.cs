@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Common.Responses;
+using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.AssignUserCommand;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.DeleteCardCommand;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.MoveCardCommand;
@@ -91,9 +92,27 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
         return NoContent();
     }
 
+    [HttpPatch("{cardId:Guid}/assign")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AssignUser(
+        [FromRoute] Guid boardId, Guid columnId, Guid cardId,
+        [FromBody] AssignUserRequest request)
+    {
+        await mediator.Send(new AssignUserCommand
+        {
+            BoardId = boardId,
+            ColumnId = columnId,
+            CardId = cardId,
+            AssignedToId = request.AssignedToId
+        });
+
+        return NoContent();
+    }
+
     [HttpDelete("{cardId:Guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(
         [FromRoute] Guid boardId, Guid columnId, Guid cardId)
     {
