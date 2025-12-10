@@ -6,33 +6,20 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Users.Commands.DeleteUserCommand;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
+public class DeleteUserCommandHandler(
+    IUserWriteOnlyRepository repository,
+    ILoggedUser loggedUser,
+    IUnitOfWork unitOfWork) : IRequestHandler<DeleteUserCommand, Unit>
 {
-    private readonly IUserWriteOnlyRepository _repository;
-    private readonly ILoggedUser _loggedUser;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public DeleteUserCommandHandler(
-        IUserWriteOnlyRepository repository,
-        ILoggedUser loggedUser,
-        IUnitOfWork unitOfWork)
+    public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        _repository = repository;
-        _loggedUser = loggedUser;
-        _unitOfWork = unitOfWork;
-    }
+        var user = await loggedUser.GetUserAndBoards();
 
-    public async Task<Unit> Handle(Commands.DeleteUserCommand.DeleteUserCommand request,
-        CancellationToken cancellationToken)
-    {
-        var user = await _loggedUser.GetUserAndBoards();
+        if (user.CreatedBoards.Count != 0) throw new UserHasAssociatedBoardsException();
 
-        if (user.CreatedBoards.Any())
-            throw new UserHasAssociatedBoardsException();
+        await repository.Delete(user);
 
-        await _repository.Delete(user);
-
-        await _unitOfWork.Commit();
+        await unitOfWork.Commit();
 
         return Unit.Value;
     }
