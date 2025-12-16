@@ -1,7 +1,7 @@
 using Mapster;
 using MediatR;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories.Board;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery;
@@ -9,18 +9,18 @@ namespace TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery;
 public class GetBoardByIdQueryHandler : IRequestHandler<GetBoardByIdQuery, GetBoardByIdResponse?>
 {
     private readonly IBoardReadOnlyRepository _repository;
-    private readonly ILoggedUser _loggedUser;
+    private readonly ICurrentUser _currentUser;
 
-    public GetBoardByIdQueryHandler(IBoardReadOnlyRepository repository, ILoggedUser loggedUser)
+    public GetBoardByIdQueryHandler(IBoardReadOnlyRepository repository, ICurrentUser currentUser)
     {
         _repository = repository;
-        _loggedUser = loggedUser;
+        _currentUser = currentUser;
     }
 
     public async Task<GetBoardByIdResponse?> Handle(GetBoardByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var loggedUser = await _loggedUser.Get();
+        var loggedUser = await _currentUser.GetCurrentUser();
 
         var board = await _repository.GetById(loggedUser, request.Id);
 

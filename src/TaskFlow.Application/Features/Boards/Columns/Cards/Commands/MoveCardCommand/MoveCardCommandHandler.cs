@@ -1,17 +1,17 @@
 using MediatR;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
 using TaskFlow.Domain.Repositories.Column;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.MoveCardCommand;
 
 public class MoveCardCommandHandler(
     IUnitOfWork unitOfWork,
-    ILoggedUser loggedUser,
+    ICurrentUser currentUser,
     IBoardReadOnlyRepository boardRepository,
     ICardWriteOnlyRepository cardRepository,
     IColumnReadOnlyRepository columnRepository) : IRequestHandler<MoveCardCommand, Unit>
@@ -20,7 +20,7 @@ public class MoveCardCommandHandler(
     {
         Validate(request);
 
-        var user = await loggedUser.GetUserAndBoards();
+        var user = await currentUser.GetCurrentUser();
 
         var board = await boardRepository.GetById(user, request.BoardId);
         if (board is null) throw new BoardNotFoundException();

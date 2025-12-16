@@ -1,22 +1,22 @@
 using MediatR;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.User;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Users.Commands.RemoveUserCommand;
 
 public class RemoveUserCommandHandler(
     IUnitOfWork unitOfWork,
-    ILoggedUser user,
+    ICurrentUser user,
     IBoardWriteOnlyRepository repository,
     IUserReadOnlyRepository userReadOnlyRepository)
     : IRequestHandler<RemoveUserCommand, Unit>
 {
     public async Task<Unit> Handle(RemoveUserCommand request, CancellationToken cancellationToken)
     {
-        var loggedUser = await user.Get();
+        var loggedUser = await user.GetCurrentUser();
 
         var board = await repository.GetById(loggedUser, request.BoardId);
         if (board is null) throw new BoardNotFoundException();

@@ -139,7 +139,7 @@ public class UpdateCardCommandHandlerTest
         Guid? cardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var loggedUser = LoggedUserBuilder.Build(user);
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnReadOnlyRepositoryBuilder();

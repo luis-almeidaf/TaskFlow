@@ -143,7 +143,7 @@ public class MoveCardCommandHandlerTest
         Guid? secondColumnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var loggedUser = LoggedUserBuilder.Build(user);
         var boardRepository = new BoardReadOnlyRepositoryBuilder();
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnReadOnlyRepositoryBuilder();

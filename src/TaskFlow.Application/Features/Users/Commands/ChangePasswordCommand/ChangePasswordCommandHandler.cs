@@ -1,25 +1,24 @@
 using FluentValidation.Results;
 using MediatR;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.User;
 using TaskFlow.Domain.Security.Cryptography;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Users.Commands.ChangePasswordCommand;
 
 public class ChangePasswordCommandHandler(
-    ILoggedUser loggedUser,
+    ICurrentUser currentUser,
     IUserWriteOnlyRepository repository,
     IPasswordEncrypter passwordEncrypter,
     IUnitOfWork unitOfWork) : IRequestHandler<ChangePasswordCommand, Unit>
 {
-    public async Task<Unit> Handle(ChangePasswordCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var loggedUser1 = await loggedUser.Get();
+        var loggedUser1 = await currentUser.GetCurrentUser();
 
         Validate(request, loggedUser1);
 
@@ -44,10 +43,8 @@ public class ChangePasswordCommandHandler(
                 ResourceErrorMessages.PASSWORD_DIFFERENT_CURRENT_PASSWORD));
         }
 
-        if (!result.IsValid)
-        {
-            var errorMessages = result.Errors.Select(e => e.ErrorMessage).ToList();
-            throw new ErrorOnValidationException(errorMessages);
-        }
+        if (result.IsValid) return;
+        var errorMessages = result.Errors.Select(e => e.ErrorMessage).ToList();
+        throw new ErrorOnValidationException(errorMessages);
     }
 }

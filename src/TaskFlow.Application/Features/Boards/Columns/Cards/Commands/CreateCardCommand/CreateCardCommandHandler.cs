@@ -1,17 +1,17 @@
 using Mapster;
 using MediatR;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
 using TaskFlow.Domain.Repositories.Column;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 
 public class CreateCardCommandHandler(
-    ILoggedUser loggedUser,
+    ICurrentUser currentUser,
     IUnitOfWork unitOfWork,
     IBoardReadOnlyRepository boardReadOnlyRepository,
     ICardWriteOnlyRepository cardRepository,
@@ -22,7 +22,7 @@ public class CreateCardCommandHandler(
     {
         Validate(request);
 
-        var user = await loggedUser.GetUserAndBoards();
+        var user = await currentUser.GetCurrentUser();
 
         var board = await boardReadOnlyRepository.GetById(user, request.BoardId);
         if (board is null) throw new BoardNotFoundException();

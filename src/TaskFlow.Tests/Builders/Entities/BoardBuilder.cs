@@ -11,6 +11,7 @@ public static class BoardBuilder
             .RuleFor(board => board.Id, _ => Guid.NewGuid())
             .RuleFor(board => board.Name, faker => faker.Commerce.Department())
             .RuleFor(board => board.CreatedById, _ => user.Id)
+            .RuleFor(board => board.Users, _ => new List<User>())
             .RuleFor(board => board.Columns, _ => new List<Column>()).Generate();
         
         var columns = new List<Column>

@@ -77,7 +77,7 @@ public class MoveColumnCommandHandlerTest
     private static MoveColumnCommandHandler CreateHandler(User user, Board board, Guid? boardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var loggedUser = LoggedUserBuilder.Build(user);
         var boardRepository = new BoardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnWriteOnlyRepositoryBuilder().Build();
 

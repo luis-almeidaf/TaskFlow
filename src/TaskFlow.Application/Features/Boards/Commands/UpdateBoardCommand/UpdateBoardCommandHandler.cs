@@ -1,14 +1,14 @@
 using MediatR;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Commands.UpdateBoardCommand;
 
 public class UpdateBoardCommandHandler(
     IUnitOfWork unitOfWork,
-    ILoggedUser loggedUser,
+    ICurrentUser currentUser,
     IBoardWriteOnlyRepository repository)
     : IRequestHandler<UpdateBoardCommand, Unit>
 {
@@ -16,7 +16,7 @@ public class UpdateBoardCommandHandler(
     {
         Validate(request);
 
-        var user = await loggedUser.Get();
+        var user = await currentUser.GetCurrentUser();
 
         var board = await repository.GetById(user, request.Id);
         if (board is null) throw new BoardNotFoundException();

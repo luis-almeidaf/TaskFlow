@@ -1,5 +1,6 @@
 using FluentAssertions;
 using TaskFlow.Application.Features.Users.Commands.DeleteUserCommand;
+using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Users;
@@ -16,10 +17,10 @@ public class DeleteUserCommandHandlerTest
     {
         var user = UserBuilder.Build();
         
-        var handler = CreateHandler(user);
+        var handler = CreateHandler(user, board: null);
 
         var request = DeleteUserCommandBuilder.Build();
-        
+
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
         await act.Should().NotThrowAsync();
@@ -34,10 +35,10 @@ public class DeleteUserCommandHandlerTest
 
         user.CreatedBoards.Add(board);
 
-        var handler = CreateHandler(user);
+        var handler = CreateHandler(user, board);
 
         var request = DeleteUserCommandBuilder.Build();
-        
+
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
         var result = await act.Should().ThrowAsync<UserHasAssociatedBoardsException>();
@@ -45,12 +46,22 @@ public class DeleteUserCommandHandlerTest
         result.Where(ex => ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.USER_WITH_BOARD));
     }
 
-    private static DeleteUserCommandHandler CreateHandler(Domain.Entities.User user)
+    private static DeleteUserCommandHandler CreateHandler(User user, Board? board)
     {
-        var repository = new UserWriteOnlyRepositoryBuilder().Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var userRepository = new UserWriteOnlyRepositoryBuilder().Build();
+        var boardRepository = new BoardReadOnlyRepositoryBuilder();
+        var loggedUser = LoggedUserBuilder.Build(user);
         var unitOfWork = UnitOfWorkBuilder.Build();
 
-        return new DeleteUserCommandHandler(repository, loggedUser, unitOfWork);
+        if (board is not null)
+        {
+            boardRepository.GetAll(user, board);
+        }
+        else
+        {
+            boardRepository.GetAll(user);
+        }
+
+        return new DeleteUserCommandHandler(userRepository, boardRepository.Build(), loggedUser, unitOfWork);
     }
 }

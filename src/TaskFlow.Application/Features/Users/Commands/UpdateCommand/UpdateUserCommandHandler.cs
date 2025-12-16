@@ -1,23 +1,22 @@
 using FluentValidation.Results;
 using MediatR;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.User;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Users.Commands.UpdateCommand;
 
 public class UpdateUserCommandHandler(
-    ILoggedUser loggedUser,
+    ICurrentUser currentUser,
     IUserWriteOnlyRepository repository,
     IUserReadOnlyRepository userReadOnlyRepository,
-    IUnitOfWork unitOfWork)
-    : IRequestHandler<UpdateUserCommand, Unit>
+    IUnitOfWork unitOfWork) : IRequestHandler<UpdateUserCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var loggedUser1 = await loggedUser.Get();
+        var loggedUser1 = await currentUser.GetCurrentUser();
 
         await Validate(request, loggedUser1.Email);
 

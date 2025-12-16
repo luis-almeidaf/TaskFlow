@@ -87,18 +87,15 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         IAccessTokenGenerator tokenGenerator)
     {
         var userWithBoards = UserBuilder.Build();
+        var board = BoardBuilder.Build(userWithBoards);
 
         var password = userWithBoards.Password;
+        var token = tokenGenerator.Generate(userWithBoards);
 
         userWithBoards.Password = passwordEncrypter.Encrypt(userWithBoards.Password);
 
         dbContext.Users.Add(userWithBoards);
-
-        var board = BoardBuilder.Build(userWithBoards);
-
         dbContext.Boards.Add(board);
-
-        var token = tokenGenerator.Generate(userWithBoards);
 
         UserWithBoards = new UserIdentityManager(userWithBoards, password, token);
 

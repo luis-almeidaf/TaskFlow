@@ -63,7 +63,7 @@ public class DeleteCardCommandHandlerTest
         Guid? cardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var loggedUser = LoggedUserBuilder.Build(user);
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
 
         cardRepository.GetById(user, board, column, card);

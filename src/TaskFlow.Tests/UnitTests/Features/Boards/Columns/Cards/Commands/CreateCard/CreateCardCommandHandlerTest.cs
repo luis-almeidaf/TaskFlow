@@ -102,7 +102,7 @@ public class CreateCardCommandHandlerTest
         Guid? columnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var loggedUser = LoggedUserBuilder.Build(user);
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
         var cardWriteRepository = new CardWriteOnlyRepositoryBuilder().Build();
         var columnReadRepository = new ColumnReadOnlyRepositoryBuilder();

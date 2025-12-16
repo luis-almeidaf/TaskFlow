@@ -1,15 +1,15 @@
 using MediatR;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
 using TaskFlow.Domain.Repositories.Column;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.AssignUserCommand;
 
 public class AssignUserCommandHandler(
-    ILoggedUser loggedUser,
+    ICurrentUser currentUser,
     IUnitOfWork unitOfWork,
     IBoardReadOnlyRepository boardRepository,
     ICardWriteOnlyRepository cardRepository,
@@ -17,7 +17,7 @@ public class AssignUserCommandHandler(
 {
     public async Task<Unit> Handle(AssignUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await loggedUser.Get();
+        var user = await currentUser.GetCurrentUser();
 
         var board = await boardRepository.GetById(user, request.BoardId);
         if (board is null) throw new BoardNotFoundException();

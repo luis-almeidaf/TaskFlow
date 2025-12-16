@@ -1,25 +1,16 @@
 using Moq;
 using TaskFlow.Domain.Entities;
-using TaskFlow.Domain.Services.LoggedUser;
+using TaskFlow.Domain.Identity;
 
 namespace TaskFlow.Tests.Builders.LoggedUser;
 
 public static class LoggedUserBuilder
 {
-    public static ILoggedUser Build(User user)
+    public static ICurrentUser Build(User user)
     {
-        var mock = new Mock<ILoggedUser>();
+        var mock = new Mock<ICurrentUser>();
 
-        mock.Setup(loggedUser => loggedUser.Get()).ReturnsAsync(user);
-
-        return mock.Object;
-    }
-    
-    public static ILoggedUser BuildUserWithBoards(User user)
-    {
-        var mock = new Mock<ILoggedUser>();
-
-        mock.Setup(loggedUser => loggedUser.GetUserAndBoards()).ReturnsAsync(user);
+        mock.Setup(loggedUser => loggedUser.GetCurrentUser()).ReturnsAsync(user);
 
         return mock.Object;
     }
