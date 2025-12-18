@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskFlow.Api.Authorization;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Application.Features.Boards.Columns.Commands.DeleteColumnCommand;
@@ -18,6 +19,7 @@ public class BoardColumnController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(CreateColumnResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Columns.Create)]
     public async Task<IActionResult> CreateColumn(
     [FromRoute] Guid boardId,
     [FromBody] CreateColumnRequest toBoardRequest)
@@ -34,6 +36,7 @@ public class BoardColumnController(IMediator mediator) : ControllerBase
     [HttpDelete("{columnId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Columns.Delete)]
     public async Task<IActionResult> DeleteColumn(
         [FromRoute] Guid boardId,
         [FromRoute] Guid columnId)
@@ -51,6 +54,7 @@ public class BoardColumnController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Columns.Update)]
     public async Task<IActionResult> UpdateColumn(
         [FromRoute] Guid boardId,
         [FromRoute] Guid columnId,
@@ -70,6 +74,7 @@ public class BoardColumnController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Columns.Move)]
     public async Task<IActionResult> MoveColumn(
         [FromRoute] Guid boardId,
         [FromRoute] Guid columnId,

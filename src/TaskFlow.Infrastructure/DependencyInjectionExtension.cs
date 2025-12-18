@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
@@ -8,12 +9,11 @@ using TaskFlow.Domain.Repositories.Column;
 using TaskFlow.Domain.Repositories.User;
 using TaskFlow.Domain.Security.Cryptography;
 using TaskFlow.Domain.Security.Tokens;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Infrastructure.DataAccess;
 using TaskFlow.Infrastructure.DataAccess.Repositories;
 using TaskFlow.Infrastructure.Extensions;
+using TaskFlow.Infrastructure.Identity;
 using TaskFlow.Infrastructure.Security.Tokens;
-using TaskFlow.Infrastructure.Services.LoggedUser;
 
 namespace TaskFlow.Infrastructure;
 
@@ -22,7 +22,7 @@ public static class DependencyInjectionExtension
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         AddBcrypt(services);
-        AddLoggedUser(services);
+        AddUserRetriever(services);
         AddRepositories(services);
         AddToken(services, configuration);
 
@@ -37,9 +37,9 @@ public static class DependencyInjectionExtension
         services.AddScoped<IPasswordEncrypter, Security.Cryptography.BCrypt>();
     }
 
-    private static void AddLoggedUser(IServiceCollection services)
+    private static void AddUserRetriever(IServiceCollection services)
     {
-        services.AddScoped<ILoggedUser, LoggedUser>();
+        services.AddScoped<IUserRetriever, UserRetriever>();
     }
 
     private static void AddToken(IServiceCollection services, IConfiguration configuration)

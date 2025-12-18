@@ -213,7 +213,7 @@ namespace TaskFlow.Exception {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No user found with the given email..
+        ///   Looks up a localized string similar to No user was found..
         /// </summary>
         public static string USER_NOT_FOUND {
             get {

@@ -13,12 +13,14 @@ public class CreateCardTest : TaskFlowClassFixture
     private readonly Guid _boardId;
     private readonly Guid _columnId;
     private readonly string _boardOwnerToken;
+    private readonly string _boardGuestToken;
 
     public CreateCardTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _boardId = webApplicationFactory.Board.GetId();
         _columnId = webApplicationFactory.Column.GetId();
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _boardOwnerToken = webApplicationFactory.UserOwner.GetToken();
+        _boardGuestToken = webApplicationFactory.UserGuest.GetToken();
     }
 
     [Fact]
@@ -40,27 +42,16 @@ public class CreateCardTest : TaskFlowClassFixture
         responseData.RootElement.GetProperty("title").GetString().Should().Be(request.Title);
     }
 
+
     [Fact]
-    public async Task Error_Board_Not_Found()
+    public async Task Should_ReturnForbidden_When_GuestTriesToCreateCard()
     {
         var request = new CreateCardRequest { Title = "New Card" };
 
-        var fakeId = Guid.NewGuid();
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/columns/{_columnId}/cards", request: request,
+            token: _boardGuestToken);
 
-        var response = await DoPost(requestUri: $"/{Route}/{fakeId}/columns/{_columnId}/cards", request: request,
-            token: _boardOwnerToken);
-
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var responseBody = await response.Content.ReadAsStreamAsync();
-
-        var responseData = await JsonDocument.ParseAsync(responseBody);
-
-        var errors = responseData.RootElement.GetProperty("errorMessages").EnumerateArray();
-
-        var expectedMessage = ResourceErrorMessages.BOARD_NOT_FOUND;
-
-        errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     [Fact]

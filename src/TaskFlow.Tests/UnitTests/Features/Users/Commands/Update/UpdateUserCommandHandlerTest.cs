@@ -4,8 +4,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Users;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Users.Commands.Update;
 
@@ -66,7 +66,7 @@ public class UpdateUserCommandHandlerTest
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var updateRepository = new UserWriteOnlyRepositoryBuilder().GetById(user).Build();
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var readRepository = new UserReadOnlyRepositoryBuilder();
 
         if (!string.IsNullOrWhiteSpace(email))
@@ -74,6 +74,6 @@ public class UpdateUserCommandHandlerTest
             readRepository.ExistActiveUserWithEmail(email);
         }
 
-        return new UpdateUserCommandHandler(loggedUser, updateRepository, readRepository.Build(), unitOfWork);
+        return new UpdateUserCommandHandler(userRetriever, updateRepository, readRepository.Build(), unitOfWork);
     }
 }

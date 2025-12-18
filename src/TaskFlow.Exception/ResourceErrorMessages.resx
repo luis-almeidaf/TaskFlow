@@ -49,7 +49,7 @@
         <value>Board not found, check the id given.</value>
     </data>
     <data name="USER_NOT_FOUND" xml:space="preserve">
-        <value>No user found with the given email.</value>
+        <value>No user was found.</value>
     </data>
     <data name="USER_ALREADY_IN_BOARD" xml:space="preserve">
         <value>User is already in this board.</value>

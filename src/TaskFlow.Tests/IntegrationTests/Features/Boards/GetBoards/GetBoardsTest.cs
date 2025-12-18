@@ -8,19 +8,19 @@ public class GetBoardsTest: TaskFlowClassFixture
 {
     private const string Route = "Boards";
 
-    private readonly string _userWithBoardsToken;
-    private readonly string _userWithoutBoardsToken;
+    private readonly string _userOwnerToken;
+    private readonly string _userGuestToken;
 
     public GetBoardsTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _userWithBoardsToken = webApplicationFactory.UserWithBoards.GetToken();
-        _userWithoutBoardsToken = webApplicationFactory.User.GetToken();
+        _userOwnerToken = webApplicationFactory.UserOwner.GetToken();
+        _userGuestToken = webApplicationFactory.UserGuest.GetToken();
     }
 
     [Fact]
     public async Task Success()
     {
-        var response = await DoGet($"{Route}", _userWithBoardsToken);
+        var response = await DoGet($"{Route}", _userOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -34,7 +34,7 @@ public class GetBoardsTest: TaskFlowClassFixture
     [Fact]
     public async Task User_Without_Boards_Should_Return_Empty_List()
     {
-        var response = await DoGet($"{Route}", _userWithoutBoardsToken);
+        var response = await DoGet($"{Route}", _userGuestToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 

@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Cards.Commands.AssignUser;
 
@@ -16,12 +16,11 @@ public class AssignUserCommandHandlerTest
     public async Task Success()
     {
         var user = UserBuilder.Build();
-
         var board = BoardBuilder.Build(user);
-        board.Users.Add(user);
+        var boardMember = BoardMemberBuilder.Build(user, board);
+        board.Members.Add(boardMember);
 
         var column = board.Columns.First();
-
         var card = CardBuilder.Build(column);
 
         var handler = CreateHandler(user, board, column, card);
@@ -132,14 +131,14 @@ public class AssignUserCommandHandlerTest
         Guid? cardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnReadOnlyRepositoryBuilder();
 
         boardReadRepository.GetById(user, board);
         cardRepository.GetById(user, board, column, card);
-        columnRepository.GetById(column);
+        columnRepository.GetById(board.Id, column);
 
         if (boardId.HasValue)
             boardReadRepository.GetById(user, board, boardId);
@@ -148,10 +147,10 @@ public class AssignUserCommandHandlerTest
             cardRepository.GetById(user, board, column, card, cardId);
 
         if (columnId.HasValue)
-            columnRepository.GetById(column, columnId);
+            columnRepository.GetById(board.Id, column, columnId);
 
         return new AssignUserCommandHandler(
-            loggedUser,
+            userRetriever,
             unitOfWork,
             boardReadRepository.Build(),
             cardRepository.Build(),

@@ -14,7 +14,7 @@ public class CreateBoardTest : TaskFlowClassFixture
 
     public CreateBoardTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _token = webApplicationFactory.User.GetToken();
+        _token = webApplicationFactory.UserGuest.GetToken();
     }
 
     [Fact]

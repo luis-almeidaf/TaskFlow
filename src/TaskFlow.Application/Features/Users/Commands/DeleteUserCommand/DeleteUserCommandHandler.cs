@@ -1,23 +1,26 @@
 using MediatR;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
+using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.User;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Users.Commands.DeleteUserCommand;
 
 public class DeleteUserCommandHandler(
-    IUserWriteOnlyRepository repository,
-    ILoggedUser loggedUser,
+    IUserWriteOnlyRepository userRepository,
+    IBoardReadOnlyRepository boardRepository,
+    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork) : IRequestHandler<DeleteUserCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await loggedUser.GetUserAndBoards();
+        var user = await userRetriever.GetCurrentUser();
+        var boards = await boardRepository.GetAll(user);
+        
+        if (boards.Count != 0) throw new UserHasAssociatedBoardsException();
 
-        if (user.CreatedBoards.Count != 0) throw new UserHasAssociatedBoardsException();
-
-        await repository.Delete(user);
+        await userRepository.Delete(user);
 
         await unitOfWork.Commit();
 

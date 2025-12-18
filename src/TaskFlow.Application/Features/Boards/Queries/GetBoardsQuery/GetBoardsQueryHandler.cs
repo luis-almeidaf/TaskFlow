@@ -1,31 +1,21 @@
 using Mapster;
 using MediatR;
 using TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery.Responses;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories.Board;
-using TaskFlow.Domain.Services.LoggedUser;
 
 namespace TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 
-public class GetBoardsQueryHandler : IRequestHandler<GetBoardsQuery, GetBoardsResponse>
+public class GetBoardsQueryHandler(
+    IUserRetriever userRetriever, 
+    IBoardReadOnlyRepository boardRepository) : IRequestHandler<GetBoardsQuery, GetBoardsResponse>
 {
-    private readonly ILoggedUser _loggedUser;
-    private readonly IBoardReadOnlyRepository _repository;
-
-    public GetBoardsQueryHandler(ILoggedUser loggedUser, IBoardReadOnlyRepository repository)
-    {
-        _loggedUser = loggedUser;
-        _repository = repository;
-    }
-
     public async Task<GetBoardsResponse> Handle(GetBoardsQuery request, CancellationToken cancellationToken)
     {
-        var loggedUser = await _loggedUser.Get();
+        var user = await userRetriever.GetCurrentUser();
 
-        var result = await _repository.GetAll(loggedUser);
+        var result = await boardRepository.GetAll(user);
 
-        return new GetBoardsResponse()
-        {
-            Boards = result.Adapt<List<ShortBoardResponse>>()
-        };
+        return new GetBoardsResponse { Boards = result.Adapt<List<ShortBoardResponse>>() };
     }
 }

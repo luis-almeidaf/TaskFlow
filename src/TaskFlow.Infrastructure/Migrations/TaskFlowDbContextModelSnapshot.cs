@@ -22,21 +22,6 @@ namespace TaskFlow.Infrastructure.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("BoardUser", b =>
-                {
-                    b.Property<Guid>("BoardsId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("BoardsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("BoardUsers", (string)null);
-                });
-
             modelBuilder.Entity("TaskFlow.Domain.Entities.Board", b =>
                 {
                     b.Property<Guid>("Id")
@@ -58,6 +43,33 @@ namespace TaskFlow.Infrastructure.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("Boards");
+                });
+
+            modelBuilder.Entity("TaskFlow.Domain.Entities.BoardMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("BoardId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoardId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BoardMembers", (string)null);
                 });
 
             modelBuilder.Entity("TaskFlow.Domain.Entities.Card", b =>
@@ -149,21 +161,6 @@ namespace TaskFlow.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BoardUser", b =>
-                {
-                    b.HasOne("TaskFlow.Domain.Entities.Board", null)
-                        .WithMany()
-                        .HasForeignKey("BoardsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskFlow.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TaskFlow.Domain.Entities.Board", b =>
                 {
                     b.HasOne("TaskFlow.Domain.Entities.User", "CreatedBy")
@@ -173,6 +170,25 @@ namespace TaskFlow.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("TaskFlow.Domain.Entities.BoardMember", b =>
+                {
+                    b.HasOne("TaskFlow.Domain.Entities.Board", "Board")
+                        .WithMany("Members")
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TaskFlow.Domain.Entities.User", "User")
+                        .WithMany("Boards")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Board");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskFlow.Domain.Entities.Card", b =>
@@ -215,6 +231,8 @@ namespace TaskFlow.Infrastructure.Migrations
             modelBuilder.Entity("TaskFlow.Domain.Entities.Board", b =>
                 {
                     b.Navigation("Columns");
+
+                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("TaskFlow.Domain.Entities.Column", b =>
@@ -225,6 +243,8 @@ namespace TaskFlow.Infrastructure.Migrations
             modelBuilder.Entity("TaskFlow.Domain.Entities.User", b =>
                 {
                     b.Navigation("AssignedCards");
+
+                    b.Navigation("Boards");
 
                     b.Navigation("CreatedBoards");
 

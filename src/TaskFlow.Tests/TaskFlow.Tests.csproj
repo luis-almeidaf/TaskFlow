@@ -30,12 +30,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="IntegrationTests\Features\Boards\Users\" />
+      <Folder Include="IntegrationTests\Features\Boards\Members\" />
       <Folder Include="UnitTests\" />
       <Folder Include="UnitTests\Features\Boards\Columns\Commands\" />
       <Folder Include="UnitTests\Features\Boards\Commands\" />
       <Folder Include="UnitTests\Features\Boards\Queries\" />
-      <Folder Include="UnitTests\Features\Boards\Users\Commands\" />
+      <Folder Include="UnitTests\Features\Boards\Members\Commands\" />
       <Folder Include="UnitTests\Features\Users\Commands\" />
       <Folder Include="UnitTests\Features\Users\Queries\" />
       <Folder Include="ValidatorsTests\Features\Boards\Users\" />

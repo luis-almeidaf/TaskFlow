@@ -1,7 +1,10 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TaskFlow.Api;
+using TaskFlow.Api.Authorization;
 using TaskFlow.Api.Filters;
 using TaskFlow.Api.Token;
 using TaskFlow.Application;
@@ -56,6 +59,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
 
+builder.Services.AddScoped<IAuthorizationHandler, TaskFlowPermissionHandler>();
 builder.Services.AddScoped<ITokenProvider, HttpContextTokenValue>();
 
 builder.Services.AddHttpContextAccessor();
@@ -77,6 +81,8 @@ builder.Services.AddAuthentication(config =>
     };
 });
 
+builder.Services.AddAuthorizationBuilder().AddTaskFlowPolicies();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: myAllowSpecificOrigins,
@@ -97,10 +103,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors(myAllowSpecificOrigins);
-
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 

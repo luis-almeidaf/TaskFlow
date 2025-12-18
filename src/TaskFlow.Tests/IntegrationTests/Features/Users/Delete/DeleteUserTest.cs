@@ -15,10 +15,10 @@ public class DeleteUserTest : TaskFlowClassFixture
 
     public DeleteUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _userToken = webApplicationFactory.User.GetToken();
-        _userWithBoardsToken = webApplicationFactory.UserWithBoards.GetToken();
-        _email = webApplicationFactory.User.GetEmail();
-        _password = webApplicationFactory.User.GetEmail();
+        _userToken = webApplicationFactory.UserGuest.GetToken();
+        _userWithBoardsToken = webApplicationFactory.UserOwner.GetToken();
+        _email = webApplicationFactory.UserGuest.GetEmail();
+        _password = webApplicationFactory.UserGuest.GetEmail();
     }
 
     [Fact]

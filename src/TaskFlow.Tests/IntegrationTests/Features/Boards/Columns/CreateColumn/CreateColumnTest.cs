@@ -11,12 +11,14 @@ public class CreateColumnTest : TaskFlowClassFixture
     private const string Route = "Boards";
 
     private readonly Guid _boardId;
-    private readonly string _boardOwnerToken;
+    private readonly string _boardAdminToken;
+    private readonly string _boardGuestToken;
 
     public CreateColumnTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _boardId = webApplicationFactory.Board.GetId();
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _boardAdminToken = webApplicationFactory.UserAdmin.GetToken();
+        _boardGuestToken = webApplicationFactory.UserGuest.GetToken();
     }
 
     [Fact]
@@ -25,7 +27,7 @@ public class CreateColumnTest : TaskFlowClassFixture
         var request = new CreateColumnRequest { Name = "New Column" };
 
         var response = await DoPost(requestUri: $"/{Route}/{_boardId}/columns", request: request,
-            token: _boardOwnerToken);
+            token: _boardAdminToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
@@ -43,7 +45,7 @@ public class CreateColumnTest : TaskFlowClassFixture
         var request = new CreateColumnRequest { Name = "" };
 
         var response = await DoPost(requestUri: $"/{Route}/{_boardId}/columns", request: request,
-            token: _boardOwnerToken);
+            token: _boardAdminToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -57,27 +59,17 @@ public class CreateColumnTest : TaskFlowClassFixture
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
     }
-
+    
     [Fact]
-    public async Task Error_Board_Not_Found()
+    public async Task Should_ReturnForbidden_When_GuestTriesToCreateColumn()
     {
         var request = new CreateColumnRequest { Name = "New Column" };
 
-        var fakeId = Guid.NewGuid();
+        var response = await DoPost(
+            requestUri: $"/{Route}/{_boardId}/columns", 
+            request: request,
+            token: _boardGuestToken);
 
-        var response = await DoPost(requestUri: $"/{Route}/{fakeId}/columns", request: request,
-            token: _boardOwnerToken);
-
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var responseBody = await response.Content.ReadAsStreamAsync();
-
-        var responseData = await JsonDocument.ParseAsync(responseBody);
-
-        var errors = responseData.RootElement.GetProperty("errorMessages").EnumerateArray();
-
-        var expectedMessage = ResourceErrorMessages.BOARD_NOT_FOUND;
-
-        errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 }

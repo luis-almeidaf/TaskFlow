@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Cards.Commands.DeleteCard;
 
@@ -63,7 +63,7 @@ public class DeleteCardCommandHandlerTest
         Guid? cardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
 
         cardRepository.GetById(user, board, column, card);
@@ -72,7 +72,7 @@ public class DeleteCardCommandHandlerTest
             cardRepository.GetById(user, board, column, card, cardId);
 
         return new DeleteCardCommandHandler(
-            loggedUser,
+            userRetriever,
             cardRepository.Build(),
             unitOfWork);
     }

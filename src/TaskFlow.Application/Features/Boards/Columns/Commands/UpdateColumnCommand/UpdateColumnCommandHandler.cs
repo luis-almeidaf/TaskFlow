@@ -1,15 +1,15 @@
 using MediatR;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Column;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Columns.Commands.UpdateColumnCommand;
 
 public class UpdateColumnCommandHandler(
     IUnitOfWork unitOfWork,
-    ILoggedUser loggedUser,
+    IUserRetriever userRetriever,
     IBoardReadOnlyRepository boardRepository,
     IColumnReadOnlyRepository readOnlyRepository,
     IColumnWriteOnlyRepository columnRepository)
@@ -19,12 +19,12 @@ public class UpdateColumnCommandHandler(
     {
         Validate(request);
 
-        var user = await loggedUser.Get();
+        var user = await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(user, request.BoardId);
+        var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
-        var column = await readOnlyRepository.GetById(request.ColumnId);
+        var column = await readOnlyRepository.GetById(board.Id, request.ColumnId);
         if (column is null) throw new ColumnNotFoundException();
 
         column.Name = request.Name;

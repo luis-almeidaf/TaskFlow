@@ -17,9 +17,9 @@ public class ChangePasswordTest : TaskFlowClassFixture
 
     public ChangePasswordTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _token = webApplicationFactory.User.GetToken();
-        _password = webApplicationFactory.User.GetPassword();
-        _email = webApplicationFactory.User.GetEmail();
+        _token = webApplicationFactory.UserGuest.GetToken();
+        _password = webApplicationFactory.UserGuest.GetPassword();
+        _email = webApplicationFactory.UserGuest.GetEmail();
     }
 
     [Fact]

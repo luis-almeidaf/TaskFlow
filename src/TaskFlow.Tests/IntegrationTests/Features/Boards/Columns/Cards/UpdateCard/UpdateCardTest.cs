@@ -15,14 +15,16 @@ public class UpdateCardTest : TaskFlowClassFixture
     private readonly Guid _cardId;
     private readonly Guid _userToBeAssignedId;
     private readonly string _boardOwnerToken;
+    private readonly string _boardGuestToken;
 
     public UpdateCardTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _boardId = webApplicationFactory.Board.GetId();
         _columnId = webApplicationFactory.Column.GetId();
         _cardId = webApplicationFactory.Card.GetId();
-        _userToBeAssignedId = webApplicationFactory.UserWithBoards.GetId();
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _userToBeAssignedId = webApplicationFactory.UserAdmin.GetId();
+        _boardOwnerToken = webApplicationFactory.UserOwner.GetToken();
+        _boardGuestToken = webApplicationFactory.UserGuest.GetToken();
     }
 
     [Fact]
@@ -81,28 +83,16 @@ public class UpdateCardTest : TaskFlowClassFixture
     }
 
     [Fact]
-    public async Task Error_Board_Not_Found()
+    public async Task Should_ReturnForbidden_When_GuestTriesToUpdateCard()
     {
         var request = new UpdateCardRequest { Title = "New Title", };
 
-        var fakeBoardId = Guid.NewGuid();
-
         var response = await DoPut(
-            requestUri: $"/{Route}/{fakeBoardId}/columns/{_columnId}/cards/{_cardId}",
+            requestUri: $"/{Route}/{_boardId}/columns/{_columnId}/cards/{_cardId}",
             request,
-            _boardOwnerToken);
+            _boardGuestToken);
 
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var responseBody = await response.Content.ReadAsStreamAsync();
-
-        var responseData = await JsonDocument.ParseAsync(responseBody);
-
-        var errors = responseData.RootElement.GetProperty("errorMessages").EnumerateArray();
-
-        var expectedMessage = ResourceErrorMessages.BOARD_NOT_FOUND;
-
-        errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     [Fact]

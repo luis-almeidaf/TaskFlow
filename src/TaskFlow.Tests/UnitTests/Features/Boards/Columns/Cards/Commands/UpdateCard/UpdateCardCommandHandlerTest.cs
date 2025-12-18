@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Cards.Commands.UpdateCard;
 
@@ -16,12 +16,12 @@ public class UpdateCardCommandHandlerTest
     public async Task Success()
     {
         var user = UserBuilder.Build();
-
         var board = BoardBuilder.Build(user);
-        board.Users.Add(user);
+        var boardMember = BoardMemberBuilder.Build(user, board);
+
+        board.Members.Add(boardMember);
 
         var column = board.Columns.First();
-
         var card = CardBuilder.Build(column);
 
         var handler = CreateHandler(user, board, column, card);
@@ -37,12 +37,12 @@ public class UpdateCardCommandHandlerTest
     public async Task Error_Board_Not_Found()
     {
         var user = UserBuilder.Build();
-
         var board = BoardBuilder.Build(user);
-        board.Users.Add(user);
+        var boardMember = BoardMemberBuilder.Build(user, board);
+
+        board.Members.Add(boardMember);
 
         var column = board.Columns.First();
-
         var card = CardBuilder.Build(column);
 
         var handler = CreateHandler(user, board, column, card, boardId: board.Id);
@@ -60,12 +60,12 @@ public class UpdateCardCommandHandlerTest
     public async Task Error_User_To_Be_Assigned_Not_In_Board()
     {
         var user = UserBuilder.Build();
-
         var board = BoardBuilder.Build(user);
-        board.Users.Add(user);
+        var boardMember = BoardMemberBuilder.Build(user, board);
+
+        board.Members.Add(boardMember);
 
         var column = board.Columns.First();
-
         var card = CardBuilder.Build(column);
 
         var handler = CreateHandler(user, board, column, card);
@@ -87,12 +87,12 @@ public class UpdateCardCommandHandlerTest
     public async Task Error_Column_Not_Found()
     {
         var user = UserBuilder.Build();
-
         var board = BoardBuilder.Build(user);
-        board.Users.Add(user);
+        var boardMember = BoardMemberBuilder.Build(user, board);
+
+        board.Members.Add(boardMember);
 
         var column = board.Columns.First();
-
         var card = CardBuilder.Build(column);
 
         var handler = CreateHandler(user, board, column, card, columnId: column.Id);
@@ -110,12 +110,12 @@ public class UpdateCardCommandHandlerTest
     public async Task Error_Card_Not_Found()
     {
         var user = UserBuilder.Build();
-
         var board = BoardBuilder.Build(user);
-        board.Users.Add(user);
+        var boardMember = BoardMemberBuilder.Build(user, board);
+
+        board.Members.Add(boardMember);
 
         var column = board.Columns.First();
-
         var card = CardBuilder.Build(column);
 
         var handler = CreateHandler(user, board, column, card, cardId: card.Id);
@@ -139,26 +139,26 @@ public class UpdateCardCommandHandlerTest
         Guid? cardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnReadOnlyRepositoryBuilder();
 
         boardReadRepository.GetById(user, board);
+        columnRepository.GetById(board.Id, column);
         cardRepository.GetById(user, board, column, card);
-        columnRepository.GetById(column);
 
         if (boardId.HasValue)
             boardReadRepository.GetById(user, board, boardId);
 
+        if (columnId.HasValue)
+            columnRepository.GetById(board.Id, column, columnId);
+
         if (cardId.HasValue)
             cardRepository.GetById(user, board, column, card, cardId);
 
-        if (columnId.HasValue)
-            columnRepository.GetById(column, columnId);
-
         return new UpdateCardCommandHandler(
-            loggedUser,
+            userRetriever,
             unitOfWork,
             boardReadRepository.Build(),
             cardRepository.Build(),

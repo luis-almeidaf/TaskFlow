@@ -1,17 +1,17 @@
 using MediatR;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
 using TaskFlow.Domain.Repositories.Column;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.MoveCardCommand;
 
 public class MoveCardCommandHandler(
     IUnitOfWork unitOfWork,
-    ILoggedUser loggedUser,
+    IUserRetriever userRetriever,
     IBoardReadOnlyRepository boardRepository,
     ICardWriteOnlyRepository cardRepository,
     IColumnReadOnlyRepository columnRepository) : IRequestHandler<MoveCardCommand, Unit>
@@ -20,12 +20,12 @@ public class MoveCardCommandHandler(
     {
         Validate(request);
 
-        var user = await loggedUser.GetUserAndBoards();
+        var user = await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(user, request.BoardId);
+        var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
-        var column = await columnRepository.GetById(request.CurrentColumnId);
+        var column = await columnRepository.GetById(board.Id, request.CurrentColumnId);
         if (column is null) throw new ColumnNotFoundException();
 
         var cardsInCurrentColumn = column.Cards.OrderBy(card => card.Position).ToList();
@@ -44,7 +44,7 @@ public class MoveCardCommandHandler(
 
     private async Task MoveCardBetweenColumns(MoveCardCommand request, List<Card> cardsInCurrentColumn, Card cardToMove)
     {
-        var newColumn = await columnRepository.GetById(request.NewColumnId!.Value);
+        var newColumn = await columnRepository.GetById(request.BoardId, request.NewColumnId!.Value);
         if (newColumn is null) throw new ColumnNotFoundException();
 
         cardsInCurrentColumn.Remove(cardToMove);

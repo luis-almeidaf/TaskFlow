@@ -15,16 +15,18 @@ public class AssignUserTest : TaskFlowClassFixture
     private readonly Guid _cardId;
     private readonly Guid _userToBeAssignedId;
     private readonly string _boardOwnerToken;
+    private readonly string _boardGuestToken;
 
     public AssignUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _boardId = webApplicationFactory.Board.GetId();
         _columnId = webApplicationFactory.Column.GetId();
         _cardId = webApplicationFactory.Card.GetId();
-        _userToBeAssignedId = webApplicationFactory.UserWithBoards.GetId();
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _userToBeAssignedId = webApplicationFactory.UserGuest.GetId();
+        _boardOwnerToken = webApplicationFactory.UserOwner.GetToken();
+        _boardGuestToken = webApplicationFactory.UserGuest.GetToken();
     }
-    
+
     [Fact]
     public async Task Success()
     {
@@ -43,32 +45,21 @@ public class AssignUserTest : TaskFlowClassFixture
 
         var responseData = await JsonDocument.ParseAsync(responseBody);
 
-        responseData.RootElement.GetProperty("assignedTo").GetProperty("id").GetGuid().Should().Be(request.AssignedToId);
+        responseData.RootElement.GetProperty("assignedTo").GetProperty("id").GetGuid().Should()
+            .Be(request.AssignedToId);
     }
-    
-        [Fact]
-    public async Task Error_Board_Not_Found()
+
+    [Fact]
+    public async Task Should_ReturnForbidden_When_GuestTriesToAssignUser()
     {
         var request = new AssignUserRequest() { AssignedToId = _userToBeAssignedId };
 
-        var fakeBoardId = Guid.NewGuid();
-
         var response = await DoPatch(
-            requestUri: $"/{Route}/{fakeBoardId}/columns/{_columnId}/cards/{_cardId}/assign",
-            request,
-            _boardOwnerToken);
+            requestUri: $"/{Route}/{_boardId}/columns/{_columnId}/cards/{_cardId}/assign",
+            request: request,
+            token: _boardGuestToken);
 
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var responseBody = await response.Content.ReadAsStreamAsync();
-
-        var responseData = await JsonDocument.ParseAsync(responseBody);
-
-        var errors = responseData.RootElement.GetProperty("errorMessages").EnumerateArray();
-
-        var expectedMessage = ResourceErrorMessages.BOARD_NOT_FOUND;
-
-        errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     [Fact]
@@ -109,7 +100,7 @@ public class AssignUserTest : TaskFlowClassFixture
             _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        
+
         var responseBody = await response.Content.ReadAsStreamAsync();
 
         var responseData = await JsonDocument.ParseAsync(responseBody);
@@ -122,12 +113,12 @@ public class AssignUserTest : TaskFlowClassFixture
     }
 
     [Fact]
-    public async Task Error_Use_To_Be_Assigned_Not_In_Board()
+    public async Task Error_User_To_Be_Assigned_Not_In_Board()
     {
         var userToBeAssignedId = Guid.NewGuid();
 
         var request = new AssignUserRequest() { AssignedToId = userToBeAssignedId };
-        
+
         var response = await DoPatch(
             requestUri: $"/{Route}/{_boardId}/columns/{_columnId}/cards/{_cardId}/assign",
             request,

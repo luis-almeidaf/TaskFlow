@@ -6,8 +6,8 @@ using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Users;
 using TaskFlow.Tests.Builders.Cryptography;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Users.Commands.ChangePassword;
 
@@ -66,9 +66,9 @@ public class ChangePasswordCommandHandlerTest
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var updateRepository = new UserWriteOnlyRepositoryBuilder().GetById(user).Build();
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var passwordEncrypter = new PasswordEncrypterBuilder().Verify(password).Build();
 
-        return new ChangePasswordCommandHandler(loggedUser, updateRepository, passwordEncrypter, unitOfWork);
+        return new ChangePasswordCommandHandler(userRetriever, updateRepository, passwordEncrypter, unitOfWork);
     }
 }

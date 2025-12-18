@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Commands.Create;
 
@@ -48,9 +48,9 @@ public class CreateBoardCommandHandlerTest
     private static CreateBoardCommandHandler CreateHandler(User user)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var repository = new BoardWriteOnlyRepositoryBuilder().Build();
 
-        return new CreateBoardCommandHandler(unitOfWork, loggedUser, repository);
+        return new CreateBoardCommandHandler(unitOfWork, userRetriever, repository);
     }
 }

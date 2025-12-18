@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Commands.MoveColumn;
 
@@ -77,7 +77,7 @@ public class MoveColumnCommandHandlerTest
     private static MoveColumnCommandHandler CreateHandler(User user, Board board, Guid? boardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardRepository = new BoardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnWriteOnlyRepositoryBuilder().Build();
 
@@ -88,7 +88,7 @@ public class MoveColumnCommandHandlerTest
 
         return new MoveColumnCommandHandler(
             unitOfWork, 
-            loggedUser, 
+            userRetriever, 
             boardRepository.Build(),
             columnRepository);
     }

@@ -14,13 +14,15 @@ public class DeleteCardTest : TaskFlowClassFixture
     private readonly Guid _cardId;
 
     private readonly string _boardOwnerToken;
+    private readonly string _boardGuestToken;
 
     public DeleteCardTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _boardId = webApplicationFactory.Board.GetId();
         _columnId = webApplicationFactory.Column.GetId();
         _cardId = webApplicationFactory.Card.GetId();
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _boardOwnerToken = webApplicationFactory.UserOwner.GetToken();
+        _boardGuestToken = webApplicationFactory.UserGuest.GetToken();
     }
 
     [Fact]
@@ -51,5 +53,15 @@ public class DeleteCardTest : TaskFlowClassFixture
         var expectedMessage = ResourceErrorMessages.CARD_NOT_FOUND;
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
+    }
+    
+    [Fact]
+    public async Task Should_ReturnForbidden_When_GuestTriesToDeleteCard()
+    {
+        var response = await DoDelete(
+            requestUri: $"/{Route}/{_boardId}/columns/{_columnId}/cards/{_cardId}",
+            token: _boardGuestToken);
+        
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 }

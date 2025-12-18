@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Cards.Commands.CreateCard;
 
@@ -102,22 +102,22 @@ public class CreateCardCommandHandlerTest
         Guid? columnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
         var cardWriteRepository = new CardWriteOnlyRepositoryBuilder().Build();
         var columnReadRepository = new ColumnReadOnlyRepositoryBuilder();
 
         boardReadRepository.GetById(user, board);
-        columnReadRepository.GetById(column);
+        columnReadRepository.GetById(board.Id, column);
 
         if (boardId.HasValue)
             boardReadRepository.GetById(user, board, boardId);
 
         if (columnId.HasValue)
-            columnReadRepository.GetById(column, columnId);
+            columnReadRepository.GetById(board.Id, column, columnId);
 
         return new CreateCardCommandHandler(
-            loggedUser,
+            userRetriever,
             unitOfWork,
             boardReadRepository.Build(),
             cardWriteRepository,

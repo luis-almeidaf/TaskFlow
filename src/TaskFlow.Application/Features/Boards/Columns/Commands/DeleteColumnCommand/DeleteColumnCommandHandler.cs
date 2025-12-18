@@ -1,14 +1,14 @@
 ﻿using MediatR;
+using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Column;
-using TaskFlow.Domain.Services.LoggedUser;
 using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Columns.Commands.DeleteColumnCommand;
 
 public class DeleteColumnCommandHandler(
-    ILoggedUser user,
+    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork,
     IBoardReadOnlyRepository boardRepository,
     IColumnReadOnlyRepository columnReadOnlyRepository,
@@ -16,12 +16,12 @@ public class DeleteColumnCommandHandler(
 {
     public async Task<Unit> Handle(DeleteColumnCommand request, CancellationToken cancellationToken)
     {
-        var loggedUser = await user.Get();
+        await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(loggedUser, request.BoardId);
+        var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
-        var column = await columnReadOnlyRepository.GetById(request.ColumnId);
+        var column = await columnReadOnlyRepository.GetById(board.Id, request.ColumnId);
         if (column is null) throw new ColumnNotFoundException();
 
         var deletedPosition = column.Position;

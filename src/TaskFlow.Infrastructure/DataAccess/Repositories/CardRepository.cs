@@ -17,7 +17,7 @@ public class CardRepository(TaskFlowDbContext dbContext) : ICardReadOnlyReposito
                 card.ColumnId == columnId &&
                 card.Column.BoardId == boardId &&
                 (card.Column.Board.CreatedById == user.Id ||
-                 card.Column.Board.Users.Any(u => u.Id == user.Id)))
+                 card.Column.Board.Members.Any(u => u.Id == user.Id)))
             .FirstOrDefaultAsync();
     }
     
@@ -29,7 +29,7 @@ public class CardRepository(TaskFlowDbContext dbContext) : ICardReadOnlyReposito
                 card.ColumnId == columnId &&
                 card.Column.BoardId == boardId &&
                 (card.Column.Board.CreatedById == user.Id ||
-                 card.Column.Board.Users.Any(u => u.Id == user.Id)))
+                 card.Column.Board.Members.Any(u => u.Id == user.Id)))
             .FirstOrDefaultAsync();
     }
 

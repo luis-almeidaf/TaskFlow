@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Commands.Delete;
 
@@ -49,7 +49,7 @@ public class DeleteBoardCommandHandlerTest
 
     private static DeleteBoardCommandHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
     {
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var unitOfWork = UnitOfWorkBuilder.Build();
 
         var repository = new BoardWriteOnlyRepositoryBuilder();
@@ -62,6 +62,6 @@ public class DeleteBoardCommandHandlerTest
             repository.GetById(user, board);
         }
 
-        return new DeleteBoardCommandHandler(repository.Build(), loggedUser, unitOfWork);
+        return new DeleteBoardCommandHandler(repository.Build(), userRetriever, unitOfWork);
     }
 }

@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Cards.Commands.MoveCard;
 
@@ -143,7 +143,7 @@ public class MoveCardCommandHandlerTest
         Guid? secondColumnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.BuildUserWithBoards(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardRepository = new BoardReadOnlyRepositoryBuilder();
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnReadOnlyRepositoryBuilder();
@@ -154,18 +154,18 @@ public class MoveCardCommandHandlerTest
             boardRepository.GetById(user, board);
 
         if (firstColumnId.HasValue)
-            columnRepository.GetById(firstColumn, firstColumnId);
+            columnRepository.GetById(board.Id, firstColumn, firstColumnId);
         else if (secondColumnId.HasValue)
-            columnRepository.GetById(secondColumn, secondColumnId);
+            columnRepository.GetById(board.Id, secondColumn, secondColumnId);
         else
         {
-            columnRepository.GetById(firstColumn);
-            columnRepository.GetById(secondColumn);
+            columnRepository.GetById(board.Id, firstColumn);
+            columnRepository.GetById(board.Id, secondColumn);
         }
 
         return new MoveCardCommandHandler(
             unitOfWork,
-            loggedUser,
+            userRetriever,
             boardRepository.Build(),
             cardRepository.Build(),
             columnRepository.Build());

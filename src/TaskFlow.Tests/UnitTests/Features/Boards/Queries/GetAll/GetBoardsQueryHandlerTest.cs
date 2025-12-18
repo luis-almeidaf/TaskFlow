@@ -1,10 +1,9 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Boards.Queries.GetAllBoardsQuery;
 using TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Queries.GetAll;
 
@@ -28,12 +27,12 @@ public class GetBoardsQueryHandlerTest
         result.Boards[0].Id.Should().Be(board.Id);
         result.Boards[0].Name.Should().Be(board.Name);
     }
-    
+
     [Fact]
     public async Task Return_EmptyList_When_UserHasNoBoard()
     {
         var user = UserBuilder.Build();
-        
+
         var handler = CreateHandler(user, board: null);
 
         var request = new GetBoardsQuery();
@@ -44,9 +43,9 @@ public class GetBoardsQueryHandlerTest
         result.Boards.Should().BeEmpty();
     }
 
-    private static GetBoardsQueryHandler CreateHandler(Domain.Entities.User user, Board? board)
+    private static GetBoardsQueryHandler CreateHandler(User user, Board? board)
     {
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var repository = new BoardReadOnlyRepositoryBuilder();
 
         if (board is not null)
@@ -58,6 +57,6 @@ public class GetBoardsQueryHandlerTest
             repository.GetAll(user);
         }
 
-        return new GetBoardsQueryHandler(loggedUser, repository.Build());
+        return new GetBoardsQueryHandler(userRetriever, repository.Build());
     }
 }

@@ -19,7 +19,7 @@ public class GetCardByIdTest : TaskFlowClassFixture
         _boardId = webApplicationFactory.Board.GetId();
         _columnId = webApplicationFactory.Column.GetId();
         _cardId = webApplicationFactory.Card.GetId();
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _boardOwnerToken = webApplicationFactory.UserOwner.GetToken();
     }
 
     [Fact]

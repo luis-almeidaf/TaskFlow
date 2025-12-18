@@ -10,12 +10,14 @@ public class UpdateBoardTest : TaskFlowClassFixture
 {
     private const string Route = "Boards";
 
-    private readonly string _token;
+    private readonly string _boardOwnerToken;
+    private readonly string _boardGuestToken;
     private readonly Guid _boardId;
 
     public UpdateBoardTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _token = webApplicationFactory.UserWithBoards.GetToken();
+        _boardOwnerToken = webApplicationFactory.UserOwner.GetToken();
+        _boardGuestToken = webApplicationFactory.UserGuest.GetToken();
         _boardId = webApplicationFactory.Board.GetId();
     }
 
@@ -24,7 +26,7 @@ public class UpdateBoardTest : TaskFlowClassFixture
     {
         var request = new UpdateBoardRequest ("New board name");
         
-        var response = await DoPatch(requestUri: $"{Route}/{_boardId}", request: request, token: _token);
+        var response = await DoPatch(requestUri: $"{Route}/{_boardId}", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
@@ -34,7 +36,7 @@ public class UpdateBoardTest : TaskFlowClassFixture
     {
         var request = new UpdateBoardRequest ("");
         
-        var response = await DoPatch(requestUri: $"{Route}/{_boardId}", request: request, token: _token);
+        var response = await DoPatch(requestUri: $"{Route}/{_boardId}", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -49,23 +51,12 @@ public class UpdateBoardTest : TaskFlowClassFixture
     }
 
     [Fact]
-    public async Task Error_Board_Not_Found()
+    public async Task Should_ReturnForbidden_When_Guest_Tries_ToUpdateBoard()
     {
         var request = new UpdateBoardRequest ("New board name");
+        
+        var response = await DoPatch(requestUri: $"{Route}/{_boardId}", request: request, token: _boardGuestToken);
 
-        var fakeId = Guid.NewGuid();
-
-        var response = await DoPatch(requestUri: $"{Route}/{fakeId}", request: request, token: _token);
-
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var responseBody = await response.Content.ReadAsStreamAsync();
-
-        var responseData = await JsonDocument.ParseAsync(responseBody);
-
-        var errors = responseData.RootElement.GetProperty("errorMessages").EnumerateArray();
-        var expectedMessage = ResourceErrorMessages.BOARD_NOT_FOUND;
-
-        errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 }
