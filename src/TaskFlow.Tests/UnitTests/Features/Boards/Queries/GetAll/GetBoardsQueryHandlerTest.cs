@@ -2,8 +2,8 @@ using FluentAssertions;
 using TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Queries.GetAll;
 
@@ -45,7 +45,7 @@ public class GetBoardsQueryHandlerTest
 
     private static GetBoardsQueryHandler CreateHandler(User user, Board? board)
     {
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var repository = new BoardReadOnlyRepositoryBuilder();
 
         if (board is not null)
@@ -57,6 +57,6 @@ public class GetBoardsQueryHandlerTest
             repository.GetAll(user);
         }
 
-        return new GetBoardsQueryHandler(loggedUser, repository.Build());
+        return new GetBoardsQueryHandler(userRetriever, repository.Build());
     }
 }

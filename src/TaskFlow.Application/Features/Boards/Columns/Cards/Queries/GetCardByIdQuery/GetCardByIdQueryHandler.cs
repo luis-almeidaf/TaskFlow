@@ -8,12 +8,12 @@ namespace TaskFlow.Application.Features.Boards.Columns.Cards.Queries.GetCardById
 
 public class GetCardByIdQueryHandler(
     ICardReadOnlyRepository repository,
-    ICurrentUser currentUser)
+    IUserRetriever userRetriever)
     : IRequestHandler<GetCardByIdQuery, GetCardByIdResponse?>
 {
     public async Task<GetCardByIdResponse?> Handle(GetCardByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
         var card = await repository.GetById(user, request.BoardId, request.ColumnId, request.CardId);
 

@@ -4,71 +4,81 @@ using TaskFlow.Domain.Repositories.Board;
 
 namespace TaskFlow.Infrastructure.DataAccess.Repositories;
 
-public class BoardRepository : IBoardWriteOnlyRepository, IBoardReadOnlyRepository
+public class BoardRepository(TaskFlowDbContext dbContext) : IBoardWriteOnlyRepository, IBoardReadOnlyRepository
 {
-    private readonly TaskFlowDbContext _dbContext;
-
-    public BoardRepository(TaskFlowDbContext dbContext) => _dbContext = dbContext;
-
     public async Task<List<Board>> GetAll(User user)
     {
-        return await _dbContext.Boards
+        return await dbContext.Boards
             .AsNoTracking()
-            .Where(board =>
-                board.CreatedById == user.Id || board.Users.Any(u => u.Id == user.Id)).ToListAsync();
+            .Where(board => board.CreatedById == user.Id || board.Members.Any(u => u.Id == user.Id)).ToListAsync();
     }
 
-    async Task<Board?> IBoardWriteOnlyRepository.GetById(User user, Guid id)
+    async Task<Board?> IBoardWriteOnlyRepository.GetById(Guid id)
     {
-        return await _dbContext.Boards
-            .Include(board => board.Users)
+        return await dbContext.Boards
+            .Include(board => board.Members)
             .Include(board => board.Columns)
-            .FirstOrDefaultAsync(board =>
-                board.Id == id &&
-                (board.CreatedById == user.Id || board.Users.Any(u => u.Id == user.Id)));
+            .FirstOrDefaultAsync(board => board.Id == id);
     }
 
-    async Task<Board?> IBoardReadOnlyRepository.GetById(User user, Guid id)
+    public async Task<BoardRole?> GetUserRoleInBoard(BoardMember boardMember)
     {
-        return await _dbContext.Boards
+        var member = await dbContext.BoardMembers.FirstOrDefaultAsync((bm =>
+            bm.UserId == boardMember.UserId && bm.BoardId == boardMember.BoardId));
+        return member?.Role;
+    }
+
+    async Task<Board?> IBoardReadOnlyRepository.GetById(Guid id)
+    {
+        return await dbContext.Boards
             .AsNoTracking()
             .Include(board => board.CreatedBy)
-            .Include(board => board.Users)
+            .Include(board => board.Members)
             .Include(board => board.Columns)
             .ThenInclude(column => column.Cards)
             .ThenInclude(card => card.CreatedBy)
             .Include(board => board.Columns)
             .ThenInclude(column => column.Cards)
             .ThenInclude(card => card.AssignedTo)
-            .FirstOrDefaultAsync(board =>
-                board.Id == id &&
-                (board.CreatedById == user.Id || board.Users.Any(u => u.Id == user.Id)));
+            .FirstOrDefaultAsync(board => board.Id == id);
     }
 
     public async Task Add(Board board)
     {
-        await _dbContext.Boards.AddAsync(board);
+        await dbContext.Boards.AddAsync(board);
     }
 
     public void Update(Board board)
     {
-        _dbContext.Boards.Update(board);
+        dbContext.Boards.Update(board);
     }
 
     public async Task Delete(Guid boardId)
     {
-        var boardToRemove = await _dbContext.Boards.FindAsync(boardId);
-        _dbContext.Boards.Remove(boardToRemove!);
+        var boardToRemove = await dbContext.Boards.FindAsync(boardId);
+        dbContext.Boards.Remove(boardToRemove!);
     }
 
-    public void AddUser(Board board, User user)
+    public void AddBoardMember(BoardMember boardMember)
     {
-        _dbContext.Entry(user).State = EntityState.Unchanged;
-        board.Users.Add(user);
+        dbContext.BoardMembers.Add(boardMember);
     }
 
-    public void RemoveUser(Board board, User user)
+    public void RemoveBoardMember(BoardMember boardMember)
     {
-        board.Users.Remove(user);
+        dbContext.BoardMembers.Remove(boardMember);
+    }
+
+    public async Task<BoardMember?> GetBoardMember(Guid boardId, Guid boardMemberId)
+    {
+        return await dbContext.BoardMembers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(bm => bm.BoardId == boardId && bm.UserId == boardMemberId);
+    }
+
+    public async Task<Guid> GetOwnerId(Guid boardId)
+    {
+        var boardOwner = await dbContext.Boards.FirstOrDefaultAsync(board => board.Id == boardId);
+        return boardOwner!.CreatedById;
     }
 }

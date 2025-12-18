@@ -10,12 +10,12 @@ namespace TaskFlow.Application.Features.Users.Commands.DeleteUserCommand;
 public class DeleteUserCommandHandler(
     IUserWriteOnlyRepository userRepository,
     IBoardReadOnlyRepository boardRepository,
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork) : IRequestHandler<DeleteUserCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
         var boards = await boardRepository.GetAll(user);
         
         if (boards.Count != 0) throw new UserHasAssociatedBoardsException();

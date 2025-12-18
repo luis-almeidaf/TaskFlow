@@ -8,15 +8,15 @@ namespace TaskFlow.Application.Features.Boards.Commands.DeleteBoardCommand;
 
 public class DeleteBoardCommandHandler(
     IBoardWriteOnlyRepository repository,
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork)
     : IRequestHandler<DeleteBoardCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteBoardCommand request, CancellationToken cancellationToken)
     {
-        var user = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
-        var board = await repository.GetById(user,request.Id);
+        var board = await repository.GetById(request.Id);
         if (board is null) throw new BoardNotFoundException();
 
         await repository.Delete(request.Id);

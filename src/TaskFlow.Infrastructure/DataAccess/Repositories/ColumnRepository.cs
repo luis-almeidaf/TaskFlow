@@ -37,10 +37,10 @@ public class ColumnRepository(TaskFlowDbContext dbContext) : IColumnReadOnlyRepo
     }
     
 
-    public async Task<Column?> GetById(Guid id)
+    public async Task<Column?> GetById(Guid boardId, Guid columnId)
     {
         return await dbContext.Columns
             .Include(column => column.Cards)
-            .FirstOrDefaultAsync(user => user.Id == id);
+            .FirstOrDefaultAsync(column => column.BoardId == boardId && column.Id == columnId);
     }
 }

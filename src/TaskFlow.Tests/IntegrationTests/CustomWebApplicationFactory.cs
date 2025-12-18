@@ -17,8 +17,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     public BoardIdentityManager Board { get; private set; } = null!;
     public ColumnIdentityManager Column { get; private set; } = null!;
     public CardIdentityManager Card { get; private set; } = null!;
-    public UserIdentityManager User { get; private set; } = null!;
-    public UserIdentityManager UserWithBoards { get; private set; } = null!;
+    public UserIdentityManager UserOwner { get; private set; } = null!;
+    public UserIdentityManager UserAdmin { get; private set; } = null!;
+    public UserIdentityManager UserGuest { get; private set; } = null!;
+    public UserIdentityManager UserOutOfBoard { get; private set; } = null!;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -48,89 +50,79 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         IPasswordEncrypter passwordEncrypter,
         IAccessTokenGenerator tokenGenerator)
     {
-        AddUser(dbContext, passwordEncrypter, tokenGenerator);
-
-        var userWithBoards = AddUserWithBoards(dbContext, passwordEncrypter, tokenGenerator);
-
-        var board = AddBoard(dbContext, userWithBoards);
+        var userOwner = AddUser(dbContext, passwordEncrypter);
+        var userAdmin = AddUser(dbContext, passwordEncrypter);
+        var userGuest = AddUser(dbContext, passwordEncrypter);
+        var userOutOfBoard = AddUser(dbContext, passwordEncrypter);
         
+        UserOwner = new UserIdentityManager(userOwner, "B!1qwerty", tokenGenerator.Generate(userOwner));
+        UserAdmin = new UserIdentityManager(userAdmin, "B!1qwerty", tokenGenerator.Generate(userAdmin));
+        UserGuest = new UserIdentityManager(userGuest, "B!1qwerty", tokenGenerator.Generate(userGuest));
+        UserOutOfBoard = new UserIdentityManager(userOutOfBoard, "B!1qwerty", tokenGenerator.Generate(userOutOfBoard));
+        
+        var board = AddBoard(dbContext, userOwner);
+        
+        AddBoardMember(dbContext, userOwner, board, BoardRole.Owner);
+        AddBoardMember(dbContext, userAdmin, board, BoardRole.Admin);
+        AddBoardMember(dbContext, userGuest, board, BoardRole.Guest);
+
         var column = AddColumn(dbContext, board);
 
         AddCard(dbContext, column);
         AddCard(dbContext, column);
         AddCard(dbContext, column);
-        
+
         dbContext.SaveChanges();
     }
 
-    private void AddUser(
-        TaskFlowDbContext dbContext,
-        IPasswordEncrypter passwordEncrypter,
-        IAccessTokenGenerator tokenGenerator)
+    private static User AddUser(TaskFlowDbContext dbContext, IPasswordEncrypter passwordEncrypter)
     {
         var user = UserBuilder.Build();
-
-        var password = user.Password;
-
+        user.Password = "B!1qwerty";
+        
         user.Password = passwordEncrypter.Encrypt(user.Password);
 
         dbContext.Users.Add(user);
 
-        var token = tokenGenerator.Generate(user);
-
-        User = new UserIdentityManager(user, password, token);
+        return user;
     }
-    
-    private User AddUserWithBoards(
-        TaskFlowDbContext dbContext,
-        IPasswordEncrypter passwordEncrypter,
-        IAccessTokenGenerator tokenGenerator)
+
+    private static void AddBoardMember(TaskFlowDbContext dbContext, User user, Board board, BoardRole boardRole)
     {
-        var userWithBoards = UserBuilder.Build();
-        var board = BoardBuilder.Build(userWithBoards);
+        var boardMember = BoardMemberBuilder.Build(user, board);
+        boardMember.Role = boardRole;
 
-        var password = userWithBoards.Password;
-        var token = tokenGenerator.Generate(userWithBoards);
-
-        userWithBoards.Password = passwordEncrypter.Encrypt(userWithBoards.Password);
-
-        dbContext.Users.Add(userWithBoards);
-        dbContext.Boards.Add(board);
-
-        UserWithBoards = new UserIdentityManager(userWithBoards, password, token);
-
-        return userWithBoards;
+        dbContext.BoardMembers.Add(boardMember);
     }
 
     private Board AddBoard(TaskFlowDbContext dbContext, User user)
     {
         var board = BoardBuilder.Build(user);
-        board.Users.Add(user);
-
+        
         dbContext.Boards.Add(board);
 
         Board = new BoardIdentityManager(board);
-        
+
         return board;
     }
-    
+
     private Column AddColumn(TaskFlowDbContext dbContext, Board board)
     {
         var column = ColumnBuilder.Build(board);
-        
+
         dbContext.Columns.Add(column);
-        
+
         Column = new ColumnIdentityManager(column);
 
         return column;
     }
-    
+
     private void AddCard(TaskFlowDbContext dbContext, Column column)
     {
         var card = CardBuilder.Build(column);
-        
+
         dbContext.Cards.Add(card);
-        
+
         Card = new CardIdentityManager(card);
     }
 }

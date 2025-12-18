@@ -1,16 +1,16 @@
-using TaskFlow.Application.Features.Boards.Users.Commands.RemoveUserCommand;
+using TaskFlow.Application.Features.Boards.Members.Commands.RemoveBoardMemberCommand;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Tests.Builders.Commands.Boards.Users;
 
 public static class RemoveUserCommandBuilder
 {
-    public static RemoveUserCommand Build(Board board, User user)
+    public static RemoveBoardMemberCommand Build(Board board, BoardMember boardMember)
     {
-        return new RemoveUserCommand
+        return new RemoveBoardMemberCommand
         {
             BoardId = board.Id,
-            UserId = user.Id
+            BoardMemberId = boardMember.Id
         };
     }
 }

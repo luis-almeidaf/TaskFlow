@@ -7,18 +7,15 @@ using TaskFlow.Domain.Repositories.Board;
 namespace TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 
 public class GetBoardsQueryHandler(
-    ICurrentUser currentUser, 
+    IUserRetriever userRetriever, 
     IBoardReadOnlyRepository boardRepository) : IRequestHandler<GetBoardsQuery, GetBoardsResponse>
 {
     public async Task<GetBoardsResponse> Handle(GetBoardsQuery request, CancellationToken cancellationToken)
     {
-        var loggedUser = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
-        var result = await boardRepository.GetAll(loggedUser);
+        var result = await boardRepository.GetAll(user);
 
-        return new GetBoardsResponse()
-        {
-            Boards = result.Adapt<List<ShortBoardResponse>>()
-        };
+        return new GetBoardsResponse { Boards = result.Adapt<List<ShortBoardResponse>>() };
     }
 }

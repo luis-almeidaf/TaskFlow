@@ -11,12 +11,14 @@ public class DeleteColumnTest : TaskFlowClassFixture
     private const string Route = "Boards";
 
     private readonly Guid _boardId;
-    private readonly string _boardOwnerToken;
+    private readonly string _boardAdminToken;
+    private readonly string _boardGuestToken;
 
     public DeleteColumnTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _boardId = webApplicationFactory.Board.GetId();
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _boardAdminToken = webApplicationFactory.UserAdmin.GetToken();
+        _boardGuestToken = webApplicationFactory.UserGuest.GetToken();
     }
 
     [Fact]
@@ -24,7 +26,7 @@ public class DeleteColumnTest : TaskFlowClassFixture
     {
         var request = new CreateColumnRequest { Name = "New Column" };
 
-        var response = await DoPost($"/{Route}/{_boardId}/columns", request, token: _boardOwnerToken);
+        var response = await DoPost($"/{Route}/{_boardId}/columns", request, token: _boardAdminToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
@@ -34,33 +36,30 @@ public class DeleteColumnTest : TaskFlowClassFixture
 
         var columnId = responseData.RootElement.GetProperty("columnId").GetGuid();
 
-        response = await DoDelete(requestUri: $"{Route}/{_boardId}/columns/{columnId}", token: _boardOwnerToken);
+        response = await DoDelete(requestUri: $"{Route}/{_boardId}/columns/{columnId}", token: _boardAdminToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
     [Fact]
-    public async Task Error_Board_Not_Found()
+    public async Task Should_ReturnForbidden_When_GuestTriesToDeleteColumn()
     {
-        var fakeBoardId = Guid.NewGuid();
+        var request = new CreateColumnRequest { Name = "New Column" };
 
-        var response = await DoDelete(requestUri: $"/{Route}/{fakeBoardId}/columns/{fakeBoardId}",
-            token: _boardOwnerToken);
+        var response = await DoPost($"/{Route}/{_boardId}/columns", request, token: _boardAdminToken);
 
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var responseBody = await response.Content.ReadAsStreamAsync();
 
         var responseData = await JsonDocument.ParseAsync(responseBody);
 
-        var errors = responseData.RootElement.GetProperty("errorMessages").EnumerateArray();
+        var columnId = responseData.RootElement.GetProperty("columnId").GetGuid();
 
-        var expectedMessage = ResourceErrorMessages.BOARD_NOT_FOUND;
+        response = await DoDelete(requestUri: $"{Route}/{_boardId}/columns/{columnId}", token: _boardGuestToken);
 
-        errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
-        Assert.Single(errors);
-        Assert.Contains(errors, error => error.GetString()! == expectedMessage);
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     [Fact]
@@ -69,7 +68,7 @@ public class DeleteColumnTest : TaskFlowClassFixture
         var fakeColumnId = Guid.NewGuid();
 
         var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/columns/{fakeColumnId}",
-            token: _boardOwnerToken);
+            token: _boardAdminToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 

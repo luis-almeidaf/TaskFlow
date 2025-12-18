@@ -6,23 +6,14 @@ using TaskFlow.Exception.ExceptionsBase;
 
 namespace TaskFlow.Application.Features.Boards.Queries.GetBoardByIdQuery;
 
-public class GetBoardByIdQueryHandler : IRequestHandler<GetBoardByIdQuery, GetBoardByIdResponse?>
+public class GetBoardByIdQueryHandler(IBoardReadOnlyRepository repository, IUserRetriever userRetriever)
+    : IRequestHandler<GetBoardByIdQuery, GetBoardByIdResponse?>
 {
-    private readonly IBoardReadOnlyRepository _repository;
-    private readonly ICurrentUser _currentUser;
-
-    public GetBoardByIdQueryHandler(IBoardReadOnlyRepository repository, ICurrentUser currentUser)
+    public async Task<GetBoardByIdResponse?> Handle(GetBoardByIdQuery request, CancellationToken cancellationToken)
     {
-        _repository = repository;
-        _currentUser = currentUser;
-    }
+        await userRetriever.GetCurrentUser();
 
-    public async Task<GetBoardByIdResponse?> Handle(GetBoardByIdQuery request,
-        CancellationToken cancellationToken)
-    {
-        var loggedUser = await _currentUser.GetCurrentUser();
-
-        var board = await _repository.GetById(loggedUser, request.Id);
+        var board = await repository.GetById(request.Id);
 
         return board is null ? throw new BoardNotFoundException() : board?.Adapt<GetBoardByIdResponse>();
     }

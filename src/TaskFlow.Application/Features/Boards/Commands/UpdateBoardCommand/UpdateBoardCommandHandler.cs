@@ -8,7 +8,7 @@ namespace TaskFlow.Application.Features.Boards.Commands.UpdateBoardCommand;
 
 public class UpdateBoardCommandHandler(
     IUnitOfWork unitOfWork,
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IBoardWriteOnlyRepository repository)
     : IRequestHandler<UpdateBoardCommand, Unit>
 {
@@ -16,9 +16,9 @@ public class UpdateBoardCommandHandler(
     {
         Validate(request);
 
-        var user = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
-        var board = await repository.GetById(user, request.Id);
+        var board = await repository.GetById(request.Id);
         if (board is null) throw new BoardNotFoundException();
 
         board.Name = request.Name;

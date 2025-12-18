@@ -11,18 +11,18 @@ using TaskFlow.Exception.ExceptionsBase;
 namespace TaskFlow.Application.Features.Users.Commands.ChangePasswordCommand;
 
 public class ChangePasswordCommandHandler(
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IUserWriteOnlyRepository repository,
     IPasswordEncrypter passwordEncrypter,
     IUnitOfWork unitOfWork) : IRequestHandler<ChangePasswordCommand, Unit>
 {
     public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var loggedUser1 = await currentUser.GetCurrentUser();
+        var currentUser = await userRetriever.GetCurrentUser();
 
-        Validate(request, loggedUser1);
+        Validate(request, currentUser);
 
-        var user = await repository.GetById(loggedUser1.Id);
+        var user = await repository.GetById(currentUser.Id);
         user!.Password = passwordEncrypter.Encrypt(request.NewPassword);
 
         await unitOfWork.Commit();

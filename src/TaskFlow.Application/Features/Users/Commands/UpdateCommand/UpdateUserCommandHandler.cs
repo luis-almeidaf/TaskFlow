@@ -9,18 +9,18 @@ using TaskFlow.Exception.ExceptionsBase;
 namespace TaskFlow.Application.Features.Users.Commands.UpdateCommand;
 
 public class UpdateUserCommandHandler(
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IUserWriteOnlyRepository repository,
     IUserReadOnlyRepository userReadOnlyRepository,
     IUnitOfWork unitOfWork) : IRequestHandler<UpdateUserCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var loggedUser1 = await currentUser.GetCurrentUser();
+        var currentUser = await userRetriever.GetCurrentUser();
 
-        await Validate(request, loggedUser1.Email);
+        await Validate(request, currentUser.Email);
 
-        var user = await repository.GetById(loggedUser1.Id);
+        var user = await repository.GetById(currentUser.Id);
 
         user!.Name = request.Name;
         user.Email = request.Email;

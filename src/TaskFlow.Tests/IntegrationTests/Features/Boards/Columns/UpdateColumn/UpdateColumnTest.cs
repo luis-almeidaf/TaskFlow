@@ -14,12 +14,14 @@ public class UpdateColumnTest : TaskFlowClassFixture
     private readonly Guid _boardId;
     private readonly List<Column> _columns;
     private readonly string _boardOwnerToken;
+    private readonly string _boardGuestToken;
 
     public UpdateColumnTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _boardId = webApplicationFactory.Board.GetId();
         _columns = webApplicationFactory.Board.GetColumns;
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _boardOwnerToken = webApplicationFactory.UserOwner.GetToken();
+        _boardGuestToken = webApplicationFactory.UserGuest.GetToken();
     }
 
     [Fact]
@@ -74,34 +76,7 @@ public class UpdateColumnTest : TaskFlowClassFixture
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
     }
-
-    [Fact]
-    public async Task Error_Board_Not_Found()
-    {
-        var columnToMove = _columns[1];
-
-        var columnId = columnToMove.Id;
-
-        var request = new UpdateColumnRequest { Name = "New name" };
-
-        var fakeBoardId = Guid.NewGuid();
-
-        var response = await DoPatch(requestUri: $"{Route}/{fakeBoardId}/columns/{columnId}", request,
-            _boardOwnerToken);
-
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var responseBody = await response.Content.ReadAsStreamAsync();
-
-        var responseData = await JsonDocument.ParseAsync(responseBody);
-
-        var errors = responseData.RootElement.GetProperty("errorMessages").EnumerateArray();
-
-        var expectedMessage = ResourceErrorMessages.BOARD_NOT_FOUND;
-
-        errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
-    }
-
+    
     [Fact]
     public async Task Error_Column_Not_Found()
     {
@@ -123,5 +98,22 @@ public class UpdateColumnTest : TaskFlowClassFixture
         var expectedMessage = ResourceErrorMessages.COLUMN_NOT_FOUND;
 
         errors.Should().HaveCount(1).And.Contain(error => error.GetString()!.Equals(expectedMessage));
+    }
+    
+    [Fact]
+    public async Task Should_ReturnForbidden_When_GuestTriesToUpdateColumn()
+    {
+        var request = new UpdateColumnRequest { Name = "New name" };
+        
+        var columnToMove = _columns[1];
+
+        var columnId = columnToMove.Id;
+
+        var response = await DoPatch(
+            requestUri: $"/{Route}/{_boardId}/columns/{columnId}/position", 
+            request,
+            token: _boardGuestToken);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 }

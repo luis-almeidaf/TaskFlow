@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskFlow.Api.Authorization;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Commands.CreateBoardCommand;
 using TaskFlow.Application.Features.Boards.Commands.DeleteBoardCommand;
@@ -48,6 +49,7 @@ public class BoardController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Boards.Update)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid boardId,
         [FromBody] UpdateBoardRequest request)
@@ -64,6 +66,7 @@ public class BoardController(IMediator mediator) : ControllerBase
     [HttpDelete("{boardId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Boards.Delete)]
     public async Task<IActionResult> Delete([FromRoute] Guid boardId)
     {
         await mediator.Send(new DeleteBoardCommand { Id = boardId });

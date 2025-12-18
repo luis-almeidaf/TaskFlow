@@ -4,8 +4,8 @@ using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Cards.Queries.GetCardById;
 
@@ -78,7 +78,7 @@ public class GetCardByIdQueryHandlerTest
         Guid columnId,
         Guid? cardId = null)
     {
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var repository = new CardReadOnlyRepositoryBuilder();
 
         if (cardId.HasValue)
@@ -86,6 +86,6 @@ public class GetCardByIdQueryHandlerTest
         else
             repository.GetCardById(user, card, boardId, columnId);
 
-        return new GetCardByIdQueryHandler(repository.Build(), loggedUser);
+        return new GetCardByIdQueryHandler(repository.Build(), userRetriever);
     }
 }

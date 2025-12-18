@@ -9,7 +9,7 @@ namespace TaskFlow.Application.Features.Boards.Columns.Commands.UpdateColumnComm
 
 public class UpdateColumnCommandHandler(
     IUnitOfWork unitOfWork,
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IBoardReadOnlyRepository boardRepository,
     IColumnReadOnlyRepository readOnlyRepository,
     IColumnWriteOnlyRepository columnRepository)
@@ -19,12 +19,12 @@ public class UpdateColumnCommandHandler(
     {
         Validate(request);
 
-        var user = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(user, request.BoardId);
+        var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
-        var column = await readOnlyRepository.GetById(request.ColumnId);
+        var column = await readOnlyRepository.GetById(board.Id, request.ColumnId);
         if (column is null) throw new ColumnNotFoundException();
 
         column.Name = request.Name;

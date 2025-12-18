@@ -6,8 +6,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Commands.CreateColumn;
 
@@ -59,7 +59,7 @@ public class CreateColumnCommandHandlerTest
     private static CreateColumnCommandHandler CreateHandler(User user, Board board, Guid? boardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardRepository = new BoardReadOnlyRepositoryBuilder();
         var columnRepository = new ColumnWriteOnlyRepositoryBuilder();
 
@@ -69,7 +69,7 @@ public class CreateColumnCommandHandlerTest
             boardRepository.GetById(user, board, boardId);
 
         return new CreateColumnCommandHandler(
-            loggedUser,
+            userRetriever,
             unitOfWork, 
             boardRepository.Build(), 
             columnRepository.Build());

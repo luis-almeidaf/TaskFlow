@@ -22,7 +22,7 @@ public static class DependencyInjectionExtension
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         AddBcrypt(services);
-        AddLoggedUser(services);
+        AddUserRetriever(services);
         AddRepositories(services);
         AddToken(services, configuration);
 
@@ -37,9 +37,9 @@ public static class DependencyInjectionExtension
         services.AddScoped<IPasswordEncrypter, Security.Cryptography.BCrypt>();
     }
 
-    private static void AddLoggedUser(IServiceCollection services)
+    private static void AddUserRetriever(IServiceCollection services)
     {
-        services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<IUserRetriever, UserRetriever>();
     }
 
     private static void AddToken(IServiceCollection services, IConfiguration configuration)

@@ -9,7 +9,7 @@ namespace TaskFlow.Application.Features.Boards.Columns.Commands.MoveColumnComman
 
 public class MoveColumnCommandHandler(
     IUnitOfWork unitOfWork,
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IBoardWriteOnlyRepository boardRepository,
     IColumnWriteOnlyRepository columnRepository) : IRequestHandler<MoveColumnCommand, Unit>
 {
@@ -19,7 +19,7 @@ public class MoveColumnCommandHandler(
     /// <param name="request">The command containing the board ID, column ID, and the new position.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A <see cref="Unit"/> value indicating successful completion.</returns>
-    /// <exception cref="BoardNotFoundException">Thrown when the specified board is not found or does not belong to the logged user.</exception>
+    /// <exception cref="BoardNotFoundException">Thrown when the specified board is not found or does not belong to the logged userRetriever.</exception>
     /// <exception cref="ColumnNotFoundException">Thrown when the specified column is not found within the board.</exception>
     /// <remarks>
     /// This method reorders all columns in the board after the move operation to ensure sequential positioning.
@@ -29,9 +29,9 @@ public class MoveColumnCommandHandler(
     {
         Validate(request);
 
-        var user = await currentUser.GetCurrentUser();
+        await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(user, request.BoardId);
+        var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
         var columns = board.Columns.OrderBy(column => column.Position).ToList();

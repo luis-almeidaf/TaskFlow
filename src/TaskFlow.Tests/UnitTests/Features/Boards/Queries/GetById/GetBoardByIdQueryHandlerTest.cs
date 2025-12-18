@@ -4,8 +4,8 @@ using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Queries.GetById;
 
@@ -49,7 +49,7 @@ public class GetBoardByIdQueryHandlerTest
 
     private static GetBoardByIdQueryHandler CreateHandler(User user, Board board, Guid? id = null)
     {
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var repository = new BoardReadOnlyRepositoryBuilder();
 
         if (id.HasValue)
@@ -61,6 +61,6 @@ public class GetBoardByIdQueryHandlerTest
             repository.GetById(user, board);
         }
 
-        return new GetBoardByIdQueryHandler(repository.Build(), loggedUser);
+        return new GetBoardByIdQueryHandler(repository.Build(), userRetriever);
     }
 }

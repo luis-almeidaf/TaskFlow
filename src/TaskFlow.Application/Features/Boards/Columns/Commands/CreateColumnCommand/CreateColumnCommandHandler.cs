@@ -10,7 +10,7 @@ using TaskFlow.Exception.ExceptionsBase;
 namespace TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 
 public class CreateColumnCommandHandler(
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork,
     IBoardReadOnlyRepository boardRepository,
     IColumnWriteOnlyRepository columnRepository) : IRequestHandler<CreateColumnCommand, CreateColumnResponse>
@@ -20,9 +20,9 @@ public class CreateColumnCommandHandler(
     {
         Validate(request);
 
-        var user = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(user, request.BoardId);
+        var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
         var column = request.Adapt<Column>();

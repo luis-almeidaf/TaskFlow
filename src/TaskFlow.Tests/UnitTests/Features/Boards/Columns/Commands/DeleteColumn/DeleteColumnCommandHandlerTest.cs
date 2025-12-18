@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Commands.DeleteColumn;
 
@@ -79,7 +79,7 @@ public class DeleteColumnCommandHandlerTest
         Guid? boardId = null,
         Guid? columnId = null)
     {
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var unitOfWork = UnitOfWorkBuilder.Build();
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
         var columnReadOnlyRepository = new ColumnReadOnlyRepositoryBuilder();
@@ -92,12 +92,12 @@ public class DeleteColumnCommandHandlerTest
 
 
         if (columnId.HasValue)
-            columnReadOnlyRepository.GetById(column, columnId);
+            columnReadOnlyRepository.GetById(board.Id, column, columnId);
         else
-            columnReadOnlyRepository.GetById(column);
+            columnReadOnlyRepository.GetById(board.Id, column);
 
         return new DeleteColumnCommandHandler(
-            loggedUser,
+            userRetriever,
             unitOfWork,
             boardReadRepository.Build(),
             columnReadOnlyRepository.Build(),

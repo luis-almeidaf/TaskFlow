@@ -11,7 +11,7 @@ using TaskFlow.Exception.ExceptionsBase;
 namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
 
 public class CreateCardCommandHandler(
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork,
     IBoardReadOnlyRepository boardReadOnlyRepository,
     ICardWriteOnlyRepository cardRepository,
@@ -22,17 +22,17 @@ public class CreateCardCommandHandler(
     {
         Validate(request);
 
-        var user = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
-        var board = await boardReadOnlyRepository.GetById(user, request.BoardId);
+        var board = await boardReadOnlyRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
-        var column = await columnRepository.GetById(request.ColumnId);
+        var column = await columnRepository.GetById(board.Id, request.ColumnId);
         if (column is null) throw new ColumnNotFoundException();
 
         if (request.AssignedToId.HasValue)
         {
-            var userInBoard = board.Users.Any(u => u.Id == request.AssignedToId.Value);
+            var userInBoard = board.Members.Any(u => u.Id == request.AssignedToId.Value);
             if (!userInBoard) throw new UserNotInBoardException();
         }
 

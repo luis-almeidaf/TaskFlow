@@ -25,7 +25,7 @@ public class MoveCardTest : TaskFlowClassFixture
         _columnId = webApplicationFactory.Column.GetId();
         _cardId = webApplicationFactory.Card.GetId();
         _columns = webApplicationFactory.Board.GetColumns;
-        _boardOwnerToken = webApplicationFactory.UserWithBoards.GetToken();
+        _boardOwnerToken = webApplicationFactory.UserOwner.GetToken();
     }
 
     [Fact]

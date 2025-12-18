@@ -10,20 +10,28 @@ namespace TaskFlow.Application.Features.Boards.Commands.CreateBoardCommand;
 
 public class CreateBoardCommandHandler(
     IUnitOfWork unitOfWork,
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IBoardWriteOnlyRepository repository) : IRequestHandler<CreateBoardCommand, CreateBoardResponse>
 {
     public async Task<CreateBoardResponse> Handle(CreateBoardCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
 
-        var loggedUser = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
         var board = request.Adapt<Board>();
         board.Id = Guid.NewGuid();
-        board.CreatedById = loggedUser.Id;
+        board.CreatedById = user.Id;
 
-        repository.AddUser(board, loggedUser);
+        var boardMember = new BoardMember
+        {
+            Id = Guid.NewGuid(),
+            BoardId = board.Id,
+            Role = BoardRole.Owner,
+            UserId = user.Id
+        };
+
+        repository.AddBoardMember(boardMember);
 
         var columns = new List<Column>
         {
@@ -50,10 +58,8 @@ public class CreateBoardCommandHandler(
     {
         var result = new CreateBoardValidator().Validate(request);
 
-        if (!result.IsValid)
-        {
-            var errorMessages = result.Errors.Select(error => error.ErrorMessage).ToList();
-            throw new ErrorOnValidationException(errorMessages);
-        }
+        if (result.IsValid) return;
+        var errorMessages = result.Errors.Select(error => error.ErrorMessage).ToList();
+        throw new ErrorOnValidationException(errorMessages);
     }
 }

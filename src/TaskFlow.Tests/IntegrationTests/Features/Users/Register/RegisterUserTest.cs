@@ -18,7 +18,7 @@ public class RegisterUserTest : TaskFlowClassFixture
         var request = new RegisterUserRequest
         {
             Email = "new_user@email.com",
-            Name = "user",
+            Name = "userRetriever",
             Password = "A!1qwerty"
         };
 

@@ -14,7 +14,7 @@ public class GetBoardByIdTest : TaskFlowClassFixture
 
     public GetBoardByIdTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _token = webApplicationFactory.UserWithBoards.GetToken();
+        _token = webApplicationFactory.UserOwner.GetToken();
         _boardId = webApplicationFactory.Board.GetId();
     }
 

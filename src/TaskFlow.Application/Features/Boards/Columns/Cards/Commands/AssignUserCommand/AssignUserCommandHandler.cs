@@ -9,7 +9,7 @@ using TaskFlow.Exception.ExceptionsBase;
 namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.AssignUserCommand;
 
 public class AssignUserCommandHandler(
-    ICurrentUser currentUser,
+    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork,
     IBoardReadOnlyRepository boardRepository,
     ICardWriteOnlyRepository cardRepository,
@@ -17,18 +17,18 @@ public class AssignUserCommandHandler(
 {
     public async Task<Unit> Handle(AssignUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await currentUser.GetCurrentUser();
+        var user = await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(user, request.BoardId);
+        var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
-        var column = await columnRepository.GetById(request.ColumnId);
+        var column = await columnRepository.GetById(board.Id,request.ColumnId);
         if (column is null) throw new ColumnNotFoundException();
 
         var card = await cardRepository.GetById(user, board.Id, column.Id, request.CardId);
         if (card is null) throw new CardNotFoundException();
 
-        var userInBoard = board.Users.Any(u => u.Id == request.AssignedToId);
+        var userInBoard = board.Members.Any(bm => bm.UserId == request.AssignedToId);
         if (!userInBoard) throw new UserNotInBoardException();
 
         card.AssignedToId = request.AssignedToId;

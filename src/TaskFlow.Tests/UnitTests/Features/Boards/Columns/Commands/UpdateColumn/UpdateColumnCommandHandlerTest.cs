@@ -5,8 +5,8 @@ using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns;
 using TaskFlow.Tests.Builders.Entities;
-using TaskFlow.Tests.Builders.LoggedUser;
 using TaskFlow.Tests.Builders.Repositories;
+using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Commands.UpdateColumn;
 
@@ -74,7 +74,7 @@ public class UpdateColumnCommandHandlerTest
         Guid? columnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var loggedUser = LoggedUserBuilder.Build(user);
+        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
         var columnReadRepository = new ColumnReadOnlyRepositoryBuilder();
         var columnWriteRepository = new ColumnWriteOnlyRepositoryBuilder().Build();
@@ -85,13 +85,13 @@ public class UpdateColumnCommandHandlerTest
             boardReadRepository.GetById(user, board);
 
         if (columnId.HasValue)
-            columnReadRepository.GetById(column, columnId);
+            columnReadRepository.GetById(board.Id, column, columnId);
         else
-            columnReadRepository.GetById(column);
+            columnReadRepository.GetById(board.Id, column);
 
         return new UpdateColumnCommandHandler(
             unitOfWork,
-            loggedUser,
+            userRetriever,
             boardReadRepository.Build(),
             columnReadRepository.Build(),
             columnWriteRepository);

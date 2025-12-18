@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskFlow.Api.Authorization;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.AssignUserCommand;
 using TaskFlow.Application.Features.Boards.Columns.Cards.Commands.CreateCardCommand;
@@ -20,6 +21,7 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(CreateCardResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Cards.Create)]
     public async Task<IActionResult> CreateCard(
         [FromRoute] Guid boardId,
         [FromRoute] Guid columnId,
@@ -57,6 +59,7 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Cards.Update)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid boardId, Guid columnId, Guid cardId,
         [FromBody] UpdateCardRequest request)
@@ -98,6 +101,7 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
     [HttpPatch("{cardId:Guid}/assign")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Cards.Assign)]
     public async Task<IActionResult> AssignUser(
         [FromRoute] Guid boardId, Guid columnId, Guid cardId,
         [FromBody] AssignUserRequest request)
@@ -116,6 +120,7 @@ public class BoardColumnCardController(IMediator mediator) : ControllerBase
     [HttpDelete("{cardId:Guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Cards.Delete)]
     public async Task<IActionResult> Delete(
         [FromRoute] Guid boardId, Guid columnId, Guid cardId)
     {

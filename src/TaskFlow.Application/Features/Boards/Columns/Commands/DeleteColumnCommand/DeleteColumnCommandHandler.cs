@@ -8,7 +8,7 @@ using TaskFlow.Exception.ExceptionsBase;
 namespace TaskFlow.Application.Features.Boards.Columns.Commands.DeleteColumnCommand;
 
 public class DeleteColumnCommandHandler(
-    ICurrentUser user,
+    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork,
     IBoardReadOnlyRepository boardRepository,
     IColumnReadOnlyRepository columnReadOnlyRepository,
@@ -16,12 +16,12 @@ public class DeleteColumnCommandHandler(
 {
     public async Task<Unit> Handle(DeleteColumnCommand request, CancellationToken cancellationToken)
     {
-        var loggedUser = await user.GetCurrentUser();
+        await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(loggedUser, request.BoardId);
+        var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();
 
-        var column = await columnReadOnlyRepository.GetById(request.ColumnId);
+        var column = await columnReadOnlyRepository.GetById(board.Id, request.ColumnId);
         if (column is null) throw new ColumnNotFoundException();
 
         var deletedPosition = column.Position;
