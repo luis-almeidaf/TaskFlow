@@ -17,8 +17,7 @@ public class TaskFlowDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-
+        
         modelBuilder.Entity<RefreshToken>(entity =>
         {
             entity.HasKey(rt => rt.Id);
@@ -73,6 +72,5 @@ public class TaskFlowDbContext : DbContext
             
             entity.ToTable("BoardMembers");
         });
-        
     }
 }

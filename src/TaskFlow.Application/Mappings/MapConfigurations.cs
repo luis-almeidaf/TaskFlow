@@ -16,5 +16,16 @@ public static class MapConfigurations
         TypeAdapterConfig<UpdateCardCommand, Card>.NewConfig()
             .Ignore(dest => dest.CreatedBy)
             .Ignore(dest => dest.CreatedById);
+        
+        TypeAdapterConfig<Board, GetBoardByIdResponse>
+            .NewConfig()
+            .Map(dest => dest.Members, src => src.Members);
+
+        TypeAdapterConfig<BoardMember, BoardMemberResponse>
+            .NewConfig()
+            .Map(dest => dest.UserId, src => src.User.Id)
+            .Map(dest => dest.Name, src => src.User.Name)
+            .Map(dest => dest.Email, src => src.User.Email)
+            .Map(dest => dest.Role, src => src.Role.ToString());
     }
 }

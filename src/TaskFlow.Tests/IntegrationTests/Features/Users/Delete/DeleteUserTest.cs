@@ -8,14 +8,14 @@ public class DeleteUserTest : TaskFlowClassFixture
 {
     private const string Route = "User";
     
-    private readonly string _userToken;
+    private readonly string _userWithoutBoardToken;
     private readonly string _userWithBoardsToken;
     private readonly string _email;
     private readonly string _password;
 
     public DeleteUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _userToken = webApplicationFactory.UserGuest.GetToken();
+        _userWithoutBoardToken = webApplicationFactory.UserOutOfBoard.GetToken();
         _userWithBoardsToken = webApplicationFactory.UserOwner.GetToken();
         _email = webApplicationFactory.UserGuest.GetEmail();
         _password = webApplicationFactory.UserGuest.GetEmail();
@@ -24,7 +24,7 @@ public class DeleteUserTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var result = await DoDelete(requestUri: Route, token: _userToken);
+        var result = await DoDelete(requestUri: Route, token: _userWithoutBoardToken);
 
         result.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
