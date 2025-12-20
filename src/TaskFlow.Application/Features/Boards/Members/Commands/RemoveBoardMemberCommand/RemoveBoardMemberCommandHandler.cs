@@ -15,11 +15,11 @@ public class RemoveBoardMemberCommandHandler(
     {
         await userRetriever.GetCurrentUser();
         
-        var boardMemberToRemove = await boardRepository.GetBoardMember(request.BoardId, request.BoardMemberId);
+        var boardMemberToRemove = await boardRepository.GetBoardMember(request.BoardId, request.BoardMemberUserId);
         if (boardMemberToRemove is null) throw new UserNotInBoardException();
 
         var ownerId = await boardRepository.GetOwnerId(request.BoardId);
-        if (request.BoardMemberId == ownerId) throw new BoardOwnerCannotBeRemovedException();
+        if (request.BoardMemberUserId == ownerId) throw new BoardOwnerCannotBeRemovedException();
         
         boardRepository.RemoveBoardMember(boardMemberToRemove);
 

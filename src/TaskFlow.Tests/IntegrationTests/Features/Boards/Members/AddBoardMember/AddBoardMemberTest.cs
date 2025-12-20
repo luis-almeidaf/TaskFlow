@@ -34,7 +34,7 @@ public class AddBoardMemberTest : TaskFlowClassFixture
     {
         var request = new AddBoardMemberRequest { UserEmail = _userToBeAddedEmail };
 
-        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request,
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/members", request: request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -52,7 +52,7 @@ public class AddBoardMemberTest : TaskFlowClassFixture
     {
         var request = new AddBoardMemberRequest { UserEmail = string.Empty };
 
-        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request,
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/members", request: request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -75,7 +75,7 @@ public class AddBoardMemberTest : TaskFlowClassFixture
             UserEmail = "fakeemail@email.com"
         };
 
-        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request,
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/members", request: request,
             token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -98,7 +98,7 @@ public class AddBoardMemberTest : TaskFlowClassFixture
             UserEmail = _boardOwnerEmail
         };
 
-        var response = await DoPost(requestUri: $"{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
+        var response = await DoPost(requestUri: $"{Route}/{_boardId}/members", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Conflict);
 
@@ -117,7 +117,7 @@ public class AddBoardMemberTest : TaskFlowClassFixture
     {
         var request = new AddBoardMemberRequest { UserEmail = _userToBeAddedEmail };
 
-        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request,
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/members", request: request,
             token: _boardGuestToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);

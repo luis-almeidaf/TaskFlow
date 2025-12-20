@@ -14,8 +14,6 @@ namespace TaskFlow.Tests.IntegrationTests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly string _databaseName = $"InMemoryDb_{Guid.NewGuid()}";
-
     public BoardIdentityManager Board { get; private set; } = null!;
     public ColumnIdentityManager Column { get; private set; } = null!;
     public CardIdentityManager Card { get; private set; } = null!;
@@ -23,8 +21,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     public UserIdentityManager UserAdmin { get; private set; } = null!;
     public UserIdentityManager UserGuest { get; private set; } = null!;
     public UserIdentityManager UserOutOfBoard { get; private set; } = null!;
-    public RefreshTokenManager RefreshTokenValid { get; private set; } = null!;
-    public RefreshTokenManager RefreshTokenExpired { get; private set; } = null!;
+    public RefreshTokenIdentityManager RefreshTokenValid { get; private set; } = null!;
+    public RefreshTokenIdentityManager RefreshTokenExpired { get; private set; } = null!;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -33,7 +31,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             var provider = services.AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
             services.AddDbContext<TaskFlowDbContext>(config =>
             {
-                config.UseInMemoryDatabase(_databaseName);
+                config.UseInMemoryDatabase("InMemoryDatabase");
                 config.UseInternalServiceProvider(provider);
             });
             var scope = services.BuildServiceProvider().CreateScope();
@@ -62,8 +60,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         var expiredRefreshToken = AddRefreshToken(dbContext, userGuest, "tokenExpired", DateTime.UtcNow.AddDays(-10));
         var validRefreshToken = AddRefreshToken(dbContext, userOutOfBoard, "validToken", DateTime.UtcNow.AddDays(7));
 
-        RefreshTokenValid = new RefreshTokenManager(validRefreshToken.Token);
-        RefreshTokenExpired = new RefreshTokenManager(expiredRefreshToken.Token);
+        RefreshTokenValid = new RefreshTokenIdentityManager(validRefreshToken.Token);
+        RefreshTokenExpired = new RefreshTokenIdentityManager(expiredRefreshToken.Token);
 
         UserOwner = new UserIdentityManager(userOwner, "B!1qwerty", tokenGenerator.Generate(userOwner));
         UserAdmin = new UserIdentityManager(userAdmin, "B!1qwerty", tokenGenerator.Generate(userAdmin));

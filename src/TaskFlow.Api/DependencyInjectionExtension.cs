@@ -8,19 +8,20 @@ public static class DependencyInjectionExtension
     public static void AddTaskFlowPolicies(this AuthorizationBuilder builder)
     {
         builder
-            .AddPolicy("boards:update", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.Update)))
-            .AddPolicy("boards:delete", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.Delete)))
-            .AddPolicy("boards:add-member", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.AddBoardMember)))
-            .AddPolicy("boards:remove-member", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.RemoveBoardMember)))
+            .AddPolicy(TaskFlowPermissions.Boards.Update, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.Update)))
+            .AddPolicy(TaskFlowPermissions.Boards.Delete, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.Delete)))
+            .AddPolicy(TaskFlowPermissions.Boards.AddBoardMember, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.AddBoardMember)))
+            .AddPolicy(TaskFlowPermissions.Boards.RemoveBoardMember, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.RemoveBoardMember)))
+            .AddPolicy(TaskFlowPermissions.Boards.ChangeBoardMemberRole, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Boards.ChangeBoardMemberRole)))
             
-            .AddPolicy("columns:create", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Columns.Create)))
-            .AddPolicy("columns:update", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Columns.Update)))
-            .AddPolicy("columns:delete", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Columns.Delete)))
-            .AddPolicy("columns:move", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Columns.Move)))
+            .AddPolicy(TaskFlowPermissions.Columns.Create, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Columns.Create)))
+            .AddPolicy(TaskFlowPermissions.Columns.Update, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Columns.Update)))
+            .AddPolicy(TaskFlowPermissions.Columns.Delete, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Columns.Delete)))
+            .AddPolicy(TaskFlowPermissions.Columns.Move, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Columns.Move)))
             
-            .AddPolicy("cards:create", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Cards.Create)))
-            .AddPolicy("cards:update", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Cards.Update)))
-            .AddPolicy("cards:delete", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Cards.Delete)))
-            .AddPolicy("cards:assign", p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Cards.Assign)));
+            .AddPolicy(TaskFlowPermissions.Cards.Create, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Cards.Create)))
+            .AddPolicy(TaskFlowPermissions.Cards.Update, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Cards.Update)))
+            .AddPolicy(TaskFlowPermissions.Cards.Delete, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Cards.Delete)))
+            .AddPolicy(TaskFlowPermissions.Cards.Assign, p => p.Requirements.Add(new TaskFlowPermissionRequirement(TaskFlowPermissions.Cards.Assign)));
     }
 }

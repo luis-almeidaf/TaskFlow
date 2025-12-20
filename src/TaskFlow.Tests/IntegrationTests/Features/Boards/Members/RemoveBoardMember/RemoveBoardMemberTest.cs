@@ -32,16 +32,13 @@ public class RemoveBoardMemberTest : TaskFlowClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = new AddBoardMemberRequest
-        {
-            UserEmail = _userToBeAddedEmail
-        };
+        var request = new AddBoardMemberRequest { UserEmail = _userToBeAddedEmail };
 
-        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/users", request: request, token: _boardOwnerToken);
+        var response = await DoPost(requestUri: $"/{Route}/{_boardId}/members", request: request, token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        response = await DoDelete(requestUri: $"/{Route}/{_boardId}/users/{_userToBeAddedId}", token: _boardOwnerToken);
+        response = await DoDelete(requestUri: $"/{Route}/{_boardId}/members/{_userToBeAddedId}", token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
@@ -49,7 +46,7 @@ public class RemoveBoardMemberTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_User_Not_In_Board()
     {
-        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/users/{_userToBeAddedId}", token: _boardOwnerToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/members/{_userToBeAddedId}", token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
@@ -66,7 +63,7 @@ public class RemoveBoardMemberTest : TaskFlowClassFixture
     [Fact]
     public async Task Error_Board_Owner_Cannot_Be_Removed()
     {
-        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/users/{_boardOwnerId}", token: _boardOwnerToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/members/{_boardOwnerId}", token: _boardOwnerToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Conflict);
 
@@ -83,7 +80,7 @@ public class RemoveBoardMemberTest : TaskFlowClassFixture
     [Fact]
     public async Task Should_ReturnForbidden_When_Guest_Tries_ToRemoveBoardMember()
     {
-        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/users/{_boardOwnerId}", token: _boardGuestToken);
+        var response = await DoDelete(requestUri: $"/{Route}/{_boardId}/members/{_boardOwnerId}", token: _boardGuestToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }

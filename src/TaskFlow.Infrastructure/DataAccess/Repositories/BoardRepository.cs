@@ -69,11 +69,15 @@ public class BoardRepository(TaskFlowDbContext dbContext) : IBoardWriteOnlyRepos
         dbContext.BoardMembers.Remove(boardMember);
     }
 
-    public async Task<BoardMember?> GetBoardMember(Guid boardId, Guid boardMemberId)
+    public void UpdateBoardMember(BoardMember boardMember)
+    {
+        dbContext.BoardMembers.Update(boardMember);
+    }
+
+    public async Task<BoardMember?> GetBoardMember(Guid boardId, Guid boardMemberUserId)
     {
         return await dbContext.BoardMembers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(bm => bm.BoardId == boardId && bm.UserId == boardMemberId);
+            .FirstOrDefaultAsync(bm => bm.BoardId == boardId && bm.UserId == boardMemberUserId);
     }
 
     public async Task<Guid> GetOwnerId(Guid boardId)

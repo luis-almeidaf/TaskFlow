@@ -23,16 +23,16 @@ public class BoardWriteOnlyRepositoryBuilder
     }
 
     public BoardWriteOnlyRepositoryBuilder GetBoardMember(BoardMember boardMember, Board board,
-        Guid? boardMemberId = null)
+        Guid? fakeBoardMemberUserId = null)
     {
-        if (boardMemberId.HasValue)
+        if (fakeBoardMemberUserId.HasValue)
         {
-            _repository.Setup(repo => repo.GetBoardMember(board.Id, boardMemberId.Value))
+            _repository.Setup(repo => repo.GetBoardMember(board.Id, It.IsAny<Guid>()))
                 .ReturnsAsync((BoardMember?)null);
         }
         else
         {
-            _repository.Setup(repo => repo.GetBoardMember(board.Id, boardMember.Id)).ReturnsAsync(boardMember);
+            _repository.Setup(repo => repo.GetBoardMember(board.Id, boardMember.UserId)).ReturnsAsync(boardMember);
         }
 
         return this;

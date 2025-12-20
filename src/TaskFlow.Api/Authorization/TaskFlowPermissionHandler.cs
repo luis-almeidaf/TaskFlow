@@ -74,19 +74,20 @@ public class TaskFlowPermissionHandler(
         var hasPermission = requirement.Permission switch
         {
             TaskFlowPermissions.Boards.Delete => userRole == BoardRole.Owner,
-            TaskFlowPermissions.Boards.Update => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
-            TaskFlowPermissions.Boards.AddBoardMember => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
-            TaskFlowPermissions.Boards.RemoveBoardMember => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
+            TaskFlowPermissions.Boards.Update => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Boards.AddBoardMember => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Boards.RemoveBoardMember => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Boards.ChangeBoardMemberRole => userRole is BoardRole.Owner or BoardRole.Admin,
 
-            TaskFlowPermissions.Columns.Create => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
-            TaskFlowPermissions.Columns.Update => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
-            TaskFlowPermissions.Columns.Delete => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
-            TaskFlowPermissions.Columns.Move => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
+            TaskFlowPermissions.Columns.Create => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Columns.Update => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Columns.Delete => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Columns.Move => userRole is BoardRole.Owner or BoardRole.Admin,
 
-            TaskFlowPermissions.Cards.Create => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
-            TaskFlowPermissions.Cards.Update => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
-            TaskFlowPermissions.Cards.Delete => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
-            TaskFlowPermissions.Cards.Assign => userRole == BoardRole.Owner || userRole == BoardRole.Admin,
+            TaskFlowPermissions.Cards.Create => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Cards.Update => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Cards.Delete => userRole is BoardRole.Owner or BoardRole.Admin,
+            TaskFlowPermissions.Cards.Assign => userRole is BoardRole.Owner or BoardRole.Admin,
             _ => false
         };
         return hasPermission;
