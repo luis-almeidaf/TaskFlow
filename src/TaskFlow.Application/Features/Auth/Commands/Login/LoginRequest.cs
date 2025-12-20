@@ -1,4 +1,4 @@
-namespace TaskFlow.Application.Features.Login.Commands;
+namespace TaskFlow.Application.Features.Auth.Commands.Login;
 
 public class LoginRequest
 {

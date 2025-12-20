@@ -1,14 +1,14 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
-using TaskFlow.Application.Features.Login.Commands;
+using TaskFlow.Application.Features.Auth.Commands.Login;
 using TaskFlow.Exception;
 
-namespace TaskFlow.Tests.IntegrationTests.Features.Login;
+namespace TaskFlow.Tests.IntegrationTests.Features.Auth.Login;
 
 public class LoginTest : TaskFlowClassFixture
 {
-    private const string Route = "Login";
+    private const string Route = "Auth/login";
 
     private readonly string _name;
     private readonly string _email;

@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
-using TaskFlow.Application.Features.Login.Commands;
+using TaskFlow.Application.Features.Auth.Commands.Login;
 using TaskFlow.Application.Features.Users.Commands.ChangePasswordCommand;
 using TaskFlow.Exception;
 
@@ -41,12 +41,12 @@ public class ChangePasswordTest : TaskFlowClassFixture
             Password = request.Password
         };
 
-        response = await DoPost("Login", loginRequest);
+        response = await DoPost("Auth/login", loginRequest);
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         
         loginRequest.Password =request.NewPassword;
 
-        response = await DoPost("Login", loginRequest);
+        response = await DoPost("Auth/login", loginRequest);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 

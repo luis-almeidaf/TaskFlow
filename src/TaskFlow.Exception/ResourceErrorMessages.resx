@@ -78,4 +78,7 @@
     <data name="CARD_NOT_IN_COLUMN" xml:space="preserve">
         <value>Card not found in this column.</value>
     </data>
+    <data name="REFRESH_TOKEN_EXPIRED" xml:space="preserve">
+        <value>The refresh token has expired.</value>
+    </data>
 </root>

@@ -8,6 +8,7 @@ public class TaskFlowDbContext : DbContext
     public TaskFlowDbContext(DbContextOptions options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Board> Boards { get; set; }
     public DbSet<BoardMember> BoardMembers { get; set; }
     public DbSet<Column> Columns { get; set; }
@@ -16,6 +17,15 @@ public class TaskFlowDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(rt => rt.Id);
+            entity.Property(rt => rt.Token).HasMaxLength(200);
+            entity.HasIndex(rt => rt.Token).IsUnique();
+            entity.HasOne(rt => rt.User).WithMany().HasForeignKey(rt => rt.UserId);
+        });
         
         modelBuilder.Entity<Board>()
             .HasOne(b => b.CreatedBy)

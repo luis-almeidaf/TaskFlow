@@ -1,5 +1,6 @@
 using FluentAssertions;
-using TaskFlow.Application.Features.Login.Commands;
+using TaskFlow.Application.Features.Auth.Commands.Login;
+using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
 using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Login;
@@ -8,9 +9,9 @@ using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.Repositories;
 using TaskFlow.Tests.Builders.Token;
 
-namespace TaskFlow.Tests.UnitTests.Features.Login.Command.Login;
+namespace TaskFlow.Tests.UnitTests.Features.Auth.Commands.Login;
 
-public class LoginHandlerTest
+public class LoginCommandHandlerTest
 {
     [Fact]
     public async Task Success()
@@ -25,8 +26,10 @@ public class LoginHandlerTest
         var result = await handler.Handle(request, CancellationToken.None);
 
         result.Should().NotBeNull();
+        result.Id.Should().Be(user.Id);
         result.Name.Should().Be(user.Name);
         result.Token.Should().NotBeNullOrWhiteSpace();
+        result.RefreshToken.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -65,12 +68,14 @@ public class LoginHandlerTest
     }
 
 
-    private static LoginCommandHandler CreateHandler(Domain.Entities.User user, string? password = null)
+    private static LoginCommandHandler CreateHandler(User user, string? password = null)
     {
-        var readRepository = new UserReadOnlyRepositoryBuilder().GetUserByEmail(user).Build();
+        var userRepository = new UserReadOnlyRepositoryBuilder().GetUserByEmail(user).Build();
+        var refreshTokenRepository = RefreshTokenWriteRepositoryBuilder.Build();
+        var unitOfWork = UnitOfWorkBuilder.Build();
         var passwordEncrypter = new PasswordEncrypterBuilder().Verify(password).Build();
-        var tokenGenerator = JwtTokenGeneratorBuilder.Build();
-
-        return new LoginCommandHandler(readRepository, passwordEncrypter, tokenGenerator);
+        var tokenGenerator = IAccessTokenGeneratorBuilder.Build();
+        
+        return new LoginCommandHandler(userRepository, refreshTokenRepository, unitOfWork, passwordEncrypter, tokenGenerator);
     }
 }
