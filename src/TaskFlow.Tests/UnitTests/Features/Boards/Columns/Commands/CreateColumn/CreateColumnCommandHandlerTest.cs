@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Mapster;
 using TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Exception;
@@ -7,7 +6,6 @@ using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns;
 using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.Repositories;
-using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Commands.CreateColumn;
 
@@ -22,7 +20,7 @@ public class CreateColumnCommandHandlerTest
 
         var column = ColumnBuilder.Build(board);
 
-        var handler = CreateHandler(user, board);
+        var handler = CreateHandler(board);
 
         var request = CreateColumnCommandBuilder.Build(board, column);
 
@@ -44,7 +42,7 @@ public class CreateColumnCommandHandlerTest
 
         var column = ColumnBuilder.Build(board);
 
-        var handler = CreateHandler(user, board, boardId: board.Id);
+        var handler = CreateHandler(board, boardId: board.Id);
 
         var request = CreateColumnCommandBuilder.Build(board, column);
 
@@ -56,20 +54,18 @@ public class CreateColumnCommandHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
 
-    private static CreateColumnCommandHandler CreateHandler(User user, Board board, Guid? boardId = null)
+    private static CreateColumnCommandHandler CreateHandler(Board board, Guid? boardId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardRepository = new BoardReadOnlyRepositoryBuilder();
         var columnRepository = new ColumnWriteOnlyRepositoryBuilder();
 
-        boardRepository.GetById(user, board);
+        boardRepository.GetById(board);
 
         if (boardId.HasValue)
-            boardRepository.GetById(user, board, boardId);
+            boardRepository.GetById(board, boardId);
 
         return new CreateColumnCommandHandler(
-            userRetriever,
             unitOfWork, 
             boardRepository.Build(), 
             columnRepository.Build());

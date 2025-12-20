@@ -10,7 +10,7 @@ public class BoardRepository(TaskFlowDbContext dbContext) : IBoardWriteOnlyRepos
     {
         return await dbContext.Boards
             .AsNoTracking()
-            .Where(board => board.CreatedById == user.Id || board.Members.Any(u => u.Id == user.Id)).ToListAsync();
+            .Where(board => board.CreatedById == user.Id || board.Members.Any(u => u.UserId == user.Id)).ToListAsync();
     }
 
     async Task<Board?> IBoardWriteOnlyRepository.GetById(Guid id)
@@ -34,6 +34,7 @@ public class BoardRepository(TaskFlowDbContext dbContext) : IBoardWriteOnlyRepos
             .AsNoTracking()
             .Include(board => board.CreatedBy)
             .Include(board => board.Members)
+            .ThenInclude(member => member.User)
             .Include(board => board.Columns)
             .ThenInclude(column => column.Cards)
             .ThenInclude(card => card.CreatedBy)

@@ -82,9 +82,9 @@ public class MoveColumnCommandHandlerTest
         var columnRepository = new ColumnWriteOnlyRepositoryBuilder().Build();
 
         if (boardId.HasValue)
-            boardRepository.GetById(user, board, boardId);
+            boardRepository.GetById(board, boardId);
         else
-            boardRepository.GetById(user, board);
+            boardRepository.GetById(board);
 
         return new MoveColumnCommandHandler(
             unitOfWork, 

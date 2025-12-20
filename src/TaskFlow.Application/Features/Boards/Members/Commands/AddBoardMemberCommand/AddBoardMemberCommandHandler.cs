@@ -1,6 +1,5 @@
 using MediatR;
 using TaskFlow.Domain.Entities;
-using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.User;
@@ -10,14 +9,12 @@ namespace TaskFlow.Application.Features.Boards.Members.Commands.AddBoardMemberCo
 
 public class AddBoardMemberCommandHandler(
     IUnitOfWork unitOfWork,
-    IUserRetriever userRetriever,
     IBoardWriteOnlyRepository repository,
     IUserReadOnlyRepository userReadOnlyRepository) : IRequestHandler<AddBoardMemberCommand, AddBoardMemberResponse>
 {
     public async Task<AddBoardMemberResponse> Handle(AddBoardMemberCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
-        var user = await userRetriever.GetCurrentUser();
 
         var board = await repository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();

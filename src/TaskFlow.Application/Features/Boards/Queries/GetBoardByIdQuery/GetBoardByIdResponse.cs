@@ -9,7 +9,7 @@ public class GetBoardByIdResponse
     public DateTime CreatedAt { get; set; }
 
     public CreatorBoardResponse CreatedBy { get; set; } = null!;
-    public ICollection<UserResponse> Users { get; set; } = new HashSet<UserResponse>();
+    public ICollection<BoardMemberResponse> Members { get; set; } = new HashSet<BoardMemberResponse>();
     public ICollection<ColumnResponse> Columns { get; set; } = new List<ColumnResponse>();
 }
 

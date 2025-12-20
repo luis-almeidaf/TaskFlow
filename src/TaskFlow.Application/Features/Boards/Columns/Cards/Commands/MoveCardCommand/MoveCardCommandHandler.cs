@@ -1,6 +1,5 @@
 using MediatR;
 using TaskFlow.Domain.Entities;
-using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
@@ -11,7 +10,6 @@ namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.MoveCardCo
 
 public class MoveCardCommandHandler(
     IUnitOfWork unitOfWork,
-    IUserRetriever userRetriever,
     IBoardReadOnlyRepository boardRepository,
     ICardWriteOnlyRepository cardRepository,
     IColumnReadOnlyRepository columnRepository) : IRequestHandler<MoveCardCommand, Unit>
@@ -19,8 +17,6 @@ public class MoveCardCommandHandler(
     public async Task<Unit> Handle(MoveCardCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
-
-        var user = await userRetriever.GetCurrentUser();
 
         var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();

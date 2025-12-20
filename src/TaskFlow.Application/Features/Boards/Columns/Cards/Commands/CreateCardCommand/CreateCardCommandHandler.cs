@@ -32,7 +32,7 @@ public class CreateCardCommandHandler(
 
         if (request.AssignedToId.HasValue)
         {
-            var userInBoard = board.Members.Any(u => u.Id == request.AssignedToId.Value);
+            var userInBoard = board.Members.Any(bm => bm.UserId == request.AssignedToId.Value);
             if (!userInBoard) throw new UserNotInBoardException();
         }
 

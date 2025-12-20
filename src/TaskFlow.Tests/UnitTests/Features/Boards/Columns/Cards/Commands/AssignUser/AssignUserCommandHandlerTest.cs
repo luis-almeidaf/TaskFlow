@@ -136,12 +136,12 @@ public class AssignUserCommandHandlerTest
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnReadOnlyRepositoryBuilder();
 
-        boardReadRepository.GetById(user, board);
+        boardReadRepository.GetById(board);
         cardRepository.GetById(user, board, column, card);
         columnRepository.GetById(board.Id, column);
 
         if (boardId.HasValue)
-            boardReadRepository.GetById(user, board, boardId);
+            boardReadRepository.GetById(board, boardId);
 
         if (cardId.HasValue)
             cardRepository.GetById(user, board, column, card, cardId);

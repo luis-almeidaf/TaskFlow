@@ -6,7 +6,6 @@ using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns.Cards;
 using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.Repositories;
-using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Cards.Commands.MoveCard;
 
@@ -25,7 +24,7 @@ public class MoveCardCommandHandlerTest
         var card = CardBuilder.Build(firstColumn);
         firstColumn.Cards.Add(card);
 
-        var handler = CreateHandler(user, board, firstColumn, secondColumn);
+        var handler = CreateHandler(board, firstColumn, secondColumn);
 
         var request = MoveCardCommandBuilder.Build(board, firstColumn, card, secondColumn.Id, 3);
 
@@ -47,7 +46,7 @@ public class MoveCardCommandHandlerTest
         var card = CardBuilder.Build(firstColumn);
         firstColumn.Cards.Add(card);
 
-        var handler = CreateHandler(user, board, firstColumn, secondColumn, boardId: board.Id);
+        var handler = CreateHandler(board, firstColumn, secondColumn, boardId: board.Id);
 
         var request = MoveCardCommandBuilder.Build(board, firstColumn, card, secondColumn.Id, 0);
 
@@ -72,7 +71,7 @@ public class MoveCardCommandHandlerTest
         var card = CardBuilder.Build(firstColumn);
         firstColumn.Cards.Add(card);
 
-        var handler = CreateHandler(user, board, firstColumn, secondColumn, firstColumnId: firstColumn.Id);
+        var handler = CreateHandler(board, firstColumn, secondColumn, firstColumnId: firstColumn.Id);
 
         var request = MoveCardCommandBuilder.Build(board, firstColumn, card, secondColumn.Id, 0);
 
@@ -97,7 +96,7 @@ public class MoveCardCommandHandlerTest
         var card = CardBuilder.Build(firstColumn);
         firstColumn.Cards.Add(card);
 
-        var handler = CreateHandler(user, board, firstColumn, secondColumn, secondColumnId: secondColumn.Id);
+        var handler = CreateHandler(board, firstColumn, secondColumn, secondColumnId: secondColumn.Id);
 
         var request = MoveCardCommandBuilder.Build(board, firstColumn, card, secondColumn.Id, 0);
 
@@ -121,7 +120,7 @@ public class MoveCardCommandHandlerTest
 
         var card = CardBuilder.Build(firstColumn);
 
-        var handler = CreateHandler(user, board, firstColumn, secondColumn);
+        var handler = CreateHandler(board, firstColumn, secondColumn);
 
         var request = MoveCardCommandBuilder.Build(board, firstColumn, card, secondColumn.Id, 0);
 
@@ -134,7 +133,6 @@ public class MoveCardCommandHandlerTest
     }
 
     private static MoveCardCommandHandler CreateHandler(
-        User user,
         Board board,
         Column firstColumn,
         Column secondColumn,
@@ -143,15 +141,14 @@ public class MoveCardCommandHandlerTest
         Guid? secondColumnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardRepository = new BoardReadOnlyRepositoryBuilder();
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnReadOnlyRepositoryBuilder();
 
         if (boardId.HasValue)
-            boardRepository.GetById(user, board, boardId);
+            boardRepository.GetById(board, boardId);
         else
-            boardRepository.GetById(user, board);
+            boardRepository.GetById(board);
 
         if (firstColumnId.HasValue)
             columnRepository.GetById(board.Id, firstColumn, firstColumnId);
@@ -165,7 +162,6 @@ public class MoveCardCommandHandlerTest
 
         return new MoveCardCommandHandler(
             unitOfWork,
-            userRetriever,
             boardRepository.Build(),
             cardRepository.Build(),
             columnRepository.Build());

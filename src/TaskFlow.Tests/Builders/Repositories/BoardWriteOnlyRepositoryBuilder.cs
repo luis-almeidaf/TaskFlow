@@ -8,7 +8,7 @@ public class BoardWriteOnlyRepositoryBuilder
 {
     private readonly Mock<IBoardWriteOnlyRepository> _repository = new();
 
-    public BoardWriteOnlyRepositoryBuilder GetById(User user, Board board, Guid? id = null)
+    public BoardWriteOnlyRepositoryBuilder GetById(Board board, Guid? id = null)
     {
         if (id.HasValue)
         {

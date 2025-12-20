@@ -1,7 +1,6 @@
 using Mapster;
 using MediatR;
 using TaskFlow.Domain.Entities;
-using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Column;
@@ -10,7 +9,6 @@ using TaskFlow.Exception.ExceptionsBase;
 namespace TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnCommand;
 
 public class CreateColumnCommandHandler(
-    IUserRetriever userRetriever,
     IUnitOfWork unitOfWork,
     IBoardReadOnlyRepository boardRepository,
     IColumnWriteOnlyRepository columnRepository) : IRequestHandler<CreateColumnCommand, CreateColumnResponse>
@@ -19,8 +17,6 @@ public class CreateColumnCommandHandler(
         CancellationToken cancellationToken)
     {
         Validate(request);
-
-        var user = await userRetriever.GetCurrentUser();
 
         var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();

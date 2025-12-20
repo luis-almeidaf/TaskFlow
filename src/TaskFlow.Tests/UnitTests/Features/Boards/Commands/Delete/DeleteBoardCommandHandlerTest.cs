@@ -6,7 +6,6 @@ using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards;
 using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.Repositories;
-using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Commands.Delete;
 
@@ -19,7 +18,7 @@ public class DeleteBoardCommandHandlerTest
 
         var board = BoardBuilder.Build(user);
 
-        var handler = CreateHandler(user, board);
+        var handler = CreateHandler(board);
 
         var request = DeleteBoardCommandBuilder.Build(board);
 
@@ -35,7 +34,7 @@ public class DeleteBoardCommandHandlerTest
 
         var board = BoardBuilder.Build(user);
 
-        var handler = CreateHandler(user, board, id: board.Id);
+        var handler = CreateHandler(board, id: board.Id);
 
         var request = DeleteBoardCommandBuilder.Build(board);
 
@@ -47,21 +46,20 @@ public class DeleteBoardCommandHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_NOT_FOUND));
     }
 
-    private static DeleteBoardCommandHandler CreateHandler(Domain.Entities.User user, Board board, Guid? id = null)
+    private static DeleteBoardCommandHandler CreateHandler(Board board, Guid? id = null)
     {
-        var userRetriever = UserRetrieverBuilder.Build(user);
         var unitOfWork = UnitOfWorkBuilder.Build();
 
         var repository = new BoardWriteOnlyRepositoryBuilder();
         if (id.HasValue)
         {
-            repository.GetById(user, board, id);
+            repository.GetById(board, id);
         }
         else
         {
-            repository.GetById(user, board);
+            repository.GetById(board);
         }
 
-        return new DeleteBoardCommandHandler(repository.Build(), userRetriever, unitOfWork);
+        return new DeleteBoardCommandHandler(repository.Build(), unitOfWork);
     }
 }

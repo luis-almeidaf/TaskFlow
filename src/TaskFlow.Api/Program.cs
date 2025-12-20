@@ -8,6 +8,7 @@ using TaskFlow.Api.Authorization;
 using TaskFlow.Api.Filters;
 using TaskFlow.Api.Token;
 using TaskFlow.Application;
+using TaskFlow.Application.Mappings;
 using TaskFlow.Domain.Security.Tokens;
 using TaskFlow.Infrastructure;
 using TaskFlow.Infrastructure.Extensions;
@@ -93,6 +94,8 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
+
+MapConfigurations.Configure();
 
 var app = builder.Build();
 
