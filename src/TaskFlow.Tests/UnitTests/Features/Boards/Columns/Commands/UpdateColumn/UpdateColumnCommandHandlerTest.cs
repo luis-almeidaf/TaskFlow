@@ -6,7 +6,6 @@ using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Columns;
 using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.Repositories;
-using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Columns.Commands.UpdateColumn;
 
@@ -19,7 +18,7 @@ public class UpdateColumnCommandHandlerTest
         var board = BoardBuilder.Build(user);
         var column = ColumnBuilder.Build(board);
 
-        var handler = CreateHandler(user, board, column);
+        var handler = CreateHandler(board, column);
 
         var request = UpdateColumnCommandBuilder.Build(board, column);
 
@@ -35,7 +34,7 @@ public class UpdateColumnCommandHandlerTest
         var board = BoardBuilder.Build(user);
         var column = ColumnBuilder.Build(board);
 
-        var handler = CreateHandler(user, board, column, boardId: board.Id);
+        var handler = CreateHandler(board, column, boardId: board.Id);
 
         var request = UpdateColumnCommandBuilder.Build(board, column);
 
@@ -54,7 +53,7 @@ public class UpdateColumnCommandHandlerTest
         var board = BoardBuilder.Build(user);
         var column = ColumnBuilder.Build(board);
 
-        var handler = CreateHandler(user, board, column, columnId: column.Id);
+        var handler = CreateHandler(board, column, columnId: column.Id);
 
         var request = UpdateColumnCommandBuilder.Build(board, column);
 
@@ -67,22 +66,20 @@ public class UpdateColumnCommandHandlerTest
     }
 
     private static UpdateColumnCommandHandler CreateHandler(
-        User user,
         Board board,
         Column column,
         Guid? boardId = null,
         Guid? columnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var userRetriever = UserRetrieverBuilder.Build(user);
         var boardReadRepository = new BoardReadOnlyRepositoryBuilder();
         var columnReadRepository = new ColumnReadOnlyRepositoryBuilder();
         var columnWriteRepository = new ColumnWriteOnlyRepositoryBuilder().Build();
 
         if (boardId.HasValue)
-            boardReadRepository.GetById(user, board, boardId);
+            boardReadRepository.GetById(board, boardId);
         else
-            boardReadRepository.GetById(user, board);
+            boardReadRepository.GetById(board);
 
         if (columnId.HasValue)
             columnReadRepository.GetById(board.Id, column, columnId);
@@ -91,7 +88,6 @@ public class UpdateColumnCommandHandlerTest
 
         return new UpdateColumnCommandHandler(
             unitOfWork,
-            userRetriever,
             boardReadRepository.Build(),
             columnReadRepository.Build(),
             columnWriteRepository);

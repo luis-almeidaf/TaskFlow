@@ -6,7 +6,6 @@ using TaskFlow.Exception.ExceptionsBase;
 using TaskFlow.Tests.Builders.Commands.Boards.Users;
 using TaskFlow.Tests.Builders.Entities;
 using TaskFlow.Tests.Builders.Repositories;
-using TaskFlow.Tests.Builders.UserRetriever;
 
 namespace TaskFlow.Tests.UnitTests.Features.Boards.Members.Commands.AddBoardMember;
 
@@ -91,13 +90,12 @@ public class AddBoardMemberCommandHandlerTest
     private static AddBoardMemberCommandHandler CreateHandler(User user, Board board, Guid? id = null, string? email = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
-        var userRetriever = UserRetrieverBuilder.Build(user);
 
         var repository = new BoardWriteOnlyRepositoryBuilder();
-        repository.GetById(user, board);
+        repository.GetById(board);
 
         if (id.HasValue)
-            repository.GetById(user, board, id);
+            repository.GetById(board, id);
 
         var userReadOnlyRepository = new UserReadOnlyRepositoryBuilder();
         userReadOnlyRepository.GetUserByEmail(user, email);
@@ -105,6 +103,6 @@ public class AddBoardMemberCommandHandlerTest
         if (string.IsNullOrWhiteSpace(email))
             userReadOnlyRepository.GetUserByEmail(user);
 
-        return new AddBoardMemberCommandHandler(unitOfWork, userRetriever, repository.Build(), userReadOnlyRepository.Build());
+        return new AddBoardMemberCommandHandler(unitOfWork, repository.Build(), userReadOnlyRepository.Build());
     }
 }

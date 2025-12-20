@@ -98,7 +98,11 @@ public class CreateCardCommandHandlerTest
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.USER_NOT_IN_BOARD));
     }
 
-    private static CreateCardCommandHandler CreateHandler(User user, Board board, Column column, Guid? boardId = null,
+    private static CreateCardCommandHandler CreateHandler(
+        User user, 
+        Board board,
+        Column column, 
+        Guid? boardId = null,
         Guid? columnId = null)
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
@@ -107,11 +111,11 @@ public class CreateCardCommandHandlerTest
         var cardWriteRepository = new CardWriteOnlyRepositoryBuilder().Build();
         var columnReadRepository = new ColumnReadOnlyRepositoryBuilder();
 
-        boardReadRepository.GetById(user, board);
+        boardReadRepository.GetById(board);
         columnReadRepository.GetById(board.Id, column);
 
         if (boardId.HasValue)
-            boardReadRepository.GetById(user, board, boardId);
+            boardReadRepository.GetById(board, boardId);
 
         if (columnId.HasValue)
             columnReadRepository.GetById(board.Id, column, columnId);

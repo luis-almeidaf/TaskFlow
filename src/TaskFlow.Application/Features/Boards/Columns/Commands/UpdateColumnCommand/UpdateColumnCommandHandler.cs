@@ -1,5 +1,4 @@
 using MediatR;
-using TaskFlow.Domain.Identity;
 using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Column;
@@ -9,7 +8,6 @@ namespace TaskFlow.Application.Features.Boards.Columns.Commands.UpdateColumnComm
 
 public class UpdateColumnCommandHandler(
     IUnitOfWork unitOfWork,
-    IUserRetriever userRetriever,
     IBoardReadOnlyRepository boardRepository,
     IColumnReadOnlyRepository readOnlyRepository,
     IColumnWriteOnlyRepository columnRepository)
@@ -18,8 +16,6 @@ public class UpdateColumnCommandHandler(
     public async Task<Unit> Handle(UpdateColumnCommand request, CancellationToken cancellationToken)
     {
         Validate(request);
-
-        var user = await userRetriever.GetCurrentUser();
 
         var board = await boardRepository.GetById(request.BoardId);
         if (board is null) throw new BoardNotFoundException();

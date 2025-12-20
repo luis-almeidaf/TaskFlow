@@ -144,12 +144,12 @@ public class UpdateCardCommandHandlerTest
         var cardRepository = new CardWriteOnlyRepositoryBuilder();
         var columnRepository = new ColumnReadOnlyRepositoryBuilder();
 
-        boardReadRepository.GetById(user, board);
+        boardReadRepository.GetById(board);
         columnRepository.GetById(board.Id, column);
         cardRepository.GetById(user, board, column, card);
 
         if (boardId.HasValue)
-            boardReadRepository.GetById(user, board, boardId);
+            boardReadRepository.GetById(board, boardId);
 
         if (columnId.HasValue)
             columnRepository.GetById(board.Id, column, columnId);

@@ -86,9 +86,9 @@ public class DeleteColumnCommandHandlerTest
         var columnWriteOnlyRepository = new ColumnWriteOnlyRepositoryBuilder();
 
         if (boardId.HasValue)
-            boardReadRepository.GetById(user, board, boardId);
+            boardReadRepository.GetById(board, boardId);
         else
-            boardReadRepository.GetById(user, board);
+            boardReadRepository.GetById(board);
 
 
         if (columnId.HasValue)
