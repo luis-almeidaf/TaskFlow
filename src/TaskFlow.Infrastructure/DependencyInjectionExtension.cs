@@ -6,6 +6,7 @@ using TaskFlow.Domain.Repositories;
 using TaskFlow.Domain.Repositories.Board;
 using TaskFlow.Domain.Repositories.Card;
 using TaskFlow.Domain.Repositories.Column;
+using TaskFlow.Domain.Repositories.RefreshToken;
 using TaskFlow.Domain.Repositories.User;
 using TaskFlow.Domain.Security.Cryptography;
 using TaskFlow.Domain.Security.Tokens;
@@ -63,6 +64,8 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserReadOnlyRepository, UserRepository>();
         services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
+        services.AddScoped<IRefreshTokenReadOnlyRepository, RefreshTokenRepository>();
+        services.AddScoped<IRefreshTokenWriteOnlyRepository, RefreshTokenRepository>();
         services.AddScoped<IBoardWriteOnlyRepository, BoardRepository>();
         services.AddScoped<IBoardReadOnlyRepository, BoardRepository>();
         services.AddScoped<IColumnReadOnlyRepository, ColumnRepository>();

@@ -16,13 +16,14 @@ public class RegisterUserCommandHandlerTest
     {
         var request = RegisterUserCommandBuilder.Build();
         var handler = CreateHandler();
-
-
+        
         var result = await handler.Handle(request, CancellationToken.None);
 
         result.Should().NotBeNull();
+        result.Id.Should().NotBeEmpty();
         result.Name.Should().Be(request.Name);
         result.Token.Should().NotBeNullOrWhiteSpace();
+        result.RefreshToken.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -59,8 +60,9 @@ public class RegisterUserCommandHandlerTest
     {
         var unitOfWork = UnitOfWorkBuilder.Build();
         var passwordEncrypter = new PasswordEncrypterBuilder().Build();
-        var tokenGenerator = JwtTokenGeneratorBuilder.Build();
+        var tokenGenerator = IAccessTokenGeneratorBuilder.Build();
         var readRepository = new UserReadOnlyRepositoryBuilder();
+        var refreshTokenRepository = RefreshTokenWriteRepositoryBuilder.Build();
         var writeRepository = new UserWriteOnlyRepositoryBuilder().Build();
 
         if (!string.IsNullOrWhiteSpace(email))
@@ -70,6 +72,7 @@ public class RegisterUserCommandHandlerTest
             unitOfWork,
             passwordEncrypter,
             tokenGenerator,
+            refreshTokenRepository,
             readRepository.Build(),
             writeRepository);
     }

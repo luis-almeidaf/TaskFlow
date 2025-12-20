@@ -1,6 +1,6 @@
 using System.Net;
 using FluentAssertions;
-using TaskFlow.Application.Features.Login.Commands;
+using TaskFlow.Application.Features.Auth.Commands.Login;
 
 namespace TaskFlow.Tests.IntegrationTests.Features.Users.Delete;
 
@@ -34,7 +34,7 @@ public class DeleteUserTest : TaskFlowClassFixture
             Password = _password
         };
 
-        result = await DoPost(requestUri: "login", request);
+        result = await DoPost(requestUri: "Auth/login", request);
 
         result.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }

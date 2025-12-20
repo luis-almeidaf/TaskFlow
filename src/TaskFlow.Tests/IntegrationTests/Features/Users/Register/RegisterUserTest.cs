@@ -32,6 +32,7 @@ public class RegisterUserTest : TaskFlowClassFixture
 
         responseData.RootElement.GetProperty("name").GetString().Should().Be(request.Name);
         responseData.RootElement.GetProperty("token").GetString().Should().NotBeNullOrEmpty();
+        responseData.RootElement.GetProperty("refreshToken").GetString().Should().NotBeNullOrEmpty();
     }
 
     [Fact]

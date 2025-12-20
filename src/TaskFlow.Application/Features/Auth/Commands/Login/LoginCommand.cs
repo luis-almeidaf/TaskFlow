@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace TaskFlow.Application.Features.Login.Commands;
+namespace TaskFlow.Application.Features.Auth.Commands.Login;
 
 public class LoginCommand : IRequest<LoginResponse>
 {

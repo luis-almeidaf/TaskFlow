@@ -36,7 +36,6 @@ public class ColumnRepository(TaskFlowDbContext dbContext) : IColumnReadOnlyRepo
         dbContext.Columns.UpdateRange(columns);
     }
     
-
     public async Task<Column?> GetById(Guid boardId, Guid columnId)
     {
         return await dbContext.Columns
