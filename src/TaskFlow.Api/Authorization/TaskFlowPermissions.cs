@@ -8,6 +8,7 @@ public static class TaskFlowPermissions
         public const string Delete = "boards:delete";
         public const string AddBoardMember = "boards:add-member";
         public const string RemoveBoardMember = "boards:remove-member";
+        public const string ChangeBoardMemberRole = "boards:change-member-role";
     }
     
     public static class Columns

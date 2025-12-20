@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Api.Authorization;
 using TaskFlow.Application.Common.Responses;
 using TaskFlow.Application.Features.Boards.Members.Commands.AddBoardMemberCommand;
+using TaskFlow.Application.Features.Boards.Members.Commands.ChangeBoardMemberRoleCommand;
 using TaskFlow.Application.Features.Boards.Members.Commands.RemoveBoardMemberCommand;
 
 namespace TaskFlow.Api.Controllers;
 
-[Route("Boards/{boardId:guid}/users")]
+[Route("Boards/{boardId:guid}/members")]
 [ApiController]
 public class BoardMemberController(IMediator mediator) : ControllerBase
 {
@@ -19,8 +20,8 @@ public class BoardMemberController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status409Conflict)]
     [Authorize(Policy = TaskFlowPermissions.Boards.AddBoardMember)]
     public async Task<IActionResult> AddBoardMember(
-    [FromRoute] Guid boardId,
-    [FromBody] AddBoardMemberRequest request)
+        [FromRoute] Guid boardId,
+        [FromBody] AddBoardMemberRequest request)
     {
         var result = await mediator.Send(new AddBoardMemberCommand
         {
@@ -43,7 +44,25 @@ public class BoardMemberController(IMediator mediator) : ControllerBase
         await mediator.Send(new RemoveBoardMemberCommand()
         {
             BoardId = boardId,
-            BoardMemberId = userId
+            BoardMemberUserId = userId
+        });
+
+        return NoContent();
+    }
+
+    [HttpPatch("{userId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(BaseErrorResponse), StatusCodes.Status404NotFound)]
+    [Authorize(Policy = TaskFlowPermissions.Boards.ChangeBoardMemberRole)]
+    public async Task<IActionResult> ChangeBoardMemberRole(
+        [FromRoute] Guid boardId, Guid userId,
+        [FromBody] ChangeBoardMemberRoleRequest request)
+    {
+        await mediator.Send(new ChangeBoardMemberRoleCommand
+        {
+            BoardId = boardId,
+            BoardMemberUserId = userId,
+            Role = request.Role
         });
 
         return NoContent();

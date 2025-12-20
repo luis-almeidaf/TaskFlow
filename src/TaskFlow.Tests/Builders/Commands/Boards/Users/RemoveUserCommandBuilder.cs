@@ -10,7 +10,7 @@ public static class RemoveUserCommandBuilder
         return new RemoveBoardMemberCommand
         {
             BoardId = board.Id,
-            BoardMemberId = boardMember.Id
+            BoardMemberUserId = boardMember.UserId
         };
     }
 }

@@ -39,7 +39,7 @@ public class RemoveBoardMemberCommandHandlerTest
 
         var handler = CreateHandler(user, board, boardMember, boardMemberId: nonExistingBoardMemberId);
 
-        var request = new RemoveBoardMemberCommand { BoardId = board.Id, BoardMemberId = nonExistingBoardMemberId };
+        var request = new RemoveBoardMemberCommand { BoardId = board.Id, BoardMemberUserId = nonExistingBoardMemberId };
 
         var act = async () => await handler.Handle(request, CancellationToken.None);
 
@@ -56,7 +56,7 @@ public class RemoveBoardMemberCommandHandlerTest
         var board = BoardBuilder.Build(user);
         var boardMemberToBeRemoved = BoardMemberBuilder.Build(user, board);
 
-        var handler = CreateHandler(user, board, boardMemberToBeRemoved, ownerId: boardMemberToBeRemoved.Id);
+        var handler = CreateHandler(user, board, boardMemberToBeRemoved, ownerId: boardMemberToBeRemoved.UserId);
 
         var request = RemoveUserCommandBuilder.Build(board, boardMemberToBeRemoved);
 
@@ -67,6 +67,7 @@ public class RemoveBoardMemberCommandHandlerTest
         result.Where(ex =>
             ex.GetErrors().Count == 1 && ex.GetErrors().Contains(ResourceErrorMessages.BOARD_OWNER_CANNOT_BE_REMOVED));
     }
+    
 
     private static RemoveBoardMemberCommandHandler CreateHandler(
         User user,
@@ -78,15 +79,14 @@ public class RemoveBoardMemberCommandHandlerTest
         var unitOfWork = UnitOfWorkBuilder.Build();
         var userRetriever = UserRetrieverBuilder.Build(user);
         var repository = new BoardWriteOnlyRepositoryBuilder();
-
+        
         repository.GetBoardMember(boardMember, board);
 
         if (boardMemberId.HasValue)
             repository.GetBoardMember(boardMember, board, boardMemberId.Value);
-        
-        if (ownerId.HasValue)
-            repository.GetOwnerId(board, ownerId.Value);
-        
+
+        repository.GetOwnerId(board, ownerId ?? Guid.NewGuid());
+    
         return new RemoveBoardMemberCommandHandler(
             unitOfWork,
             userRetriever,

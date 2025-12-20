@@ -5,5 +5,5 @@ namespace TaskFlow.Application.Features.Boards.Members.Commands.RemoveBoardMembe
 public class RemoveBoardMemberCommand : IRequest<Unit>
 {
     public Guid BoardId { get; set; }
-    public Guid BoardMemberId { get; set; } 
+    public Guid BoardMemberUserId { get; set; } 
 }

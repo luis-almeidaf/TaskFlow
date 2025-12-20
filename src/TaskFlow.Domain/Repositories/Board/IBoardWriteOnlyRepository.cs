@@ -11,6 +11,7 @@ public interface IBoardWriteOnlyRepository
     
     void AddBoardMember(BoardMember boardMember);
     void RemoveBoardMember(BoardMember boardMember);
-    Task<BoardMember?> GetBoardMember(Guid boardId, Guid boardMemberId);
+    void UpdateBoardMember(BoardMember boardMember);
+    Task<BoardMember?> GetBoardMember(Guid boardId, Guid boardMemberUserId);
     Task<Guid> GetOwnerId(Guid boardId);
 }
