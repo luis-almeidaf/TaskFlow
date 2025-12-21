@@ -32,6 +32,8 @@ public class LoginCommandHandler(
             ExpiresOnUtc = DateTime.UtcNow.AddDays(7)
         };
 
+        await refreshTokenRepository.Delete(user.Id);
+
         await refreshTokenRepository.Add(refreshToken);
 
         await unitOfWork.Commit();
