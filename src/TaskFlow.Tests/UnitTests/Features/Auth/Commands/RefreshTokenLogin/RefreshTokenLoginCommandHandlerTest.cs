@@ -53,9 +53,10 @@ public class RefreshTokenLoginCommandHandlerTest
     private static RefreshTokenLoginCommandHandler CreateHandler(string token, RefreshToken refreshToken)
     {
         var refreshTokenRepository = RefreshTokenReadRepositoryBuilder.Build(token, refreshToken);
+        var refreshTokenWriteRepository = RefreshTokenWriteRepositoryBuilder.Build();
         var unitOfWork = UnitOfWorkBuilder.Build();
         var tokenGenerator = IAccessTokenGeneratorBuilder.Build();
 
-        return new RefreshTokenLoginCommandHandler(refreshTokenRepository, unitOfWork, tokenGenerator);
+        return new RefreshTokenLoginCommandHandler(refreshTokenRepository,refreshTokenWriteRepository, unitOfWork, tokenGenerator);
     }
 }
