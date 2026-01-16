@@ -14,8 +14,7 @@ public class UpdateBoardCommandHandler(
     {
         Validate(request);
 
-        var board = await repository.GetById(request.Id);
-        if (board is null) throw new BoardNotFoundException();
+        var board = await repository.GetById(request.Id) ?? throw new BoardNotFoundException();
 
         board.Name = request.Name;
 

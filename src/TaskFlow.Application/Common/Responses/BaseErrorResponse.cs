@@ -2,7 +2,7 @@ namespace TaskFlow.Application.Common.Responses;
 
 public class BaseErrorResponse
 {
-    public List<string> ErrorMessages { get;}
+    public List<string> ErrorMessages { get; }
 
     public BaseErrorResponse(string errorMessages)
     {

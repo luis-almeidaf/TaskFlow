@@ -10,7 +10,7 @@ public static class TaskFlowPermissions
         public const string RemoveBoardMember = "boards:remove-member";
         public const string ChangeBoardMemberRole = "boards:change-member-role";
     }
-    
+
     public static class Columns
     {
         public const string Create = "columns:create";
@@ -18,7 +18,7 @@ public static class TaskFlowPermissions
         public const string Delete = "columns:delete";
         public const string Move = "columns:move";
     }
-    
+
     public static class Cards
     {
         public const string Create = "cards:create";
@@ -26,5 +26,4 @@ public static class TaskFlowPermissions
         public const string Delete = "cards:delete";
         public const string Assign = "cards:assign";
     }
-
 }

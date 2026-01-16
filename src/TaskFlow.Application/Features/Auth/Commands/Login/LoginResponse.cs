@@ -1,4 +1,5 @@
 ﻿namespace TaskFlow.Application.Features.Auth.Commands.Login;
+
 public class LoginResponse
 {
     public Guid Id { get; set; }

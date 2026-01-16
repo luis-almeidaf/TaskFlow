@@ -16,11 +16,9 @@ public class AddBoardMemberCommandHandler(
     {
         Validate(request);
 
-        var board = await repository.GetById(request.BoardId);
-        if (board is null) throw new BoardNotFoundException();
+        var board = await repository.GetById(request.BoardId) ?? throw new BoardNotFoundException();
 
-        var userToAdd = await userReadOnlyRepository.GetUserByEmail(request.UserEmail);
-        if (userToAdd is null) throw new UserNotFoundException();
+        var userToAdd = await userReadOnlyRepository.GetUserByEmail(request.UserEmail) ?? throw new UserNotFoundException();
 
         if (board.Members.Any(bm => bm.UserId == userToAdd.Id)) throw new UserAlreadyInBoardException();
 

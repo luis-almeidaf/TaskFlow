@@ -17,7 +17,7 @@ public class RefreshTokenLoginCommandHandler(
     public async Task<RefreshTokenLoginResponse> Handle(RefreshTokenLoginCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = await refreshTokenRepository.GetToken(request.RefreshToken);
-        
+
         if (refreshToken is null || refreshToken.ExpiresOnUtc < DateTime.UtcNow)
             throw new RefreshTokenExpiredException();
 
@@ -32,7 +32,7 @@ public class RefreshTokenLoginCommandHandler(
         var accessToken = tokenGenerator.Generate(refreshToken.User);
 
         await refreshTokenWriteOnlyRepository.Delete(refreshToken.UserId);
-        
+
         await refreshTokenWriteOnlyRepository.Add(newRefreshToken);
 
         await unitOfWork.Commit();

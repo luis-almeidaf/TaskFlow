@@ -13,7 +13,7 @@ public class LogoutCommandHandler(
     public async Task<Unit> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
         var user = await userRetriever.GetCurrentUser();
-        
+
         await repository.Delete(user.Id);
 
         await unitOfWork.Commit();
