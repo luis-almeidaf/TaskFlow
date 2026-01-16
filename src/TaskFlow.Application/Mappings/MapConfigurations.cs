@@ -16,7 +16,7 @@ public static class MapConfigurations
         TypeAdapterConfig<UpdateCardCommand, Card>.NewConfig()
             .Ignore(dest => dest.CreatedBy)
             .Ignore(dest => dest.CreatedById);
-        
+
         TypeAdapterConfig<Board, GetBoardByIdResponse>
             .NewConfig()
             .Map(dest => dest.Members, src => src.Members);

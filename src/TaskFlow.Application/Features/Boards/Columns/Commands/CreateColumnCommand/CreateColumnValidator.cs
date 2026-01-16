@@ -5,8 +5,5 @@ namespace TaskFlow.Application.Features.Boards.Columns.Commands.CreateColumnComm
 
 public class CreateColumnValidator : AbstractValidator<CreateColumnCommand>
 {
-    public CreateColumnValidator()
-    {
-        RuleFor(board => board.Name).NotEmpty().WithMessage(ResourceErrorMessages.NAME_EMPTY);
-    }
+    public CreateColumnValidator() => RuleFor(board => board.Name).NotEmpty().WithMessage(ResourceErrorMessages.NAME_EMPTY);
 }

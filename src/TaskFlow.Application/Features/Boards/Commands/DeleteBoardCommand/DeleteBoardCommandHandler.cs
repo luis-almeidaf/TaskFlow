@@ -12,13 +12,12 @@ public class DeleteBoardCommandHandler(
 {
     public async Task<Unit> Handle(DeleteBoardCommand request, CancellationToken cancellationToken)
     {
-        var board = await repository.GetById(request.Id);
-        if (board is null) throw new BoardNotFoundException();
+        var board = await repository.GetById(request.Id) ?? throw new BoardNotFoundException();
 
         await repository.Delete(request.Id);
 
         await unitOfWork.Commit();
-        
+
         return Unit.Value;
     }
 }

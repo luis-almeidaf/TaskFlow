@@ -17,7 +17,7 @@ public class DeleteUserCommandHandler(
     {
         var user = await userRetriever.GetCurrentUser();
         var boards = await boardRepository.GetAll(user);
-        
+
         if (boards.Count != 0) throw new UserHasAssociatedBoardsException();
 
         await userRepository.Delete(user);

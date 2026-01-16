@@ -7,7 +7,7 @@ using TaskFlow.Domain.Repositories.Board;
 namespace TaskFlow.Application.Features.Boards.Queries.GetBoardsQuery;
 
 public class GetBoardsQueryHandler(
-    IUserRetriever userRetriever, 
+    IUserRetriever userRetriever,
     IBoardReadOnlyRepository boardRepository) : IRequestHandler<GetBoardsQuery, GetBoardsResponse>
 {
     public async Task<GetBoardsResponse> Handle(GetBoardsQuery request, CancellationToken cancellationToken)

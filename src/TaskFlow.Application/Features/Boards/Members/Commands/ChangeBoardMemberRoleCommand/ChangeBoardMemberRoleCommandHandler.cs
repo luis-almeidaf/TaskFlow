@@ -11,8 +11,8 @@ public class ChangeBoardMemberRoleCommandHandler(
 {
     public async Task<Unit> Handle(ChangeBoardMemberRoleCommand request, CancellationToken cancellationToken)
     {
-        var boardMember = await repository.GetBoardMember(request.BoardId, request.BoardMemberUserId);
-        if (boardMember is null) throw new UserNotInBoardException();
+        var boardMember = await repository.GetBoardMember(request.BoardId, request.BoardMemberUserId) 
+                          ?? throw new UserNotInBoardException();
 
         boardMember.Role = request.Role;
 

@@ -7,7 +7,7 @@ namespace TaskFlow.Application.Common.Validators;
 public partial class PasswordValidator<T> : PropertyValidator<T, string>
 {
     public override string Name => "PasswordValidator";
-    
+
     public override bool IsValid(ValidationContext<T> context, string password)
     {
         if (string.IsNullOrWhiteSpace(password)) return false;

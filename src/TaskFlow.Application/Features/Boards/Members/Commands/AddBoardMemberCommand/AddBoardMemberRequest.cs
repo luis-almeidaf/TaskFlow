@@ -6,4 +6,4 @@ public class AddBoardMemberRequest()
 {
     public string UserEmail { get; set; } = string.Empty;
     public BoardRole Role { get; set; }
-} 
+}

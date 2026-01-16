@@ -22,15 +22,12 @@ public class UpdateCardCommandHandler(
 
         var user = await userRetriever.GetCurrentUser();
 
-        var board = await boardRepository.GetById(request.BoardId);
-        if (board is null) throw new BoardNotFoundException();
+        var board = await boardRepository.GetById(request.BoardId) ?? throw new BoardNotFoundException();
 
-        var column = await columnRepository.GetById(board.Id, request.ColumnId);
-        if (column is null) throw new ColumnNotFoundException();
+        var column = await columnRepository.GetById(board.Id, request.ColumnId) ?? throw new ColumnNotFoundException();
 
-        var card = await cardRepository.GetById(user, board.Id, column.Id, request.CardId);
-        if (card is null) throw new CardNotFoundException();
-        
+        var card = await cardRepository.GetById(user, board.Id, column.Id, request.CardId) ?? throw new CardNotFoundException();
+
         if (request.AssignedToId.HasValue)
         {
             var userInBoard = board.Members.Any(bm => bm.UserId == request.AssignedToId.Value);
@@ -42,10 +39,10 @@ public class UpdateCardCommandHandler(
         cardRepository.Update(card);
 
         await unitOfWork.Commit();
-        
+
         return Unit.Value;
     }
-    
+
     private static void Validate(UpdateCardCommand request)
     {
         var result = new UpdateCardValidator().Validate(request);

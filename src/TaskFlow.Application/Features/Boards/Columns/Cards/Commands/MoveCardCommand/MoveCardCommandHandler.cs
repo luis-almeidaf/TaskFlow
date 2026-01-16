@@ -18,16 +18,13 @@ public class MoveCardCommandHandler(
     {
         Validate(request);
 
-        var board = await boardRepository.GetById(request.BoardId);
-        if (board is null) throw new BoardNotFoundException();
+        var board = await boardRepository.GetById(request.BoardId) ?? throw new BoardNotFoundException();
 
-        var column = await columnRepository.GetById(board.Id, request.CurrentColumnId);
-        if (column is null) throw new ColumnNotFoundException();
+        var column = await columnRepository.GetById(board.Id, request.CurrentColumnId) ?? throw new ColumnNotFoundException();
 
         var cardsInCurrentColumn = column.Cards.OrderBy(card => card.Position).ToList();
 
-        var cardToMove = cardsInCurrentColumn.FirstOrDefault(card => card.Id == request.CardId);
-        if (cardToMove is null) throw new CardNotFoundException();
+        var cardToMove = cardsInCurrentColumn.FirstOrDefault(card => card.Id == request.CardId) ?? throw new CardNotFoundException();
 
         if (request.NewColumnId.HasValue)
             await MoveCardBetweenColumns(request, cardsInCurrentColumn, cardToMove);
@@ -40,8 +37,7 @@ public class MoveCardCommandHandler(
 
     private async Task MoveCardBetweenColumns(MoveCardCommand request, List<Card> cardsInCurrentColumn, Card cardToMove)
     {
-        var newColumn = await columnRepository.GetById(request.BoardId, request.NewColumnId!.Value);
-        if (newColumn is null) throw new ColumnNotFoundException();
+        var newColumn = await columnRepository.GetById(request.BoardId, request.NewColumnId!.Value) ?? throw new ColumnNotFoundException();
 
         cardsInCurrentColumn.Remove(cardToMove);
 

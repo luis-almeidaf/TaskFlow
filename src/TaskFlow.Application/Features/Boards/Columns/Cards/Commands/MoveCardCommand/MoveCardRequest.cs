@@ -2,6 +2,6 @@ namespace TaskFlow.Application.Features.Boards.Columns.Cards.Commands.MoveCardCo
 
 public class MoveCardRequest
 {
-    public Guid? NewColumnId { get; set; } 
+    public Guid? NewColumnId { get; set; }
     public int? NewPosition { get; set; }
 }
